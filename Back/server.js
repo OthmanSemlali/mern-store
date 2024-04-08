@@ -2,7 +2,7 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
 const fs = require('fs').promises;
-const users = require('./users.json')
+// const users = require('./users.json')
 const initializePassport = require("./config/passport-config");
 const express = require("express");
 const app = express();
