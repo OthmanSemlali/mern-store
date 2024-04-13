@@ -18,18 +18,8 @@ const {body, validationResult} = require("express-validator");
 // const User = require('./Model/User');
 const { default: mongoose } = require('mongoose');
 const User = require('./Models/user.model');
-
-const connectDB = async () => {
-   
-    try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/noh')
-            // , { useNewUrlParser: true, useUnifiedTopology: true });
-        console.log('Connected to database');
-    } catch (error) {
-        console.error('Couldn\'t Connect To Database: ', error);
-        process.exit(1); // Exit process with failure
-    }
-};
+const { connectDB } = require('./database/connect');
+// const { default: connectDB } = require('./database/connect');
 
 connectDB();
 
