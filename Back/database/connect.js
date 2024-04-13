@@ -3,8 +3,6 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 const mongoose = require('mongoose')
-
-
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.y13yezm.mongodb.net/noh`;
 
 module.exports.connectDB = async () => {

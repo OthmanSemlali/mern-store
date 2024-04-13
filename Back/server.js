@@ -1,8 +1,6 @@
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
-const fs = require('fs').promises;
-// const users = require('./users.json')
 const initializePassport = require("./config/passport-config");
 const express = require("express");
 const app = express();
@@ -13,15 +11,11 @@ const methodOverride = require("method-override");
 
 const flash = require("express-flash");
 const {body, validationResult} = require("express-validator");
-// const { default: User } = require('./Model/User');
 
-// const User = require('./Model/User');
-const { default: mongoose } = require('mongoose');
 const User = require('./Models/user.model');
 const { connectDB } = require('./database/connect');
 const { requireRole, checkAuthenticated, checkNotAuthenticated } = require('./middlewares/auth.mw');
-// const { requireRole } = require('./middlewares/auth.mw');
-// const { default: connectDB } = require('./database/connect');
+
 
 connectDB();
 
@@ -57,22 +51,14 @@ const validateInputs = [
     (req, res, next) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
-            
-            
             return res.json({errors: errors.array()})
         }
         next();
     }
 ];
 
-// Routes
+// ** Routes Call **
 
-
-
-
-
-
-// end Routes
 
 
 const sanitizeLoginInput = [
@@ -99,16 +85,8 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
 app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        // users.push({
-        // id: Date.now().toString(),
-        // email: req.body.email,
-        // password: hashedPassword,
-        // });
-
-        // await fs.writeFile('./users.json', JSON.stringify(users, null, 2));
-
+       
         await User.addUser({
-            // id: Date.now().toString(),
             email: req.body.email,
             password: hashedPassword,
             role:req.body.role
@@ -170,12 +148,15 @@ app.get('/auth/google/callback', checkNotAuthenticated,
 // })
 
 
+//? This route for test middlewares/auth etc..
 app.get('/auth/protected',checkAuthenticated,requireRole(['seller']), (req, res) => {
     let email = req.user.email;
     console.log('req.user.id', req.user.id)
     res.send(`Hello ${email}`);
 })
 
+
+// error Middlewares
 app.use((req, res) => {
   res.status(404).send("Route Not Found");
 });
@@ -186,12 +167,7 @@ app.use((err, req, res, next) => {
 });
 
 
-// function isLoggedIn(req, res, next) {
-//     req.user ? next() : res.sendStatus(401);
-// }
-
-
-
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+const PORT = 3000
+app.listen(PORT, () => {
+  console.log(`Server is running on port 3000: http://localhost:${PORT}/`);
 });

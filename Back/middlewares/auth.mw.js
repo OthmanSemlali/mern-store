@@ -28,5 +28,4 @@ function checkNotAuthenticated(req, res, next) {
     }
     next();
 }
-// exports.requireRole = requireRole;
 module.exports = {requireRole, checkAuthenticated, checkNotAuthenticated}

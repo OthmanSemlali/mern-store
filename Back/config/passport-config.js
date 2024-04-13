@@ -1,11 +1,11 @@
-const { authenticate, transformAuthInfo } = require("passport");
+
 const bcrypt = require("bcrypt");
 const User = require("../Models/user.model");
 const LocalStrategy = require("passport-local").Strategy;
 
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
 
-// const User = require("../Model/User");
+
 
 async function initialize(
   passport
@@ -98,7 +98,7 @@ async function initialize(
 
       const googleUser = await User.getUserByGoogleId(id);
       if (googleUser) {
-        console.log("gg user ", googleUser);
+        console.log("google user ", googleUser);
         done(null, googleUser);
       } else {
         done(new Error("Google user not found"));
@@ -108,7 +108,7 @@ async function initialize(
       const localUser = await User.fetchUserById(id);
 
       if (localUser) {
-        console.log("ll ", localUser);
+        // console.log("ll ", localUser);
         done(null, localUser);
       } else {
         done(new Error("User not found"));
