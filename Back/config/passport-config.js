@@ -1,11 +1,12 @@
 const { authenticate, transformAuthInfo } = require("passport");
 const bcrypt = require("bcrypt");
+const User = require("../Models/user.model");
 const LocalStrategy = require("passport-local").Strategy;
 
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
 
 
-const User = require("../Model/User");
+// const User = require("../Model/User");
 
 async function initialize(
   passport

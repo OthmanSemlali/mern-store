@@ -15,8 +15,9 @@ const flash = require("express-flash");
 const {body, validationResult} = require("express-validator");
 // const { default: User } = require('./Model/User');
 
-const User = require('./Model/User');
+// const User = require('./Model/User');
 const { default: mongoose } = require('mongoose');
+const User = require('./Models/user.model');
 
 const connectDB = async () => {
    
@@ -71,6 +72,16 @@ const validateInputs = [
         next();
     }
 ];
+
+// Routes
+
+
+
+
+
+
+// end Routes
+
 
 const sanitizeLoginInput = [
     body("username").trim().escape()
