@@ -5,7 +5,6 @@ const LocalStrategy = require("passport-local").Strategy;
 
 var GoogleStrategy = require("passport-google-oauth2").Strategy;
 
-
 // const User = require("../Model/User");
 
 async function initialize(
@@ -15,13 +14,11 @@ async function initialize(
   // addUser,
   // fetchUserById
 ) {
-
   // This method is used to authenticate the user. The result of the authenticateUser method is attached to the request object as req.user.
   const authenticateUser = async (email, password, done) => {
     // This method is used to retrieve the user from the database. The result of the getUserByUsername method is attached to the request object as req.user.
     const user = await User.getUserByEmail(email);
-  
-    
+
     if (user == null) {
       return done(null, false, { message: "No user with that username" });
     }
@@ -52,7 +49,6 @@ async function initialize(
         scope: ["email", "profile"],
       },
       async function (request, accessToken, refreshToken, profile, done) {
-    
         const existingGoogleUser = await User.getUserByGoogleId(profile.id);
 
         if (existingGoogleUser) {
@@ -61,8 +57,10 @@ async function initialize(
           // Google user already exists locally
           return done(null, existingGoogleUser);
         } else {
+          // const role = request.state ? request.state.role : "no_role";
 
-          // const role = request.query.role || "user";
+
+          const role = request.query.role || "no_role";
 
           // Google user doesn't exist locally -> add the user localy
           const newGoogleUser = {
@@ -70,18 +68,20 @@ async function initialize(
             googleId: profile.id,
             email: profile.email,
             displayName: profile.displayName,
-            role:"role"
+            role: role,
           };
 
           try {
             await User.addUser(newGoogleUser);
+
+            newGoogleUser.created = true;
+            //user object that will be set on req.user after authentication. It's the user object you want to make available in your route handlers.
+            return done(null, newGoogleUser);
           } catch (error) {
             console.error("addUser err ", error);
-          }
 
-          newGoogleUser.created = true;
-          //user object that will be set on req.user after authentication. It's the user object you want to make available in your route handlers.
-          return done(null, newGoogleUser);
+            return done(null, error.message);
+          }
         }
       }
     )
@@ -92,7 +92,6 @@ async function initialize(
 
   // This method is used to retrieve the whole object via the id. That object is attached to the request object as req.user.
   passport.deserializeUser(async (id, done) => {
-
     if (id.includes("google")) {
       // Google user ID format, fetch user by googleId
       //! const googleId = id.split('-')[1]; // Assuming the format is 'google-{googleId}'

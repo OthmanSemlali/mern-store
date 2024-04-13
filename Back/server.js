@@ -109,6 +109,7 @@ app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) 
             // id: Date.now().toString(),
             email: req.body.email,
             password: hashedPassword,
+            role:req.body.role
             })
         return res.status(201).json({ message: 'User registered successfully!', user: newUser });
     } catch {
@@ -135,7 +136,7 @@ app.get('/auth/google',
       [ 'email', 'profile' ] }
 ));
 
-app.get('/auth/google/callback',
+app.get('/auth/google/callback', checkNotAuthenticated,
   passport.authenticate('google', {
     successRedirect: false,
     failureRedirect: false
