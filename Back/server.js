@@ -19,6 +19,8 @@ const {body, validationResult} = require("express-validator");
 const { default: mongoose } = require('mongoose');
 const User = require('./Models/user.model');
 const { connectDB } = require('./database/connect');
+const { requireRole, checkAuthenticated, checkNotAuthenticated } = require('./middlewares/auth.mw');
+// const { requireRole } = require('./middlewares/auth.mw');
 // const { default: connectDB } = require('./database/connect');
 
 connectDB();
@@ -168,10 +170,11 @@ app.get('/auth/google/callback', checkNotAuthenticated,
 // })
 
 
-// app.get('/auth/protected',checkAuthenticated, (req, res) => {
-//     let name = req.user.email;
-//     res.send(`Hello ${name}`);
-// })
+app.get('/auth/protected',checkAuthenticated,requireRole(['seller']), (req, res) => {
+    let email = req.user.email;
+    console.log('req.user.id', req.user.id)
+    res.send(`Hello ${email}`);
+})
 
 app.use((req, res) => {
   res.status(404).send("Route Not Found");
@@ -187,23 +190,7 @@ app.use((err, req, res, next) => {
 //     req.user ? next() : res.sendStatus(401);
 // }
 
-// function checkAuthenticated(req, res, next) {
-//     if(req.isAuthenticated()){
-//         return next();
-//     }
-//     // res.redirect("/login");
-//     res.sendStatus(401)
-// }
 
-//restrict user from send request for loging while he already logged!
-function checkNotAuthenticated(req, res, next) {
-    if(req.isAuthenticated()){
-        // return res.redirect("/dashboard");
-
-        return res.json({error: "Unautorized (you must be logged out to perform such an operation)"})
-    }
-    next();
-}
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
