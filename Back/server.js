@@ -16,6 +16,8 @@ const User = require('./Models/user.model');
 const { connectDB } = require('./database/connect');
 const { requireRole, checkAuthenticated, checkNotAuthenticated } = require('./middlewares/auth.mw');
 
+const categoryRouter = require('./Routes/category.routes')
+const productRouter = require('./Routes/product.routes')
 
 connectDB();
 
@@ -58,7 +60,8 @@ const validateInputs = [
 ];
 
 // ** Routes Call **
-
+app.use('/api/categories', categoryRouter );
+app.use('/api/products', productRouter);
 
 
 const sanitizeLoginInput = [
@@ -84,6 +87,12 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
   
 app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) => {
     try {
+
+      const user = await User.getUserByEmail(req.body.email);
+      if(user){
+          return res.status(400).json({ errors: [{"type":"field","value":email, "msg":"Email Already Exist","path":"email"}] });
+      }
+      
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
        
         await User.addUser({
