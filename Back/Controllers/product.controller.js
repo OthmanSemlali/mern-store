@@ -202,5 +202,23 @@ class ProductController {
             res.status(500).json({ message: 'Server Error' });
         }
     }
+
+
+    updateProductStock = async (products) => {
+        try {
+          for (const productItem of products) {
+            const product = await Product.findById(productItem.productID);
+            if (!product) {
+              throw new Error('Product not found');
+            }
+            // Update product stock
+            product.stock -= productItem.quantity;
+            await product.save();
+          }
+        } catch (error) {
+          throw new Error(error.message);
+        }
+      };
+      
 }
 module.exports = new ProductController();
