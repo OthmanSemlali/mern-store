@@ -19,6 +19,7 @@ const { requireRole, checkAuthenticated, checkNotAuthenticated } = require('./mi
 const categoryRouter = require('./Routes/category.routes')
 const productRouter = require('./Routes/product.routes')
 const userRouter = require('./Routes/user.routes')
+const orderRouter = require('./Routes/order.routes')
 
 connectDB();
 
@@ -64,6 +65,7 @@ const validateInputs = [
 app.use('/api/categories', categoryRouter );
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
+app.use('/api/orders', orderRouter);
 
 
 const sanitizeLoginInput = [
@@ -90,14 +92,16 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
 app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) => {
     try {
 
-      const user = await User.getUserByEmail(req.body.email);
-      if(user){
+      const {email, password} = req.body;
+      // const user = ;
+      if(await User.getUserByEmail(email)){
+      
           return res.status(400).json({ errors: [{"type":"field","value":email, "msg":"Email Already Exist","path":"email"}] });
       }
-      
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+   
+        const hashedPassword = await bcrypt.hash(password, 10);
        
-        await User.addUser({
+        const newUser = await User.addUser({
             email: req.body.email,
             password: hashedPassword,
             role:req.body.role
@@ -160,7 +164,7 @@ app.get('/auth/google/callback', checkNotAuthenticated,
 
 
 //? This route for test middlewares/auth etc..
-app.get('/auth/protected',checkAuthenticated,requireRole(['seller']), (req, res) => {
+app.get('/auth/protected',checkAuthenticated, (req, res) => {
     let email = req.user.email;
     console.log('req.user.id', req.user.id)
     res.send(`Hello ${email}`);
