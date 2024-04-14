@@ -101,6 +101,28 @@ class ProductController {
         }
     }
 
+
+    async fetchProductsByPriceRange(req, res) {
+        const minPrice = req.params.minPrice;
+        const maxPrice = req.params.maxPrice;
+        const page = parseInt(req.params.page);
+        const pageSize = parseInt(req.params.pageSize);
+        try {
+
+            const productsByPriceRange = await Product.fetchProductsByPriceRange(page, pageSize, minPrice, maxPrice);
+
+            res.json(productsByPriceRange);
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('fetchProductsByPriceRange ', error.message)
+
+            } else {
+                res.status(500).json({ message: 'Server Error' });
+
+            }
+        }
+    }
+
     
     
 
@@ -130,10 +152,10 @@ class ProductController {
         }
 
         
-        const { name, description, seoDescription,image, categoryID } = req.body;
+        const { name, description, seoDescription,image,price, stock, size, categoryID } = req.body;
         
         try {
-            const product = await Product.createProduct(name, description, seoDescription,image, req.user.id, categoryID);
+            const product = await Product.createProduct(name, description, seoDescription,image,price, stock, size, req.user.id, categoryID);
             res.status(201).json(product);
         } catch (error) {
             if (error instanceof Error) {
@@ -171,9 +193,9 @@ class ProductController {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid product ID' });
           }
-        const { name, description, seoDescription,image} = req.body;
+        const { name, description, seoDescription,image, price, stock, size} = req.body;
         try {
-            const product = await Product.updateProductById(id, name, description, seoDescription,image);
+            const product = await Product.updateProductById(id, name, description, seoDescription,image, price, stock, size);
             res.status(201).json(product);
 
         } catch (error) {

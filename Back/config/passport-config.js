@@ -111,7 +111,9 @@ async function initialize(
         // console.log("ll ", localUser);
         done(null, localUser);
       } else {
-        done(new Error("User not found"));
+        // done(new Error("User not found"));
+        done(null, false, {message:'user not found'});
+
       }
     }
   });

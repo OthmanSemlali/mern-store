@@ -24,8 +24,8 @@ const UserSchema = new Schema(
 );
 
 class UserClass {
-  static fetchUserById(id) {
-    return this.findById(id);
+  static fetchUserById(_id) {
+    return this.findById(_id);
   }
 
 

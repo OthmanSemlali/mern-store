@@ -18,6 +18,7 @@ const { requireRole, checkAuthenticated, checkNotAuthenticated } = require('./mi
 
 const categoryRouter = require('./Routes/category.routes')
 const productRouter = require('./Routes/product.routes')
+const userRouter = require('./Routes/user.routes')
 
 connectDB();
 
@@ -62,6 +63,7 @@ const validateInputs = [
 // ** Routes Call **
 app.use('/api/categories', categoryRouter );
 app.use('/api/products', productRouter);
+app.use('/api/users', userRouter);
 
 
 const sanitizeLoginInput = [

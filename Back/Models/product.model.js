@@ -8,10 +8,14 @@ const ProductShcema = new Schema({
     name: { type: String, required: true },
     description: { type: String, required: true },
     seodescription: { type: String },
-    readTime: { type: String },
     image: { type: String, require: true },
+    price:{type: Number, reqiured:true },
+    stock:{type: Number,  reqiured:true },
+    size:{type: Object,  reqiured:true },
     sellerID: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     categoryID: { type: Schema.Types.ObjectId, ref: 'Category', required: true }
+
+
 },
     {
         timestamps: true,
@@ -39,12 +43,7 @@ class ProductClass {
             // .populate('sellerID', 'email')
             // .populate('categoryID', 'name')
             .exec();
-            // if(product){
-            //     return product;
-
-            // }else{
-            //     return null
-            // }
+       
             return product;
         } catch (error) {
             console.error("Error fetching product by id:", error);
@@ -151,17 +150,35 @@ class ProductClass {
 
     }
 
-   
+    static async fetchProductsByPriceRange(page, pageSize, minPrice, maxPrice) {
+        const skip = (page - 1) * pageSize;
+    
+        const productsQuery = this.find({
+            price: { $gte: minPrice, $lte: maxPrice }
+        })
+            .skip(skip)
+            .limit(pageSize)
+            .select('name seodescription image price'); // Adjust the fields selected as needed
+    
+        const countQuery = this.countDocuments({
+            price: { $gte: minPrice, $lte: maxPrice }
+        });
+    
+        const [products, totalProducts] = await Promise.all([productsQuery.exec(), countQuery.exec()]);
+    
+        return { products, totalProducts };
+    }
+    
 
-    static createProduct(name, description, seodescription, image, sellerID, categoryID) {
-        return this.create({ name, description, seodescription, image, sellerID, categoryID });
+    static createProduct(name, description, seodescription, image,price, stock, size, sellerID, categoryID) {
+        return this.create({ name, description, seodescription, image,price, stock, size, sellerID, categoryID });
     }
     static deleteProductById(_id) {
         return this.findOneAndDelete({ _id });
     }
 
-    static async updateProductById(_id, name, description, seodescription, image) {
-        return await this.findOneAndUpdate({ _id }, { name, description, seodescription, image });
+    static async updateProductById(_id, name, description, seodescription, image, price, stock, size) {
+        return await this.findOneAndUpdate({ _id }, { name, description, seodescription, image, price, stock, size });
     }
 
 

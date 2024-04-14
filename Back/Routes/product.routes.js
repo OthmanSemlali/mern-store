@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.get('/fetchPaginatedProducts/:page/:pageSize', productController.fetchPaginatedProducts);
 router.get('/fetchPaginatedProductsByCategory/:categoryName/:page/:pageSize', productController.fetchPaginatedProductsByCategory)
+router.get('/fetchPaginatedProductsByPriceRange/:minPrice/:maxPrice/:page/:pageSize', productController.fetchProductsByPriceRange)
 router.get('/fetchSingleProductByName/:name', productController.fetchSingleProductByName);
 router.get('/fetchSingleProductByID/:id', productController.fetchProductById);
 
@@ -21,6 +22,10 @@ router.post('/create', checkAuthenticated, requireRole(['seller']), [
     body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
     body('description').notEmpty().withMessage('Description is required').escape(),
     body('seoDescription').notEmpty().withMessage('seoDescription is required').escape(),
+    body('price').notEmpty(),
+    body('stock').notEmpty(),
+    body('size').notEmpty(),
+    
     // body('sellerID').notEmpty(),
     body('categoryID').notEmpty()
 ], productController.createProduct);
