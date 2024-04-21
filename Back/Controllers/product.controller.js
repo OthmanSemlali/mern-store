@@ -38,6 +38,22 @@ class ProductController {
             }
         }
     }
+
+    async getFeaturedProducts(req, res){
+        console.log('req.params.id')
+        try {
+            const products = await Product.getFeaturedProducts()
+            res.json(products)
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('getFeaturedProducts ', error.message)
+
+            } else {
+                res.status(500).json({ message: 'Server Error' });
+
+            }
+        }
+    }
      async fetchPaginatedProducts(req, res) {
 
         const page = parseInt(req.params.page);
@@ -57,7 +73,6 @@ class ProductController {
 
             } else {
                 res.status(500).json({ message: 'Server Error' });
-
             }
         }
     }
@@ -152,10 +167,10 @@ class ProductController {
         }
 
         
-        const { name, description, seoDescription,image,price, stock, size, categoryID } = req.body;
+        const { name, description, seoDescription, image,price, stock, size, options, style, tileUse, materials,featured,published, categoryID } = req.body;
         
         try {
-            const product = await Product.createProduct(name, description, seoDescription,image,price, stock, size, req.user.id, categoryID);
+            const product = await Product.createProduct(name, description, seoDescription, image,price, stock, size, options, style, tileUse, materials,featured,published, req.user.id, categoryID);
             res.status(201).json(product);
         } catch (error) {
             if (error instanceof Error) {
@@ -193,9 +208,9 @@ class ProductController {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid product ID' });
           }
-        const { name, description, seoDescription,image, price, stock, size} = req.body;
+        const { name, description, seoDescription, image,price, stock, size, options, style, tileUse, materials,featured,published} = req.body;
         try {
-            const product = await Product.updateProductById(id, name, description, seoDescription,image, price, stock, size);
+            const product = await Product.updateProductById(id, name, description, seoDescription, image,price, stock, size, options, style, tileUse, materials,featured,published);
             res.status(201).json(product);
 
         } catch (error) {
@@ -219,6 +234,27 @@ class ProductController {
           throw new Error(error.message);
         }
       };
+
+      toggleVisibility = async (req, res) => {
+        try {
+            const {id} = req.params
+
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return res.status(400).json({ error: 'Invalid product ID' });
+              }
+            const product = await Product.toggleProductVisibility(id)
+            res.json(product.modifiedCount)
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error('toggleVisibility ', error.message)
+
+            } else {
+                res.status(500).json({ message: 'Server Error' });
+
+            }
+            
+        }
+      }
       
 }
 module.exports = new ProductController();

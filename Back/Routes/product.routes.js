@@ -25,6 +25,12 @@ router.post('/create', checkAuthenticated, requireRole(['seller']), [
     body('price').notEmpty(),
     body('stock').notEmpty(),
     body('size').notEmpty(),
+    body('options').notEmpty(),
+    body('style').notEmpty(),
+    body('tileUse').notEmpty(),
+    body('materials').notEmpty(),
+    body('featured').notEmpty(),
+    body('published').notEmpty(),
     
     // body('sellerID').notEmpty(),
     body('categoryID').notEmpty()
@@ -39,4 +45,7 @@ router.put('/:id', checkAuthenticated, verifyOwnership, [
     // body('categoryID').notEmpty()
 ], productController.updateProductById);
 
+
+router.get('/getFeaturedProducts', productController.getFeaturedProducts)
+router.post('/toggleProductVisibility/:id', productController.toggleVisibility)
 module.exports = router

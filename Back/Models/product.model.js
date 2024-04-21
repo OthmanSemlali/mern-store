@@ -12,6 +12,18 @@ const ProductShcema = new Schema({
     price:{type: Number, reqiured:true },
     stock:{type: Number,  reqiured:true },
     size:{type: Object,  reqiured:true },
+
+    // options: dispo colors with images each
+    options:{type:Object, required:true},
+    // color:{type:Object, required:true},
+
+    //modern/classic etc..
+    style:{type:String, required:true},
+    // shower/bathroom..
+    tileUse:{type:String, required:true},
+    materials:{type:String, required:true},
+    featured:{type:Boolean, required:true},
+    published:{type:Boolean, required:true},
     sellerID: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     categoryID: { type: Schema.Types.ObjectId, ref: 'Category', required: true }
 
@@ -39,7 +51,7 @@ class ProductClass {
 
     static async fetchProductById(_id){
         try {
-            const product = await this.findOne({ _id: new mongoose.Types.ObjectId(_id) })
+            const product = await this.findOne({ _id: _id })
             // .populate('sellerID', 'email')
             // .populate('categoryID', 'name')
             .exec();
@@ -70,6 +82,18 @@ class ProductClass {
 
         return relatedPosts;
     }
+
+    static async getFeaturedProducts() {
+        return await this.find({ featured: true }).select('name seodescription image').exec();;
+    }
+    
+
+    static async toggleProductVisibility(_id) {
+        const product = await this.findOne({_id});
+        const updatedVisibility = !product.published;
+        return await this.updateOne({_id}, { $set: { 'published': updatedVisibility } });
+    }
+    
 
      static async getCategoriesWithProductCounts() {
         try {
@@ -170,15 +194,15 @@ class ProductClass {
     }
     
 
-    static createProduct(name, description, seodescription, image,price, stock, size, sellerID, categoryID) {
-        return this.create({ name, description, seodescription, image,price, stock, size, sellerID, categoryID });
+    static createProduct(name, description, seodescription, image,price, stock, size, options, style, tileUse, materials,featured,published, sellerID, categoryID) {
+        return this.create({ name, description, seodescription, image,price, stock, size, options, style, tileUse, materials,featured,published, sellerID, categoryID });
     }
     static deleteProductById(_id) {
         return this.findOneAndDelete({ _id });
     }
 
-    static async updateProductById(_id, name, description, seodescription, image, price, stock, size) {
-        return await this.findOneAndUpdate({ _id }, { name, description, seodescription, image, price, stock, size });
+    static async updateProductById(_id, name, description, seodescription, image,price, stock, size, options, style, tileUse, materials,featured,published) {
+        return await this.findOneAndUpdate({ _id }, { name, description, seodescription, image,price, stock, size, options, style, tileUse, materials,featured,published });
     }
 
 
