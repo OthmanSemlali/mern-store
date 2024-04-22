@@ -1,10 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
+import { brand_name } from '../Utils/constants'
 const Footer = () => {
   return <Wrapper>
     <h5>
       &copy; {new Date().getFullYear()}
-      <span> Home Goods Store </span>
+      <span> {brand_name} </span>
     </h5>
     <h5>All rights reserved</h5>
   </Wrapper>

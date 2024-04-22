@@ -20,6 +20,7 @@ export const getFeaturedProducts = createAsyncThunk(
 
       return res.data;
     } catch (error) {
+      console.log("err: something went wrong while fetching featured products");
       return thunkAPI.rejectWithValue(
         "something went wrong while fetching featured products"
       );
@@ -28,16 +29,16 @@ export const getFeaturedProducts = createAsyncThunk(
 );
 
 const initialState = {
-    products: [],
-    products_loading: false,
-    products_error: false,
+  products: [],
+  products_loading: false,
+  products_error: false,
 
-    featured_products: [],
-    featured_products_status:'success',
+  featured_products: [],
+  featured_products_status: "success",
 
-    single_product: {},
-    single_product_loading: false,
-    single_product_error: false,
+  single_product: {},
+  single_product_loading: false,
+  single_product_error: false,
 };
 
 const productSlice = createSlice({
@@ -46,16 +47,16 @@ const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(getFeaturedProducts.pending, (state)=>{
-        state.featured_products_status='loading'
-    })
-    .addCase(getFeaturedProducts.fulfilled, (state, action)=>{
-        state.featured_products_status = 'success';
-        state.featured_products = action.payload
-    })
-    .addCase(getFeaturedProducts.rejected, (state)=>{
-        state.featured_products_status='failed'
-    })
+      .addCase(getFeaturedProducts.pending, (state) => {
+        state.featured_products_status = "loading";
+      })
+      .addCase(getFeaturedProducts.fulfilled, (state, action) => {
+        state.featured_products_status = "success";
+        state.featured_products = action.payload;
+      })
+      .addCase(getFeaturedProducts.rejected, (state) => {
+        state.featured_products_status = "failed";
+      });
   },
 });
 
