@@ -20,9 +20,10 @@ const categoryRouter = require('./Routes/category.routes')
 const productRouter = require('./Routes/product.routes')
 const userRouter = require('./Routes/user.routes')
 const orderRouter = require('./Routes/order.routes')
-
+const cors = require('cors')
 connectDB();
 
+app.use(cors())
 initializePassport(
     passport,
     User.getUserByEmail,

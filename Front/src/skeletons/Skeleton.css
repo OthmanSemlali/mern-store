@@ -1,0 +1,83 @@
+/* basic style */
+
+.skeleton {
+  background: #ddd;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+.skeleton.text {
+  width: 35%;
+  height: 12px;
+}
+.skeleton.short-text {
+  width: 20%;
+  height: 12px;
+}
+.skeleton.long-text {
+  width: 100%;
+  height: 12px;
+}
+.skeleton.title {
+  width: 50%;
+  height: 20px;
+  margin-bottom: 15px;
+}
+.skeleton.short-title {
+  width: 20%;
+  height: 20px;
+  margin-bottom: 15px;
+}
+.skeleton.avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+.skeleton.thumbnail {
+  width: 100%;
+  height: 100%;
+}
+
+.shimmer-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: loading 2.5s infinite;
+  overflow: hidden;
+}
+.shimmer {
+  width: 30%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+
+  transform: skewX(-20deg);
+}
+@keyframes loading {
+  0% {
+    transform: translateX(-150%);
+  }
+  50% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+
+@keyframes skeleton-show-hide {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.skeleton {
+  animation: skeleton-show-hide 2s infinite;
+}
