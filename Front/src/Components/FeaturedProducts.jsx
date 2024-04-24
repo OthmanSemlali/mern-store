@@ -35,10 +35,10 @@ const FeaturedProducts = () => {
 //     // </>
 //     );
 //   }
-  if (status == "failed") {
+  if (status === "failed") {
     return (
       <>
-        <Error />
+        {/* <Error /> */}
         <p className="text-center">Failed to load Featurd books!</p>
       </>
     );
