@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { closeSideBar } from "../features/themeSlice";
 import { brand_name, links } from "../Utils/constants";
+import CartButtons from "./CartButtons";
+import { FaTimes } from "react-icons/fa";
 
 
 const Sidebar = () => {
@@ -14,15 +16,18 @@ const { isSideBarOpen } = useSelector(
 
   console.log('isSideBarOpen', isSideBarOpen)
 
+  const closeSideBatHundler = () => {
+    dispatch(closeSideBar())
+  }
   return (
     <SidebarContainer>
       <aside className={`${isSideBarOpen ? "sidebar show-sidebar" : "sidebar"}`}>
         <div className="sidebar-header">
           {/* <img src={logo} className="logo" alt="Keep Reading" /> */}
           <span style={{ color: 'var(--clr-primary-5)' }}>{brand_name}</span>
-          <button className="close-btn" type="button" onClick={() => dispatch(closeSideBar())}>
-            {/* <FaTimes /> */}
-            CLOSE
+          <button className="close-btn" type="button" onClick={closeSideBatHundler}>
+            <FaTimes />
+            
           </button>
         </div>
 
@@ -30,16 +35,16 @@ const { isSideBarOpen } = useSelector(
           {links.map(({ id, text, url }) => {
             return (
               <li key={id}>
-                <Link to={url} onClick={closeSideBar()}>{text}</Link>
+                <Link to={url} onClick={closeSideBatHundler}>{text}</Link>
               </li>
             );
           })}
           <li>
-            {/* <Link to="checkout" onClick={closeSidebar}>checkout</Link> */}
+            <Link to="/checkout" onClick={closeSideBatHundler}>checkout</Link>
           </li>
         </ul>
 
-        {/* <CartButtons /> */}
+        <CartButtons closeSideBatHundler={closeSideBatHundler} />
       </aside>
     </SidebarContainer>
   );

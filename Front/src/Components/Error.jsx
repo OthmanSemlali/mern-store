@@ -6,7 +6,12 @@ const Error = ({ status }) => {
         <h2>Route Not Found..</h2>
       ) : status === 505 ? (
         <h2>Server Error...</h2>
-      ) : (
+      ) : status === 201 ? (
+        <h2>
+          no post found
+        </h2>
+      )
+      : (
         <h2>there was an error...</h2>
       )}
     </div>

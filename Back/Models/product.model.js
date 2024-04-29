@@ -95,17 +95,17 @@ class ProductClass {
       throw new Error("Failed to fetch post by id");
     }
   }
-  static async fetchSingleProductByName(name) {
+  static async fetchSingleProductBySlug(slug) {
     // console.log('name', name)
     try {
-      const product = await this.findOne({ name })
+      const product = await this.findOne({ slug })
         .populate("sellerID", "username")
         .populate("categoryID", "name")
         .exec();
       return product;
     } catch (error) {
-      console.error("Error fetching product by name:", error);
-      throw new Error("Failed to fetch post by name");
+      console.error("Error fetching product by slug:", error);
+      throw new Error("Failed to fetch post by slug");
     }
   }
 
@@ -167,17 +167,58 @@ class ProductClass {
     }
   }
 
-  static async fetchPaginatedProducts(page, pageSize) {
-    const skip = (page - 1) * pageSize;
+  // static async fetchPaginatedProducts(page, pageSize) {
+  //   const skip = (page - 1) * pageSize;
 
-    return await this.find()
+  //   return await this.find()
+  //     .skip(skip)
+  //     .limit(pageSize)
+  //     // .populate('categoryID', 'name')
+  //     // .populate('sellerID', 'username')
+  //     .select("name seodescription image")
+  //     .exec();
+  // }
+
+  static async fetchPaginatedProducts(page, pageSize, filters) {
+    const skip = (page - 1) * pageSize;
+    console.log('skip', skip)
+    // const query = {};
+  
+    // Apply filters if provided
+    // if (filters) {
+    //   if (filters.category) {
+    //     query.category = filters.category;
+    //   }
+    //   if (filters.priceRange) {
+    //     // Assuming priceRange is an array [min, max]
+    //     query.price = { $gte: filters.priceRange[0], $lte: filters.priceRange[1] };
+    //   }
+    //   if (filters.style) {
+    //     query.style = filters.style;
+    //   }
+    //   if (filters.titleUse) {
+    //     query.titleUse = filters.titleUse;
+    //   }
+    //   if (filters.material) {
+    //     query.material = filters.material;
+    //   }
+    // }
+
+    console.log('filters ', filters )
+  
+    const getProductsQquery = this.find(filters)
       .skip(skip)
       .limit(pageSize)
-      // .populate('categoryID', 'name')
-      // .populate('sellerID', 'username')
-      .select("name seodescription image")
-      .exec();
+      .select("slug name seodescription image price")
+
+
+      const getCountQuery = this.countDocuments(filters)
+
+      const [products, totalProducts] = await Promise.all([getProductsQquery.exec(), getCountQuery.exec()]);
+
+      return { products, totalProducts };
   }
+  
 
   static async fetchProductsByCategory(categoryName, page, pageSize) {
     const category = await Category.findOne({ name: categoryName });

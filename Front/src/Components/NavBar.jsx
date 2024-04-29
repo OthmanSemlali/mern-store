@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { brand_name, links } from "../Utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { openSideBar } from "../features/themeSlice";
+import { FaBars } from "react-icons/fa";
+import CartButtons from "./CartButtons";
 
 const Nav = () => {
 const dispatch = useDispatch();
@@ -23,8 +25,8 @@ const dispatch = useDispatch();
           <button type="button" className="nav-toggle" 
           onClick={()=>dispatch(openSideBar())}
           >
-            OPEN
-            {/* <FaBars /> */}
+            {/* OPEN */}
+            <FaBars />
           </button>
         </div>
 
@@ -39,7 +41,7 @@ const dispatch = useDispatch();
           })}
         </ul>
 
-        {/* <CartButtons /> */}
+        <CartButtons />
       </div>
     </NavContainer>
   );

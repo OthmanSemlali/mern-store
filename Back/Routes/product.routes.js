@@ -7,13 +7,15 @@ const { requireRole, checkAuthenticated } = require('../middlewares/auth.mw');
 
 const router = express.Router();
 
-router.get('/fetchPaginatedProducts/:page/:pageSize', productController.fetchPaginatedProducts);
+router.get('/', productController.fetchPaginatedProducts);
+// router.get('/fetchPaginatedProducts/:page/:pageSize', productController.fetchPaginatedProducts);
 router.get('/fetchPaginatedProductsByCategory/:categoryName/:page/:pageSize', productController.fetchPaginatedProductsByCategory)
 router.get('/fetchPaginatedProductsByPriceRange/:minPrice/:maxPrice/:page/:pageSize', productController.fetchProductsByPriceRange)
-router.get('/fetchSingleProductByName/:name', productController.fetchSingleProductByName);
+router.get('/fetchSingleProductBySlug/:slug', productController.fetchProductBySlug);
 router.get('/fetchSingleProductByID/:id', productController.fetchProductById);
 
 router.get('/getCategoriesWithProductsCounts', productController.getCategoriesWithProductsCounts)
+router.get('/distinctFilters', productController.distinctFilters)
 router.get('/getRelatedProducts', productController.getRelatedProducts)
 // router.get('/:title', productController.fetchProductById);
 
