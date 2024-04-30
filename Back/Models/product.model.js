@@ -167,49 +167,18 @@ class ProductClass {
     }
   }
 
-  // static async fetchPaginatedProducts(page, pageSize) {
-  //   const skip = (page - 1) * pageSize;
-
-  //   return await this.find()
-  //     .skip(skip)
-  //     .limit(pageSize)
-  //     // .populate('categoryID', 'name')
-  //     // .populate('sellerID', 'username')
-  //     .select("name seodescription image")
-  //     .exec();
-  // }
-
   static async fetchPaginatedProducts(page, pageSize, filters) {
     const skip = (page - 1) * pageSize;
     console.log('skip', skip)
-    // const query = {};
   
-    // Apply filters if provided
-    // if (filters) {
-    //   if (filters.category) {
-    //     query.category = filters.category;
-    //   }
-    //   if (filters.priceRange) {
-    //     // Assuming priceRange is an array [min, max]
-    //     query.price = { $gte: filters.priceRange[0], $lte: filters.priceRange[1] };
-    //   }
-    //   if (filters.style) {
-    //     query.style = filters.style;
-    //   }
-    //   if (filters.titleUse) {
-    //     query.titleUse = filters.titleUse;
-    //   }
-    //   if (filters.material) {
-    //     query.material = filters.material;
-    //   }
-    // }
+    
 
     console.log('filters ', filters )
   
     const getProductsQquery = this.find(filters)
       .skip(skip)
       .limit(pageSize)
-      .select("slug name seodescription image price")
+      .select("slug name seodescription description image price")
 
 
       const getCountQuery = this.countDocuments(filters)
@@ -220,59 +189,9 @@ class ProductClass {
   }
   
 
-  static async fetchProductsByCategory(categoryName, page, pageSize) {
-    const category = await Category.findOne({ name: categoryName });
-    if (!category) {
-      console.log("category not found");
 
-      // throw new Error('Category not found');
 
-      return null;
-    }
-
-    console.log("category found", category);
-
-    const skip = (page - 1) * pageSize;
-
-    // First query to fetch paginated posts
-    const productsQuery = this.find({ categoryID: category._id })
-      .skip(skip)
-      .limit(pageSize)
-      // .populate('sellerID', 'username')
-      .select("name seodescription image");
-
-    const countQuery = this.countDocuments({ categoryID: category._id });
-
-    const [products, totalPosts] = await Promise.all([
-      productsQuery.exec(),
-      countQuery.exec(),
-    ]);
-
-    // console.log('posts by cat ', posts)
-    return { products, totalPosts };
-  }
-
-  static async fetchProductsByPriceRange(page, pageSize, minPrice, maxPrice) {
-    const skip = (page - 1) * pageSize;
-
-    const productsQuery = this.find({
-      price: { $gte: minPrice, $lte: maxPrice },
-    })
-      .skip(skip)
-      .limit(pageSize)
-      .select("name seodescription image price"); // Adjust the fields selected as needed
-
-    const countQuery = this.countDocuments({
-      price: { $gte: minPrice, $lte: maxPrice },
-    });
-
-    const [products, totalProducts] = await Promise.all([
-      productsQuery.exec(),
-      countQuery.exec(),
-    ]);
-
-    return { products, totalProducts };
-  }
+ 
 
   static createProduct(
     name,

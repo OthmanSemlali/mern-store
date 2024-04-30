@@ -5,14 +5,10 @@ import {
   getCategoriesWithProductsCounts,
   getDistinctFilters,
 } from "../features/filterSlice";
-import { Navigate, useNavigate } from "react-router-dom";
-// import { useFilterContext } from "../context/filter_context";
-// import { getUniqueValues, formatPrice } from "../utils/helpers";
-// import { FaCheck } from "react-icons/fa";
-// import Loading from "./Loading";
-// import Modal from "./Modal";
+import { useNavigate } from "react-router-dom";
 
-const Filters = ({ filters, setFilter }) => {
+
+const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
   const dispatch = useDispatch();
   console.log('filters---------', filters)
   const naviate = useNavigate()
@@ -31,29 +27,6 @@ const Filters = ({ filters, setFilter }) => {
     setFilter(target.name, target.value);
   };
 
-
-  // ************************
-  //   const { all_products_loading: loading } = useFilterContext();
-
-  //   const {
-  //     filters: {
-  //       text,
-  //       category,
-  //       company,
-  //       color,
-  //       min_price,
-  //       max_price,
-  //       price,
-  //       shipping,
-  //     },
-  //     updateFilters,
-  //     clearFilters,
-  //     all_products,
-  //   } = useFilterContext();
-
-  //   const categories = getUniqueValues(all_products, "category");
-  //   const colors = getUniqueValues(all_products, "colors");
-  //   const companies = getUniqueValues(all_products, "company");
 
   // track size
   const [isSmallScreen, setIsSmallScreen] = useState(false);
@@ -81,20 +54,16 @@ const Filters = ({ filters, setFilter }) => {
   //   }
   return (
     <Wrapper>
-      {/* <div className="search-btn">
-        <button>Search</button>
-      </div> */}
+
       <div className="content">
         <form onSubmit={(e) => e.preventDefault()}>
-          {/* Search Input */}
           <div className="form-control">
             <input
               type="text"
               name="text"
               placeholder="Search"
               className="search-input"
-              //   value={text}
-              //   onChange={updateFilters}
+        
             />
           </div>
 
@@ -106,7 +75,6 @@ const Filters = ({ filters, setFilter }) => {
                 return (
                   <button
                     key={index}
-                    // onClick={() => setFilter("category", cat.category)}
                     onClick={updateFilters}
                     name="category"
                     value={cat.category}
@@ -178,73 +146,24 @@ const Filters = ({ filters, setFilter }) => {
               </select>
             </form>
           </div>
-          {/* colors */}
+         
 
-          {/* <div className="form-control">
-            <h5>colors</h5>
-            <div className="colors">
-              {colors.map((c, index) => {
-                if (c === "all") {
-                  return (
-                    <button
-                      name="color"
-                      onClick={updateFilters}
-                      data-color="all"
-                      className={`${
-                        color === "all" ? "all-btn active" : "all-btn"
-                      }`}
-                    >
-                      all
-                    </button>
-                  );
-                }
-
-                return (
-                  <button
-                    type="button"
-                    key={index}
-                    name="color"
-                    style={{ backgroundColor: c }}
-                    className={`${
-                      color === c ? "color-btn active" : "color-btn"
-                    }`}
-                    data-color={c}
-                    onClick={updateFilters}
-                  >
-                    {color === c ? <FaCheck /> : null}
-                  </button>
-                );
-              })}
-            </div>
-          </div> */}
-
-          {/* Price */}
-
-          {/* <div className="form-control">
+          <div className="form-control">
             <h5>price</h5>
-            <p className="price">{formatPrice(price)} </p>
+            <p className="price">
+              {/* {formatPrice(price)} */}
+             </p>
             <input
               type="range"
-              name="price"
+              name="maxPrice"
               onChange={updateFilters}
-              min={min_price}
-              max={max_price}
-              value={price}
+              onMouseUp={handleDragEnd}
+              onMouseDown={handleDragStart}
+              min='1'
+              max='1000'
             />
-          </div> */}
+          </div>
 
-          {/* Shipping */}
-          {/* <div className="form-control shipping">
-            <label htmlFor="checkbox">free shipping</label>
-            <input
-              type="checkbox"
-              name="shipping"
-              id="shipping"
-              onChange={updateFilters}
-              checked={shipping}
-            />
-          </div> */}
-          {/* Clear filter btn */}
           <button
             type="button"
             className="clear-btn"

@@ -1,14 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-// import { formatPrice } from '../utils/helpers'
+
 import AmountButtons from './AmountButtons'
 import { FaTrash } from 'react-icons/fa'
 import { formatPrice } from '../Utils/helpers'
 import { removeItem, toggleAmount } from '../features/cartSlice'
 import { useDispatch } from 'react-redux'
-// import { useCartContext } from '../context/cart_context'
+
 const CartItem = ({id,name,optionColor,amount,price}) => {
-//   const {removeItem, toggleAmount} = useCartContext()
 const dispatch = useDispatch()
 
   const increase = () => {

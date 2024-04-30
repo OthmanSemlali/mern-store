@@ -1,39 +1,75 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Filters from "../Components/Filters";
 import ProductList from "../Components/ProductList";
 import styled from "styled-components";
 import queryString from "query-string";
 import { useDispatch, useSelector } from "react-redux";
 import { getDistinctFilters } from "../features/filterSlice";
-import { fetchPaginatedProducts } from "../features/productSlice";
+import { fetchPaginatedProducts, sortProducts } from "../features/productSlice";
 import { useNavigate } from "react-router-dom";
 import PaginationControls from "../Components/PaginationControls";
 import { PageHero, Sort } from "../Components";
 function Products() {
 
+  const {sort} = useSelector((store) => store.product)
   
+  const [isDragging, setIsDragging] = useState(false);
+
 
   // const {totalProducts} = useSelector((store)=>store.product)
   const parsed = queryString.parse(location.search);
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
-  
+  console.log('*** products page ***');
 
   const { page } = parsed;
   const filters = useMemo(() => ({ ...parsed }), [parsed]);
 
-  const {category, style, tileUse, materials} = filters
+  const {category, style, tileUse, materials, maxPrice} = filters
+
+  const handleDragEnd = useCallback(() => {
+    console.log('end dragging');
+
+    setIsDragging(false)
+
+  }, []);
+
+  const handleDragStart = useCallback(() => {
+
+    console.log('start dragging');
+    setIsDragging(true)
+
+  }, []);
   useEffect(() => {
     console.log("query changes", page, filters);
-    dispatch(fetchPaginatedProducts({ page, filters }));
+    if(!isDragging){
+      dispatch(fetchPaginatedProducts({ page, filters }));
+
+    }
     dispatch(getDistinctFilters());
 
-    window.scrollTo({ top: 100, behavior: "smooth" });
+    // window.scrollTo({ top: 100, behavior: "smooth" });
 
-  }, [dispatch, page, category, style, tileUse, materials]);
+  }, [dispatch, page, category, style, tileUse, materials, isDragging]);
 
 
+
+
+  // useEffect(()=>{
+
+  //   if(!isDragging){
+
+  //   dispatch(fetchPaginatedProducts({ page, filters }));
+
+  // }
+
+
+  // },[maxPrice])
+
+  useEffect(()=>{
+    dispatch(sortProducts())
+  },[sort])
   const setFilter = (name, value) => {
    
     const params = new URLSearchParams(window.location.search);
@@ -61,7 +97,7 @@ function Products() {
 
       <Wrapper className="page">
         <div className="section-center products">
-          <Filters filters={filters} setFilter={setFilter}/>
+          <Filters filters={filters} setFilter={setFilter} handleDragEnd={handleDragEnd} handleDragStart={handleDragStart} />
 
           <div>
             <Sort  />

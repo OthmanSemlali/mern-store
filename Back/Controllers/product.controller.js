@@ -52,7 +52,7 @@ class ProductController {
       page = 1,
   
       category,
-      minPrice,
+      // minPrice,
       maxPrice,
       style,
       tileUse,
@@ -76,8 +76,8 @@ class ProductController {
         return;
       }
     }
-    if (minPrice && maxPrice) {
-      filters.price = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };
+    if (maxPrice) {
+      filters.price = { $gte: 1, $lte: parseInt(maxPrice) };
     }
     if (style) {
       filters.style = style;
@@ -104,26 +104,7 @@ class ProductController {
       }
     }
   }
-  async fetchPaginatedProducts2(req, res) {
-    const page = parseInt(req.params.page);
-    const pageSize = parseInt(req.params.pageSize);
-
-    try {
-      const products = await Product.fetchPaginatedProducts(page, pageSize);
-
-      const totalProducts = await Product.countDocuments();
-
-      // console.log('fetchPaginatedPosts: ', posts);
-      res.json({ products, totalProducts });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("fetchPaginatedProducts ", error.message);
-      } else {
-        res.status(500).json({ message: "Server Error" });
-      }
-    }
-  }
-
+ 
   async getCategoriesWithProductsCounts(req, res) {
     try {
       const categoriesWithCount =
@@ -139,50 +120,7 @@ class ProductController {
     }
   }
 
-  async fetchPaginatedProductsByCategory(req, res) {
-    const categoryName = req.params.categoryName;
-    const page = parseInt(req.params.page);
-    const pageSize = parseInt(req.params.pageSize);
-    try {
-      const productsByCategory = await Product.fetchProductsByCategory(
-        categoryName,
-        page,
-        pageSize
-      );
-
-      res.json(productsByCategory);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("fetchPaginatedProductsByCategory ", error.message);
-      } else {
-        res.status(500).json({ message: "Server Error" });
-      }
-    }
-  }
-
-  async fetchProductsByPriceRange(req, res) {
-    const minPrice = req.params.minPrice;
-    const maxPrice = req.params.maxPrice;
-    const page = parseInt(req.params.page);
-    const pageSize = parseInt(req.params.pageSize);
-    try {
-      const productsByPriceRange = await Product.fetchProductsByPriceRange(
-        page,
-        pageSize,
-        minPrice,
-        maxPrice
-      );
-
-      res.json(productsByPriceRange);
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error("fetchProductsByPriceRange ", error.message);
-      } else {
-        res.status(500).json({ message: "Server Error" });
-      }
-    }
-  }
-
+ 
   async fetchProductById(req, res) {
     const _id = req.params.id;
 

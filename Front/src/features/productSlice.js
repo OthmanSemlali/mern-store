@@ -121,7 +121,9 @@ const initialState = {
   single_product_loading: false,
   single_product_error: false,
 
-  selected_option_images:[]
+  selected_option_images:[],
+
+  sort:'price-lowest'
 };
 
 const productSlice = createSlice({
@@ -131,6 +133,45 @@ const productSlice = createSlice({
     
     setOptions: (state, action) => {
       state.selected_option_images = action.payload
+  },
+
+  updateSort: (state, action) => {
+    state.sort = action.payload
+
+    console.log("updated sort", state.sort);
+  },
+
+  sortProducts: (state) => {
+
+    console.log('state.products*****************', state.products)
+    let tempProducts = [...state.products];
+    const {sort} = state
+    console.log('sort ', sort)
+
+    if (sort === "price-lowest") {
+      // console.log('price-lowest')
+      tempProducts = tempProducts.sort((a, b) => a.price - b.price);
+
+      console.log('tempProducts ', tempProducts )
+    }
+    if (sort === "price-highest") {
+      tempProducts = tempProducts.sort((a, b) => b.price - a.price);
+    }
+    if (sort === "name-a") {
+      tempProducts = tempProducts.sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
+    }
+    if (sort === "name-z") {
+      tempProducts = tempProducts.sort((a, b) => {
+        return b.name.localeCompare(a.name);
+      });
+    }
+
+    return {
+      ...state,
+      products:tempProducts
+    }
   }
   },
   extraReducers: (builder) => {
@@ -176,5 +217,5 @@ const productSlice = createSlice({
   },
 });
 
-export const {setOptions} = productSlice.actions;
+export const {setOptions, updateSort, sortProducts} = productSlice.actions;
 export default productSlice.reducer;

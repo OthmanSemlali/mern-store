@@ -47,6 +47,7 @@ const initialState = {
   styles: [],
   materials: [],
   tileUse: [],
+  sort:'price-lowest',
   catLoading: false,
   filtersLoading: false,
   error: false,

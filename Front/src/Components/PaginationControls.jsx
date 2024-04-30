@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 function PaginationControls({ currentPage = 1 }) {
@@ -8,12 +8,10 @@ function PaginationControls({ currentPage = 1 }) {
   const totalPages = Math.ceil(totalProducts / 6);
 
   const page = parseInt(currentPage);
-  const isFirstPage = page === 1;
-  const isLastPage = page === totalPages;
+//   const isFirstPage = page === 1;
+//   const isLastPage = page === totalPages;
 
-  // if (!currentPage) {
-  //     currentPage = 1;
-  // }
+
   const prevPage = page > 1 ? page - 1 : null;
   const nextPage = page < totalPages ? page + 1 : null;
 
@@ -32,7 +30,6 @@ function PaginationControls({ currentPage = 1 }) {
 
     navigate(newUrl);
   };
-  // console.log('${`/${route}/${prevPage}`}', `${`/${route}/${nextPage}`}`)
 
   if(totalPages <= 1){
     return 

@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { setGridView, setListView } from "../features/themeSlice";
+import { updateSort } from "../features/productSlice";
 const Sort = () => {
 const dispatch = useDispatch()
     const {products_loading, totalProducts} = useSelector((store)=>store.product)
@@ -13,23 +14,18 @@ const dispatch = useDispatch()
     const {productsView} = useSelector((store)=>store.theme)
     console.log('productsView', productsView)
 
-//   const {
-//     filtred_products: products,
-//     grid_view,
-//     setGridView,
-//     setListView,
-//     all_products_loading: loading,
-//     updateSort,
-//     isModalOpen,
-//     openModal,
-//   } = useFilterContext();
+    const updateSortHandler = ({target}) => {
 
-  // console.log('ll',products.length );
+        console.log('target value: ',target.value);
+        dispatch(updateSort(target.value))
+    }
+
   return (
     <Wrapper>
       <div className="buttons-container">
-        {/* <div className="switch-btn-container"> */}
+   
         <button
+
           type="butotn"
           onClick={()=>dispatch(setGridView())}
           className={`${productsView == 'grid' ? "active" : null}`}
@@ -43,10 +39,10 @@ const dispatch = useDispatch()
         >
           <BsList />
         </button>
-        {/* </div> */}
+
 
         <button className="search-btn" 
-        // onClick={openModal}
+ 
         >
           Search <AiOutlineSearch />
         </button>
@@ -65,12 +61,12 @@ const dispatch = useDispatch()
           name="sort"
           id="sort"
           className="sort-input"
-        //   onChange={updateSort}
+          onChange={updateSortHandler}
         >
-          <option value="price-lowest">price (lowest)</option>
+          <option value="price-lowest" >price (lowest)</option>
           <option value="price-highest">price (highest)</option>
-          <option value="name-a">name (a-z)</option>
-          <option value="name-z">name (z-a)</option>
+          <option value="name-a" >name (a-z)</option>
+          <option value="name-z" >name (z-a)</option>
         </select>
       </form>
     </Wrapper>
