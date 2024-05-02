@@ -10,7 +10,6 @@ import CartButtons from "./CartButtons";
 
 const Nav = () => {
 const dispatch = useDispatch();
-
   return (
     <NavContainer>
       <div className="nav-center">

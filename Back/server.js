@@ -23,7 +23,12 @@ const orderRouter = require('./Routes/order.routes')
 const cors = require('cors')
 connectDB();
 
-app.use(cors())
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  optionsSuccessStatus: 200,
+  credentials: true
+}
+app.use(cors(corsOptions));
 initializePassport(
     passport,
     User.getUserByEmail,
@@ -85,7 +90,10 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
         if (err) {
           return res.status(500).json({ error: 'An error occurred during login' });
         }
-        return res.status(200).json({ message: 'Login successful', user: user });
+
+
+
+        return res.status(200).json({ message: 'Login successful', user: {id: user.id, email: user.email, role:user.role} });
       });
     })(req, res, next);
   });
@@ -114,16 +122,21 @@ app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) 
 });
 
 // server logout!!!
-app.get("/api/logout", (req, res) => {
+app.delete("/api/logout", (req, res) => {
 
     // req.session.destroy()
-    req.logOut((err) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).send(err);
-        }
-        return res.json({message: "Logged OUT"})
+    // req.logOut((err) => {
+    //     if (err) {
+    //         console.error(err);
+    //         return res.status(500).send(err);
+    //     }
+    //     return res.json({message: "Logged OUT"})
+    // });
+
+    req.logout(() => {
+      res.end();
     });
+  
 });
 
 //google auth routes

@@ -3,6 +3,7 @@ import productSlice from "./features/productSlice";
 import themeSlice from "./features/themeSlice";
 import filterSlice from "./features/filterSlice";
 import cartSlice from "./features/cartSlice";
+import userSlice from "./features/userSlice";
 
 
 export const store = configureStore({
@@ -11,6 +12,7 @@ export const store = configureStore({
         product:productSlice,
         theme:themeSlice,
         filter:filterSlice,
-        cart:cartSlice
+        cart:cartSlice,
+        user: userSlice
     }
 })

@@ -5,13 +5,17 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { closeSideBar } from "../features/themeSlice";
 import { countCartTotals } from "../features/cartSlice";
+import { logout } from "../features/userSlice";
 // import { useProductsContext } from "../context/products_context";
 // import { useCartContext } from "../context/cart_context";
 // import { useUserContext } from "../context/user_context";
 
-const CartButtons = ({closeSideBatHundler}) => {
+const CartButtons = ({ closeSideBatHundler }) => {
   const dispatch = useDispatch();
   const { total_items } = useSelector((store) => store.cart);
+
+  const { isConnected, user } = useSelector((store) => store.user);
+
   useEffect(() => {
     dispatch(countCartTotals());
   }, []);
@@ -26,10 +30,14 @@ const CartButtons = ({closeSideBatHundler}) => {
         </span>
       </Link>
 
-      <Link to="/login" className="auth-btn" onClick={closeSideBatHundler}>
-        Login
-        <FaUserPlus />
-      </Link>
+      {isConnected && user && user.role === "user" ? (
+        <button className="auth-btn" onClick={() => dispatch(logout())}>logout</button>
+      ) : (
+        <Link to="/login" className="auth-btn" onClick={closeSideBatHundler}>
+          Login
+          <FaUserPlus />
+        </Link>
+      )}
     </Wrapper>
   );
 };

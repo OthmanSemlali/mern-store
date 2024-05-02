@@ -18,7 +18,9 @@ const initialState = {
   cart_error:false,
   // cart_alert: "",
   // cart_alert_type:"",
-};const cartSlice = createSlice({
+};
+
+const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
