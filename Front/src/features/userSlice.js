@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
 // const getLocalStorage = () => {
 //   let isConnected = localStorage.getItem("isConnected");
 //   console.log("isConnected, ", isConnected);
@@ -60,7 +59,7 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
     "user/register",
-    async ({ email, password, role }) => {
+    async ({firstName, lastName, email, password, role }) => {
       console.log("register slice", email, password, role);
       const response = await fetch("http://localhost:3000/api/register", {
         method: "POST",
@@ -68,7 +67,7 @@ export const register = createAsyncThunk(
           "Content-Type": "application/json",
         },
         // credentials: "include",
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({firstName, lastName, email, password, role }),
       });
   
       if (response.ok) {
@@ -105,6 +104,8 @@ export const logout = createAsyncThunk("user/logout", async () => {
   }
 });
 
+
+
 const { isConnected, user } = getSessionStorage();
 
 const initialState = {
@@ -115,6 +116,7 @@ const initialState = {
   custom_error: null,
 
 };
+
 
 const userSlice = createSlice({
   name: "user",
@@ -191,7 +193,8 @@ const userSlice = createSlice({
         const {user, errors} = action.payload
 
         if(user){
-            alert(user.role + ' created')
+          console.log('*** user created ***')
+            // alert(user.role + ' created')
         }
         if(errors){
             // state.error

@@ -1,24 +1,23 @@
 import { Link } from "react-router-dom";
-import {  useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
-import { register as registerUser } from "../features/userSlice";
-import { AuthWrapper } from "./login/StyledComponents";
+import { login } from "../../features/userSlice";
+import "./images/style.css";
+// import styled from "styled-components";
 import { useEffect, useRef } from "react";
-import SignupProvider from "../Components/SignupProvider";
+import SignupProvider from "../../Components/SignupProvider";
+import { AuthWrapper } from "./StyledComponents";
 
 
+// import img1 from '../login/images/bg-registration-form-1.jpg'
 const schema = z.object({
   // name: z.string().min(1, { message: "Name is required" }),
-  firstName: z.string().min(3),
-  lastName: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(8),
-  // role: z.string().includes('user', 'admin', 'seller')
 });
-function Register() {
-
+function Login() {
   const scrollToRef = useRef(null);
   useEffect(() => {
     // Scroll to the div when the component mounts
@@ -27,8 +26,8 @@ function Register() {
     }
   }, []);
 
-  const dispatch = useDispatch()
-  const {loading, error} = useSelector((store) => store.user)
+  const dispatch = useDispatch();
+  const { loading, custom_error } = useSelector((store) => store.user);
   const {
     register,
     handleSubmit,
@@ -37,15 +36,12 @@ function Register() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = ({firstName, lastName, email, password }) => {
-
-    console.log('onsubmit register', email, password);
-    dispatch(registerUser({firstName, lastName, email, password, role: 'user'}))
-
+  const onSubmit = ({ email, password }) => {
+    console.log("onsubmit", email, password);
+    dispatch(login({ email, password }));
   };
   return (
-  
-<AuthWrapper
+    <AuthWrapper
       // imageUrl={
       //   "https://img.freepik.com/premium-vector/seamless-pattern-authentic-arabian-style-vector-illustration_151170-1417.jpg?w=996"
       // }
@@ -64,25 +60,7 @@ function Register() {
 
           <SignupProvider />
 
-          <h5 >Or Sign Up With</h5>
-          <div className="form-group">
-            <input
-              type="text"
-              placeholder="First Name"
-              className="form-control"
-              {...register("firstName")}
-            />
-            {errors.firstName && <span>{errors.firstName.message}</span>}
-
-            <input
-              type="text"
-              placeholder="Last Name"
-              className="form-control"
-              {...register("lastName")}
-            />
-            {errors.lastName && <span>{errors.lastName.message}</span>}
-
-          </div>
+          <h5 >Or Sign in With</h5>
           
           <div className="form-wrapper">
             <input
@@ -92,6 +70,8 @@ function Register() {
               {...register("email")}
             />
             {errors.email && <span>{errors.email.message}</span>}
+            {custom_error && <span>{custom_error}</span>}
+
             {/* <i className="zmdi zmdi-email"></i> */}
           </div>
          
@@ -108,15 +88,14 @@ function Register() {
           </div>
         
           <button type="submit">
-          {loading ? 'register..' : 'register'}
-
+          {loading ? 'login..' : 'login'}
             {/* <i className="zmdi zmdi-arrow-right">h</i> */}
           </button>
         </form>
         {/* </div> */}
       </div>
     </AuthWrapper>
-  )
+  );
 }
 
-export default Register
+export default Login;

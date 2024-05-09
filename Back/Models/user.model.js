@@ -3,6 +3,8 @@ const { Schema } = mongoose;
 
 const UserSchema = new Schema(
   {
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
     email: { type: String, require: true },
     password: { type: String, require: true },
     role: { type: String, enum: ["user", "seller", "admin", "no_role"], required: true },
@@ -38,7 +40,19 @@ class UserClass {
   // }
 
   static async addUser(user) {
-    return this.create(user);
+    const userr =  this.create(user);
+
+    if(userr){
+      return {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        createrAt: user.createrAt
+      }
+    }else{
+      return null
+    }
   }
 }
 

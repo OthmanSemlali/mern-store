@@ -1,6 +1,6 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Error, Nav, Sidebar } from "./Components";
+import { Error, Header, Nav, Sidebar } from "./Components";
 import { AboutPage, CartPage, CheckoutPage, HomePage, Login, Product, Register } from "./Pages";
 import Footer from "./Components/Footer";
 import Products from "./Pages/Products";
@@ -9,6 +9,7 @@ import Protected from "./Components/protected";
 function App() {
   return (
     <Router>
+      <Header />
       <Nav />
       <Sidebar />
       <Routes>

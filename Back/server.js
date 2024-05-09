@@ -90,10 +90,7 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
         if (err) {
           return res.status(500).json({ error: 'An error occurred during login' });
         }
-
-
-
-        return res.status(200).json({ message: 'Login successful', user: {id: user.id, email: user.email, role:user.role} });
+        return res.status(200).json({ message: 'Login successful', user: {id: user.id, email: user.email, role:user.role, firstName: user.firstName, lastName: user.lastName} });
       });
     })(req, res, next);
   });
@@ -101,7 +98,7 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
 app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) => {
     try {
 
-      const {email, password} = req.body;
+      const {firstName, lastName, email, password, role} = req.body;
       // const user = ;
       if(await User.getUserByEmail(email)){
       
@@ -111,9 +108,11 @@ app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) 
         const hashedPassword = await bcrypt.hash(password, 10);
        
         const newUser = await User.addUser({
-            email: req.body.email,
+          firstName,
+          lastName,
+            email,
             password: hashedPassword,
-            role:req.body.role
+            role:role
             })
         return res.status(201).json({ message: 'User registered successfully!', user: newUser });
     } catch {

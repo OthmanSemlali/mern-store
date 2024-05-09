@@ -18,6 +18,8 @@ const Product = ({slug, image,name,price,id}) => {
         {name}
 
       </h5>
+
+      
       <p>
         {formatPrice(price)}
       </p>
@@ -25,6 +27,8 @@ const Product = ({slug, image,name,price,id}) => {
   </Wrapper>
 }
 export default Product
+
+
 
 
 

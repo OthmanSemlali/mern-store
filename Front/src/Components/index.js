@@ -15,6 +15,7 @@ import CartItem from "./CartItem.jsx";
 import CartColumns from "./CartColumns.jsx";
 import CartTotals from "./CartTotal.jsx";
 import CartButtons from "./CartButtons.jsx";
+import Header from "./Header.jsx";
 export {
     Nav,
     Hero,
@@ -32,7 +33,8 @@ export {
     CartItem,
     CartColumns,
     CartTotals,
-    CartButtons
+    CartButtons,
+    Header
     
 
 
