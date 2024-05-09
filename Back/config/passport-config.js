@@ -19,6 +19,8 @@ async function initialize(
     // This method is used to retrieve the user from the database. The result of the getUserByUsername method is attached to the request object as req.user.
     const user = await User.getUserByEmail(email);
 
+    console.log('user', user)
+
     if (user == null) {
       return done(null, false, { message: "No user with that username" });
     }

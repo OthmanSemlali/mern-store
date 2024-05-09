@@ -1,25 +1,27 @@
-// import "./App.css";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Error, Nav, Sidebar } from "./Components";
-import { AboutPage, HomePage } from "./Pages";
+import { Error, Header, Nav, Sidebar } from "./Components";
+import { AboutPage, CartPage, CheckoutPage, HomePage, Login, Product, Register } from "./Pages";
 import Footer from "./Components/Footer";
+import Products from "./Pages/Products";
+import Protected from "./Components/protected";
 
 function App() {
   return (
     <Router>
+      <Header />
       <Nav />
       <Sidebar />
       <Routes>
         <Route exact index element={<HomePage />} />
         <Route exact path="about" element={<AboutPage />} />
-        <Route exact path="products/:slug" element={"single product page"} />
-        <Route exact path="products" element={"products"} />
-        {/* 
-        <Route exact path="cart" element={<Cart />} />
-        
-        } />
-        <Route exact path="checkout" element={<Checkout />} />
-         */}
+        <Route exact path="products/:slug" element={<Product />} />
+        <Route exact path="products" element={<Products />} />
+        <Route exact path="cart" element={<CartPage />} />
+        <Route exact path="checkout" element={<Protected> <CheckoutPage /> </Protected> } />
+        <Route exact path="login" element={<Login />} />
+        <Route exact path="register" element={<Register />} />
+    
          <Route  path="*" element={<Error status={404} />} />
       </Routes>
       <Footer />
