@@ -50,7 +50,7 @@ class ProductController {
   async fetchPaginatedProducts(req, res) {
     const {
       page = 1,
-  
+      pageSize = 6,
       category,
       // minPrice,
       maxPrice,
@@ -91,7 +91,7 @@ class ProductController {
     try {
       const response = await Product.fetchPaginatedProducts(
         parseInt(page),
-        parseInt(6),
+        parseInt(pageSize),
         filters
       );
     //   const totalProducts = await Product.countDocuments();
