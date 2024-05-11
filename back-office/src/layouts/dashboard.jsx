@@ -30,11 +30,11 @@ export function Dashboard() {
         <IconButton
           size="lg"
           color="white"
-          className="fixed bottom-8 right-8 z-40 rounded-full shadow-blue-gray-900/10"
+          className="fixed z-40 rounded-full bottom-8 right-8 shadow-blue-gray-900/10"
           ripple={false}
           onClick={() => setOpenConfigurator(dispatch, true)}
         >
-          <Cog6ToothIcon className="h-5 w-5" />
+          <Cog6ToothIcon className="w-5 h-5" />
         </IconButton>
         <Routes>
           {routes.map(
@@ -46,7 +46,7 @@ export function Dashboard() {
           )}
         </Routes>
         <div className="text-blue-gray-600">
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>
     </div>
