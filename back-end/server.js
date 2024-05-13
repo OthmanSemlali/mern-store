@@ -24,7 +24,7 @@ const cors = require('cors')
 connectDB();
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5174', 'http://localhost:5173'],
   optionsSuccessStatus: 200,
   credentials: true
 }
@@ -84,7 +84,7 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
         return res.status(500).json({ error: 'An error occurred during authentication' });
       }
       if (!user) {
-        return res.status(401).json({ error: 'Invalid username or password' });
+        return res.status(200).json({ error: 'Invalid username or password' });
       }
       req.logIn(user, (err) => {
         if (err) {
