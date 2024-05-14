@@ -129,7 +129,7 @@ const navigate = useNavigate();
               </a>
             </Typography> */}
           </div>
-          <div className="mt-8 space-y-4">
+          {/* <div className="mt-8 space-y-4">
             <Button size="lg" color="white" className="flex items-center justify-center gap-2 shadow-md" fullWidth>
               <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#clip0_1156_824)">
@@ -145,12 +145,12 @@ const navigate = useNavigate();
                 </defs>
               </svg>
               <span>Sign in With Google</span>
-            </Button>
+            </Button> */}
             {/* <Button size="lg" color="white" className="flex items-center justify-center gap-2 shadow-md" fullWidth>
               <img src="/img/twitter-logo.svg" height={24} width={24} alt="" />
               <span>Sign in With Twitter</span>
             </Button> */}
-          </div>
+          {/* </div> */}
           <Typography variant="paragraph" className="mt-4 font-medium text-center text-blue-gray-500">
             Not registered?
             <Link to="/auth/sign-up" className="ml-1 text-gray-900">Create account</Link>
