@@ -8,22 +8,30 @@ const orderSchema = new mongoose.Schema({
     },
     products: [
       {
-        productID: {
-          type: mongoose.Schema.Types.ObjectId,
+        id: {
+          type: String,
           ref: "Product",
         },
-        // customProduct: {
-        //   design: String,
-        //   tileFormat: String,
-        // },
-        quantity: {
-          type: Number,
-          required: true,
+        name:{
+          type: String
+        },
+        optionColor:{
+          type: String
+        },
+        amount:{
+          type: Number
+        },
+        price:{
+          type: Number
         },
       },
     ],
     totalPrice: {
       type: Number,
+      required: true,
+    },
+    shipping: {
+      type:Object,
       required: true,
     },
     orderStatus: {
@@ -33,8 +41,8 @@ const orderSchema = new mongoose.Schema({
     },
     paymentStatus: {
       type: String,
-      enum: ["pending", "completed", "failed"],
-      default: "pending",
+      enum: ["succeeded", "failed"],
+      default: "succeeded",
     },
   },
   {
