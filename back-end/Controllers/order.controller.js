@@ -3,7 +3,36 @@ const Order = require("../Models/order.model");
 const User = require("../Models/user.model");
 const productController = require("./product.controller");
 
+const fetchPaginatedOrders = async (req, res) => {
+  const {
+    page = 1,
+    pageSize = 6,
+    // orderStatus
+  } = req.query;
+  console.log("req.query", req.query);
 
+  const filters = {};
+
+ 
+  // if (orderStatus) {
+  //   filters.orderStatus = orderStatus;
+  // }
+  
+  try {
+    
+    const response = await Order.fetchOrders(
+      parseInt(page),
+      parseInt(pageSize),
+      filters
+    );
+    console.log('order response', response)
+    res.json({ response });
+  } catch (error) {
+ 
+      res.status(500).json({ message: "Server Error" });
+    
+  }
+}
 
   const placeOrder = async (req, res)=> {
 
@@ -82,19 +111,6 @@ const getOrderStatus = async (req, res) => {
     }
   };
 
-//   const getOrderDetails = async (req, res) => {
-//     try {
-//         const orderID = req.params.id;
-//         const order = await Order.findById(orderID);
-//         if (!order) {
-//             return res.status(404).json({ success: false, message: 'Order not found' });
-//         }
-//         return res.status(200).json({ success: true, order });
-//     } catch (error) {
-//         res.status(500).json({ success: false, error: error.message });
-//     }
-// };
-
 const getOrderDetails = async (req, res) => {
     try {
         const orderID = req.params.id;
@@ -154,5 +170,6 @@ module.exports = {
   getOrderDetails,
   getAllOrders,
   updateOrderStatus,
+  fetchPaginatedOrders
   
 };

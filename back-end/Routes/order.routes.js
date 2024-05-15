@@ -1,10 +1,11 @@
 const express = require('express');
 const { checkAuthenticated, requireRole } = require('../middlewares/auth.mw');
-const { placeOrder, getOrderHistoryForClient, getOrderStatus, getOrderDetails, getAllOrders, updateOrderStatus } = require('../Controllers/order.controller');
+const { placeOrder, getOrderHistoryForClient, getOrderStatus, getOrderDetails, getAllOrders, updateOrderStatus, fetchPaginatedOrders } = require('../Controllers/order.controller');
 const { body } = require('express-validator');
 const router = express.Router();
 
 
+router.get('/', fetchPaginatedOrders)
 router.get('/getOrderHistoryForClient/:id', checkAuthenticated, requireRole(['admin']), getOrderHistoryForClient)
 router.get('/getOrderStatus/:id', checkAuthenticated, getOrderStatus)
 
