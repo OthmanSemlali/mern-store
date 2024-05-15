@@ -26,8 +26,18 @@ import {
   ordersOverviewData,
 } from "@/data";
 import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/solid";
+import { useAuthenticationContext } from "@/context";
 
 export function Home() {
+
+  const [state] = useAuthenticationContext()
+  const {authenticated} = state
+
+  if(!authenticated){
+    return;
+  }
+
+  
   return (
     <div className="mt-12">
       <div className="grid mb-12 gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">

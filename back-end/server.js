@@ -1,6 +1,8 @@
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
+const stripe = require('stripe')("sk_test_51PGJAkFLtCZ2m8NtAcsgJzW9J0el3ooPa0YP0L0V8YuVApkoS1QeDlc65fC1Qz8HY7xXF0bRw2inKRF9zRnNmYSE00mVHriqhq")
+
 const initializePassport = require("./config/passport-config");
 const express = require("express");
 const app = express();
@@ -20,7 +22,8 @@ const categoryRouter = require('./Routes/category.routes')
 const productRouter = require('./Routes/product.routes')
 const userRouter = require('./Routes/user.routes')
 const orderRouter = require('./Routes/order.routes')
-const cors = require('cors')
+const cors = require('cors');
+const { addOrder, placeOrder } = require('./Controllers/order.controller');
 connectDB();
 
 const corsOptions = {
@@ -174,6 +177,45 @@ app.get('/auth/google/callback', checkNotAuthenticated,
 // app.get('/auth/local/failure', (req, res) => {
 //     res.send('Something Went Wrong');
 // })
+
+app.post('/create-payment-intent', async (req, res) => {
+  const { cart, shipping_fee, total_amount } = req.body;
+
+  const shipping = {
+    name: 'John Doe', // Customer's name for delivery
+    address: {
+      line1: '123 Main St', // Customer's street address
+      city: 'Anytown', // Customer's city
+      // state: 'CA', // Customer's state
+      // postal_code: '12345', // Customer's postal code
+      country: 'US' // Customer's country code
+    }}
+console.log('cartaa', cart)
+  const calculateOrderAmount = () => {
+    // Replace this constant with a calculation of the order's amount
+    // Calculate the order total on the server to prevent
+    // people from directly manipulating the amount on the client
+    return shipping_fee + total_amount;
+  };
+
+  try {
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(),
+      currency: 'usd',
+
+      shipping
+    });
+
+
+    // console.log('intent req success')
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/placeOrder',checkAuthenticated , placeOrder);
 
 
 //? This route for test middlewares/auth etc..

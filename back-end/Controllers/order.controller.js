@@ -1,18 +1,23 @@
 const Order = require("../Models/order.model");
-const Product = require("../Models/product.model");
+// const Product = require("../Models/product.model");
 const User = require("../Models/user.model");
 const productController = require("./product.controller");
 
-const placeOrder = async (req, res) => {
+
+
+  const placeOrder = async (req, res)=> {
+
+    const {cart, total_amount, shipping} = req.body;
+
+    const products = cart.map(product => {
+      const [productId] = product.id.split('-');
+      return { ...product, id: productId };
+  });
+
+    // console.log('order products', products);
+    // console.log('order products', products)
     try {
-      // Receive order details from the frontend
-      const { products } = req.body;
       const userID = req.user.id;
-  
-      // Validate order details
-    //   if (!userId || !products || products.length === 0 || !totalPrice) {
-    //     return res.status(400).json({ success: false, message: 'Invalid order details' });
-    //   }
   
       // Check if user exists
       const user = await User.findById(userID);
@@ -20,33 +25,14 @@ const placeOrder = async (req, res) => {
         return res.status(404).json({ success: false, message: 'User not found' });
       }
   
-      // Calculate total price of the order based on product prices and quantities
-      let totalPrice = 0;
-      for (const productItem of products) {
-        const product = await Product.findById(productItem.productID);
-        if (!product) {
-          return res.status(400).json({ success: false, message: `Invalid product ID(product not found) "${productItem.productID}"` });
-        }
-        // Check if quantity ordered exceeds available stock
-        if (productItem.quantity > product.stock) {
-          return res.status(400).json({ success: false, message: `Insufficient stock for product "${productItem.productID}"` });
-        }
-        // Update calculated total price
-        totalPrice += product.price * productItem.quantity;
-      }
-  
-      // Check if totalPrice matches calculatedTotalPrice
-    //   if (totalPrice !== calculatedTotalPrice) {
-    //     return res.status(400).json({ success: false, message: 'Incorrect total price calculation' });
-    //   }
-  
       // Create a new order document in the database
       const newOrder = new Order({
         userID,
         products,
-        totalPrice,
-        orderStatus: 'pending', // Default status
-        paymentStatus: 'pending' // Default status
+        totalPrice: total_amount,
+        shipping,
+        // orderStatus: 'pending', // Default status
+        // paymentStatus: 'pending' // Default status
       });
   
       // Save the order to the database
@@ -56,13 +42,15 @@ const placeOrder = async (req, res) => {
       await productController.updateProductStock(products);
   
       // Return success response
+      console.log('add order success')
+
       res.status(201).json({ success: true, message: 'Order placed successfully' });
     } catch (error) {
       // Return error response
       res.status(500).json({ success: false, error: error.message });
+      console.log('add order error', error.message)
     }
-  };
-
+  }
 const getOrderHistoryForClient = async (req, res) => {
   try {
     const userID = req.params.id;
@@ -165,5 +153,6 @@ module.exports = {
   getOrderStatus,
   getOrderDetails,
   getAllOrders,
-  updateOrderStatus
+  updateOrderStatus,
+  
 };
