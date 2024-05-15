@@ -1,7 +1,7 @@
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
-const stripe = require('stripe')("sk_test_51PGJAkFLtCZ2m8NtAcsgJzW9J0el3ooPa0YP0L0V8YuVApkoS1QeDlc65fC1Qz8HY7xXF0bRw2inKRF9zRnNmYSE00mVHriqhq")
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 const initializePassport = require("./config/passport-config");
 const express = require("express");
