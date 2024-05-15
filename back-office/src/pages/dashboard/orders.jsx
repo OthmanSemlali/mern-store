@@ -12,8 +12,10 @@ import {
     Chip,
     Tooltip,
     Progress,
+    Select,
   } from "@material-tailwind/react";
 import { authorsTableData, projectsTableData } from "@/data";
+import { formatDate } from "@/configs";
 
 
 export function Orders() {
@@ -70,7 +72,7 @@ const parsed = queryString.parse(location.search);
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
-                {["author", "function", "status", "employed", ""].map((el) => (
+                {["customer", "shipping address", "products", "total price", "payment status", "date", "order status"].map((el) => (
                   <th
                     key={el}
                     className="px-5 py-3 text-left border-b border-blue-gray-50"
@@ -86,8 +88,10 @@ const parsed = queryString.parse(location.search);
               </tr>
             </thead>
             <tbody>
-              {authorsTableData.map(
-                ({ img, name, email, job, online, date }, key) => {
+              {orders.map(
+                ({ user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt }, key) => {
+
+                    const {line1, city, country} = shipping.address
                   const className = `py-3 px-5 ${
                     key === authorsTableData.length - 1
                       ? ""
@@ -95,53 +99,71 @@ const parsed = queryString.parse(location.search);
                   }`;
 
                   return (
-                    <tr key={name}>
+                    <tr key={key}>
                       <td className={className}>
                         <div className="flex items-center gap-4">
-                          <Avatar src={img} alt={name} size="sm" variant="rounded" />
+                          {/* <Avatar src={img} alt={name} size="sm" variant="rounded" /> */}
                           <div>
                             <Typography
                               variant="small"
                               color="blue-gray"
                               className="font-semibold"
                             >
-                              {name}
+                              
+
+                              {user.firstName && user.firstName} {user.lastName && user.lastName}
                             </Typography>
                             <Typography className="text-xs font-normal text-blue-gray-500">
-                              {email}
+                              {user && user.email && user.email}
                             </Typography>
+                            
                           </div>
                         </div>
                       </td>
                       <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {job[0]}
+                        
+                        <Typography className="text-sm font-normal text-blue-gray-500">
+                          {line1}, {city} 
+                          
                         </Typography>
-                        <Typography className="text-xs font-normal text-blue-gray-500">
-                          {job[1]}
+                        <Typography className="text-sm font-normal text-blue-gray-500">
+                          
+                          {country}
                         </Typography>
                       </td>
                       <td className={className}>
+                        
+                        <Typography className="text-sm font-normal underline text-blue-gray-500">
+                          products
+                        </Typography>
+                      </td>
+                      <td className={className}>
+                        <Typography className="text-xs font-normal text-blue-gray-500">
+                          ${totalPrice}
+                        </Typography>
+                      </td>
+                      
+                      <td className={className}>
                         <Chip
                           variant="gradient"
-                          color={online ? "green" : "blue-gray"}
-                          value={online ? "online" : "offline"}
+                          color={paymentStatus =='succeeded' ? "green" : "blue-gray"}
+                          value={paymentStatus == 'succeeded' ? "succeeded" : "failed"}
                           className="py-0.5 px-2 text-[11px] font-medium w-fit"
                         />
                       </td>
                       <td className={className}>
                         <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {date}
+                          {formatDate(createdAt)}
                         </Typography>
                       </td>
                       <td className={className}>
-                        <Typography
-                          as="a"
-                          href="#"
-                          className="text-xs font-semibold text-blue-gray-600"
-                        >
-                          Edit
-                        </Typography>
+                      <select
+                          class="peer h-full   border-blue-gray-200 border-t-transparent bg-transparent   font-sans text-sm font-normal text-blue-gray-700 outline outline-0  placeholder-shown:border-t-blue-gray-200  focus:border-t-transparent disabled:border-0 disabled:bg-blue-gray-50">
+                          <option value="pending">pending</option>
+                          <option value="confirmed">confirmed</option>
+                          <option value="shipped">shipped</option>
+                          <option value="delivered">delivered</option>
+                        </select>
                       </td>
                     </tr>
                   );

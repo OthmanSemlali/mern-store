@@ -36,6 +36,7 @@ const fetchPaginatedOrders = async (req, res) => {
 
   const placeOrder = async (req, res)=> {
 
+    console.log('req.user.firstName', req.user.firstName)
     const {cart, total_amount, shipping} = req.body;
 
     const products = cart.map(product => {
@@ -56,7 +57,13 @@ const fetchPaginatedOrders = async (req, res) => {
   
       // Create a new order document in the database
       const newOrder = new Order({
-        userID,
+        user:{
+          id:userID,
+          firstName:req.user.firstName,
+          lastName:req.user.lastName,
+          email:req.user.email
+          
+        },
         products,
         totalPrice: total_amount,
         shipping,
