@@ -11,7 +11,8 @@ import {
   UsersIcon
   
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications, Orders } from "@/pages/dashboard";
+
+import { Home, Profile, Tables, Notifications, Orders, Categories } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import {NotFound} from "@/pages/Error";
 const icon = {
@@ -39,7 +40,7 @@ export const routes = [
         icon: <TagIcon {...icon} />,
         name: "categories",
         path: "/categories",
-        element: "cat",
+        element:<Categories/>,
       },
       {
         icon: <UsersIcon {...icon} />,
