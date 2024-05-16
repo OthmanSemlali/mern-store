@@ -58,29 +58,29 @@ const ProductShcema = new Schema(
 // });
 
 ProductShcema.pre("validate", async function (next) {
-    if (this.isNew || this.isModified("name")) {
-      const slug = slugify(this.name, { lower: true, strict: true });
-      const exists = await this.constructor.exists({ slug });
-  
-      if (exists) {
-        let i = 1;
-        while (true) {
-          const newSlug = `${slug}-${i}`;
-          const exists = await this.constructor.exists({ slug: newSlug });
-          if (!exists) {
-            this.slug = newSlug;
-            break;
-          }
-          i++;
+  if (this.isNew || this.isModified("name")) {
+    const slug = slugify(this.name, { lower: true, strict: true });
+    const exists = await this.constructor.exists({ slug });
+
+    if (exists) {
+      let i = 1;
+      while (true) {
+        const newSlug = `${slug}-${i}`;
+        const exists = await this.constructor.exists({ slug: newSlug });
+        if (!exists) {
+          this.slug = newSlug;
+          break;
         }
-      } else {
-        this.slug = slug;
+        i++;
       }
+    } else {
+      this.slug = slug;
     }
-  
-    next();
-  });
-  
+  }
+
+  next();
+});
+
 class ProductClass {
   static async fetchProductById(_id) {
     try {
@@ -170,28 +170,28 @@ class ProductClass {
   static async fetchPaginatedProducts(page, pageSize, filters) {
     const skip = (page - 1) * pageSize;
     console.log('skip', skip)
-  
-    
 
-    console.log('filters ', filters )
-  
+
+
+    console.log('filters ', filters)
+
     const getProductsQquery = this.find(filters)
       .skip(skip)
       .limit(pageSize)
-      .select("slug name seodescription description image price")
+      .select("slug name seodescription description image price stock")
 
 
-      const getCountQuery = this.countDocuments(filters)
+    const getCountQuery = this.countDocuments(filters)
 
-      const [products, totalProducts] = await Promise.all([getProductsQquery.exec(), getCountQuery.exec()]);
+    const [products, totalProducts] = await Promise.all([getProductsQquery.exec(), getCountQuery.exec()]);
 
-      return { products, totalProducts };
+    return { products, totalProducts };
   }
-  
 
 
 
- 
+
+
 
   static createProduct(
     name,

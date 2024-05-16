@@ -19,6 +19,9 @@
     "react": "18.2.0",
     "react-apexcharts": "1.4.1",
     "react-dom": "18.2.0",
+
+    "styled-components": "^6.1.11"
+
     "react-hook-form": "^7.51.4",
     "react-modal": "^3.16.1",
     "react-router-dom": "6.17.0",
