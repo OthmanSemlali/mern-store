@@ -253,12 +253,12 @@ class ProductController {
   updateProductStock = async (products) => {
     try {
       for (const productItem of products) {
-        const product = await Product.findById(productItem.productID);
+        const product = await Product.findById(productItem.id);
         if (!product) {
           throw new Error("Product not found");
         }
         // Update product stock
-        product.stock -= productItem.quantity;
+        product.stock -= productItem.amount;
         await product.save();
       }
     } catch (error) {
@@ -301,5 +301,7 @@ class ProductController {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
+
+
 }
 module.exports = new ProductController();

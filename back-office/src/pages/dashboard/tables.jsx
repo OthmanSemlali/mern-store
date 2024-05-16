@@ -505,3 +505,4 @@ Add New
 }
 
 export default Tables;
+

@@ -12,6 +12,7 @@ import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 import { NotFound } from "@/pages/Error";
 
 export function Dashboard() {
+  console.log('dashboard');
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
 
@@ -20,6 +21,7 @@ export function Dashboard() {
 
       <Sidenav
         routes={routes}
+        brandName="ZELIJ Hub"
         brandImg={
           sidenavType === "dark" ? "/img/logo-ct.png" : "/img/logo-ct-dark.png"
         }
@@ -27,15 +29,6 @@ export function Dashboard() {
       <div className="p-4 xl:ml-80">
         <DashboardNavbar />
         <Configurator />
-        <IconButton
-          size="lg"
-          color="white"
-          className="fixed z-40 rounded-full bottom-8 right-8 shadow-blue-gray-900/10"
-          ripple={false}
-          onClick={() => setOpenConfigurator(dispatch, true)}
-        >
-          <Cog6ToothIcon className="w-5 h-5" />
-        </IconButton>
         <Routes>
           {routes.map(
             ({ layout, pages }) =>

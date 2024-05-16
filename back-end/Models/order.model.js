@@ -1,29 +1,50 @@
 const mongoose = require("mongoose");
 
-const orderSchema = new mongoose.Schema({
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+const orderSchema = new mongoose.Schema(
+  {
+    user:{
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    
+      firstName: {
+        type: String,
+      },
+      lastName: {
+        type: String,
+      },
+      email: {
+        type: String,
+      }
     },
     products: [
       {
-        productID: {
-          type: mongoose.Schema.Types.ObjectId,
+        id: {
+          type: String,
           ref: "Product",
         },
-        // customProduct: {
-        //   design: String,
-        //   tileFormat: String,
-        // },
-        quantity: {
+        name: {
+          type: String,
+        },
+        optionColor: {
+          type: String,
+        },
+        amount: {
           type: Number,
-          required: true,
+        },
+        price: {
+          type: Number,
         },
       },
     ],
     totalPrice: {
       type: Number,
+      required: true,
+    },
+    shipping: {
+      type: Object,
       required: true,
     },
     orderStatus: {
@@ -33,8 +54,8 @@ const orderSchema = new mongoose.Schema({
     },
     paymentStatus: {
       type: String,
-      enum: ["pending", "completed", "failed"],
-      default: "pending",
+      enum: ["succeeded", "failed"],
+      default: "succeeded",
     },
   },
   {
@@ -50,6 +71,27 @@ const orderSchema = new mongoose.Schema({
     },
   }
 );
+
+orderSchema.statics.fetchOrders = async function (page, pageSize, filters) {
+  const skip = (page - 1) * pageSize;
+  // console.log("skip", skip);
+
+  // console.log("filters ", filters);
+
+  const getOrdersQuery = this.find(filters)
+    .skip(skip)
+    .limit(pageSize)
+    // .select("slug name seodescription description image price");
+
+  const getOrdersCount = this.countDocuments(filters);
+
+  const [orders, totalOrders] = await Promise.all([
+    getOrdersQuery.exec(),
+    getOrdersCount.exec(),
+  ]);
+
+  return { orders, totalOrders };
+};
 
 const Order = mongoose.model("Order", orderSchema);
 

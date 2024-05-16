@@ -38,6 +38,7 @@ router.post('/create', requireRole(['seller']), [
 
 router.delete('/:id', productController.deleteProductById);
 router.put('/:id', [
+
     body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
     body('description').notEmpty().withMessage('Description is required').escape(),
     body('seoDescription').notEmpty().withMessage('seoDescription is required').escape(),

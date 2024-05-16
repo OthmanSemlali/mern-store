@@ -11,7 +11,8 @@ import {
   UsersIcon
   
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
+
+import { Home, Profile, Tables, Notifications, Orders, Categories } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import {NotFound} from "@/pages/Error";
 const icon = {
@@ -39,7 +40,7 @@ export const routes = [
         icon: <TagIcon {...icon} />,
         name: "categories",
         path: "/categories",
-        element: "cat",
+        element:<Categories/>,
       },
       {
         icon: <UsersIcon {...icon} />,
@@ -51,7 +52,7 @@ export const routes = [
         icon: <ShoppingCartIcon {...icon} />,
         name: "orders",
         path: "/orders",
-        element: "orders",
+        element: <Orders />,
       },
       {
         icon: <CreditCardIcon {...icon} />,
@@ -100,7 +101,7 @@ export const routes = [
   // },
 ];
 
-const authRoutes = [
+export const authRoutes = [
   {
     layout: "auth",
     pages: [
@@ -116,6 +117,12 @@ const authRoutes = [
         path: "/sign-up",
         element: <SignUp />,
       },
+      // {
+      //   // icon: <RectangleStackIcon {...icon} />,
+      //   // name: "sign up",
+      //   path: "/success",
+      //   element: <AuthSuccess,
+      // },
     ],
   },
 ]

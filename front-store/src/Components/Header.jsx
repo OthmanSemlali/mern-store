@@ -6,7 +6,9 @@ import { logout } from "../features/userSlice";
 const HeaderContainer = styled.header`
   background-color: #404040;
   padding: 0.5rem 1rem;
-  color: #f5f5f5;
+  // color: #f5f5f5;
+color:white;
+
 
   //   height: 5rem;
 //   display: flex;
@@ -22,7 +24,6 @@ const HeaderContainer = styled.header`
 const AlignElement = styled.div`
   display: flex;
   justify-content: center;
-
   width: 90vw;
   margin: 0 auto;
   max-width: var(--max-width);
@@ -94,7 +95,7 @@ const Header = () => {
         <AlignElement>
           {isConnected && user && user.role === "user" ? (
           <UserInfo>
-            <p>Hello, {user.firstName}</p>
+            <p style={{color:"white"}}>Hello, {user.firstName}</p>
             <LogoutButton onClick={() => dispatch(logout())}>Logout</LogoutButton>
           </UserInfo>
         ) : (
@@ -107,7 +108,7 @@ const Header = () => {
 
             {/* </StyledLink> */}
             {/* <StyledLink to="/register">Create Account</StyledLink> */}
-            <StyledLink to="/sell">Sell With Us</StyledLink>  
+            {/* <StyledLink to="/sell">Sell With Us</StyledLink>   */}
           </AuthLinkContainer>
         )}
         </AlignElement>
