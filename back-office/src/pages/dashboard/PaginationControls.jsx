@@ -1,15 +1,14 @@
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-function PaginationControls({ currentPage = 1 }) {
+function PaginationControls({ currentPage = 1, totalProducts }) {
   const navigate = useNavigate();
-  const { totalProducts } = useSelector((store) => store.product);
   const totalPages = Math.ceil(totalProducts / 6);
 
   const page = parseInt(currentPage);
-//   const isFirstPage = page === 1;
-//   const isLastPage = page === totalPages;
+  const isFirstPage = page === 1;
+  const isLastPage = page === totalPages;
 
 
   const prevPage = page > 1 ? page - 1 : null;
@@ -22,40 +21,41 @@ function PaginationControls({ currentPage = 1 }) {
     const params = new URLSearchParams(window.location.search);
     params.set("page", page);
 
+
     const newParamsString = params.toString();
 
     const newUrl = `${window.location.pathname}${
       newParamsString ? "?" + newParamsString : ""
     }`;
- 
+        console.log('params', newUrl)
+
+
     navigate(newUrl);
   };
-
+ 
   if(totalPages <= 1){
-    return 
+    return null;
   }
+
   return (
     <>
+      <ButtonWrapper>
+        <PaginationButton 
+          disabled={isFirstPage}
+          onClick={() => paginate(prevPage)}
+          className="float-left"
+        >
+          Previous
+        </PaginationButton>
 
-    <ButtonWrapper>
-
- <PaginationButton
-  disabled={nextPage}
-  onClick={() => paginate(prevPage)}
-  className="float-left"
->
-  Previous
-</PaginationButton>
-
-<PaginationButton
-  disabled={prevPage}
-  onClick={() => paginate(nextPage)}
-  className="float-right"
->
-  Next &gt;
-</PaginationButton>
-</ButtonWrapper>
-
+        <PaginationButton
+          disabled={isLastPage}
+          onClick={() => paginate(nextPage)}
+          className="float-right"
+        >
+          Next &gt;
+        </PaginationButton>
+      </ButtonWrapper>
     </>
   );
 }
@@ -63,10 +63,11 @@ function PaginationControls({ currentPage = 1 }) {
 export default PaginationControls;
 
 const ButtonWrapper = styled.div`
-margin-top:20px;
-display:flex;
-justify-content:space-between
-`
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+`;
+
 const Button = styled.button`
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -92,13 +93,14 @@ const Button = styled.button`
     margin-left: 0.5rem;
   }
 `;
+
 const PaginationButton = ({ disabled, onClick, children }) => {
-    return (
-      <Button
-        disabled={disabled}
-        onClick={onClick}
-      >
-        {children}
-      </Button>
-    );
-  };
+  return (
+    <Button
+      disabled={disabled}
+      onClick={onClick}
+    >
+      {children}
+    </Button>
+  );
+};

@@ -94,7 +94,7 @@ class ProductController {
         parseInt(pageSize),
         filters
       );
-    //   const totalProducts = await Product.countDocuments();
+      //   const totalProducts = await Product.countDocuments();
       res.json({ response });
     } catch (error) {
       if (error instanceof Error) {
@@ -104,7 +104,7 @@ class ProductController {
       }
     }
   }
- 
+
   async getCategoriesWithProductsCounts(req, res) {
     try {
       const categoriesWithCount =
@@ -120,7 +120,7 @@ class ProductController {
     }
   }
 
- 
+
   async fetchProductById(req, res) {
     const _id = req.params.id;
 
@@ -191,13 +191,11 @@ class ProductController {
   }
   async deleteProductById(req, res) {
     const { id } = req.params;
-
     try {
       const product = await Product.deleteProductById(id);
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
-
       res.json(product);
     } catch (error) {
       res.status(500).json({ message: "Server Error" });
@@ -287,21 +285,21 @@ class ProductController {
   };
 
 
-  distinctFilters = async(req, res) => {
+  distinctFilters = async (req, res) => {
     try {
-        const distinctStyles = await Product.distinct('style');
-        const distinctMaterials = await Product.distinct('materials');
-        const distinctTileUses = await Product.distinct('tileUse');
-    
-        res.json({
-          styles: distinctStyles,
-          materials: distinctMaterials,
-          tileUse: distinctTileUses
-        });
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal server error' });
-      }
+      const distinctStyles = await Product.distinct('style');
+      const distinctMaterials = await Product.distinct('materials');
+      const distinctTileUses = await Product.distinct('tileUse');
+
+      res.json({
+        styles: distinctStyles,
+        materials: distinctMaterials,
+        tileUse: distinctTileUses
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   }
 }
 module.exports = new ProductController();

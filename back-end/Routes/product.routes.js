@@ -18,7 +18,7 @@ router.get('/getRelatedProducts', productController.getRelatedProducts)
 // router.get('/:title', productController.fetchProductById);
 
 // router.get('/search/:title', productController.findByTitle);
-router.post('/create', checkAuthenticated, requireRole(['seller']), [
+router.post('/create', requireRole(['seller']), [
     body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
     body('description').notEmpty().withMessage('Description is required').escape(),
     body('seoDescription').notEmpty().withMessage('seoDescription is required').escape(),
@@ -31,17 +31,17 @@ router.post('/create', checkAuthenticated, requireRole(['seller']), [
     body('materials').notEmpty(),
     body('featured').notEmpty(),
     body('published').notEmpty(),
-    
+
     // body('sellerID').notEmpty(),
     body('categoryID').notEmpty()
 ], productController.createProduct);
 
-router.delete('/:id',checkAuthenticated, verifyOwnership, productController.deleteProductById);
-router.put('/:id', checkAuthenticated, verifyOwnership, [
+router.delete('/:id', productController.deleteProductById);
+router.put('/:id', [
     body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
     body('description').notEmpty().withMessage('Description is required').escape(),
     body('seoDescription').notEmpty().withMessage('seoDescription is required').escape(),
-  
+
 ], productController.updateProductById);
 
 
