@@ -100,7 +100,7 @@ export const routes = [
   // },
 ];
 
-const authRoutes = [
+export const authRoutes = [
   {
     layout: "auth",
     pages: [
@@ -116,6 +116,12 @@ const authRoutes = [
         path: "/sign-up",
         element: <SignUp />,
       },
+      // {
+      //   // icon: <RectangleStackIcon {...icon} />,
+      //   // name: "sign up",
+      //   path: "/success",
+      //   element: <AuthSuccess,
+      // },
     ],
   },
 ]

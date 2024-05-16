@@ -39,6 +39,7 @@ export const fetchPaginatedProducts = createAsyncThunk(
       // Construct query parameters for pagination and filtering
       const queryParams = new URLSearchParams({
         page: page.toString(),
+        pageSize: 6,
         ...filters,
       }).toString();
 

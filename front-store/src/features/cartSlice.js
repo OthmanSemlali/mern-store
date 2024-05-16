@@ -13,7 +13,7 @@ const initialState = {
   cart: getLocalStorage(),
   total_items: 0,
   total_amount: 0,
-  // shipping_fee: 35,
+  shipping_fee: 100,
   cart_loading: false,
   cart_error:false,
   // cart_alert: "",
@@ -89,6 +89,7 @@ console.log('action.payload', action.payload)
     return { ...state, cart: tempCart };
     },
     clearCart: (state) => {
+      localStorage.removeItem('cart');
       return { ...state, cart: [] };
     },
     countCartTotals: (state) => {

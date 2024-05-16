@@ -1,6 +1,8 @@
 if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config();
 }
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+
 const initializePassport = require("./config/passport-config");
 const express = require("express");
 const app = express();
@@ -20,11 +22,12 @@ const categoryRouter = require('./Routes/category.routes')
 const productRouter = require('./Routes/product.routes')
 const userRouter = require('./Routes/user.routes')
 const orderRouter = require('./Routes/order.routes')
-const cors = require('cors')
+const cors = require('cors');
+const { addOrder, placeOrder } = require('./Controllers/order.controller');
 connectDB();
 
 const corsOptions = {
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5174', 'http://localhost:5173'],
   optionsSuccessStatus: 200,
   credentials: true
 }
@@ -84,7 +87,7 @@ app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, nex
         return res.status(500).json({ error: 'An error occurred during authentication' });
       }
       if (!user) {
-        return res.status(401).json({ error: 'Invalid username or password' });
+        return res.status(200).json({ error: 'Invalid username or password' });
       }
       req.logIn(user, (err) => {
         if (err) {
@@ -174,6 +177,45 @@ app.get('/auth/google/callback', checkNotAuthenticated,
 // app.get('/auth/local/failure', (req, res) => {
 //     res.send('Something Went Wrong');
 // })
+
+app.post('/create-payment-intent', async (req, res) => {
+  const { cart, shipping_fee, total_amount } = req.body;
+
+  const shipping = {
+    name: 'John Doe', // Customer's name for delivery
+    address: {
+      line1: '123 Main St', // Customer's street address
+      city: 'Anytown', // Customer's city
+      // state: 'CA', // Customer's state
+      // postal_code: '12345', // Customer's postal code
+      country: 'US' // Customer's country code
+    }}
+console.log('cartaa', cart)
+  const calculateOrderAmount = () => {
+    // Replace this constant with a calculation of the order's amount
+    // Calculate the order total on the server to prevent
+    // people from directly manipulating the amount on the client
+    return shipping_fee + total_amount;
+  };
+
+  try {
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: calculateOrderAmount(),
+      currency: 'usd',
+
+      shipping
+    });
+
+
+    // console.log('intent req success')
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/placeOrder',checkAuthenticated , placeOrder);
 
 
 //? This route for test middlewares/auth etc..

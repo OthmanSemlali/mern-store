@@ -12,6 +12,7 @@ import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 import { NotFound } from "@/pages/Error";
 
 export function Dashboard() {
+  console.log('dashboard');
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
 

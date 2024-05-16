@@ -8,8 +8,8 @@ function PaginationControls({ currentPage = 1 }) {
   const totalPages = Math.ceil(totalProducts / 6);
 
   const page = parseInt(currentPage);
-//   const isFirstPage = page === 1;
-//   const isLastPage = page === totalPages;
+  const isFirstPage = page === 1;
+  const isLastPage = page === totalPages;
 
 
   const prevPage = page > 1 ? page - 1 : null;
@@ -40,7 +40,7 @@ function PaginationControls({ currentPage = 1 }) {
     <ButtonWrapper>
 
  <PaginationButton
-  disabled={nextPage}
+  disabled={isFirstPage}
   onClick={() => paginate(prevPage)}
   className="float-left"
 >
@@ -48,7 +48,7 @@ function PaginationControls({ currentPage = 1 }) {
 </PaginationButton>
 
 <PaginationButton
-  disabled={prevPage}
+  disabled={isLastPage}
   onClick={() => paginate(nextPage)}
   className="float-right"
 >

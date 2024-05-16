@@ -26,11 +26,22 @@ import {
   ordersOverviewData,
 } from "@/data";
 import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/solid";
+import { useAuthenticationContext } from "@/context";
 
 export function Home() {
+
+  const [state] = useAuthenticationContext()
+  const {authenticated} = state
+
+  if(!authenticated){
+    return;
+  }
+
+  
   return (
     <div className="mt-12">
-      <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid mb-12 gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+        
         {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
           <StatisticsCard
             key={title}
@@ -48,7 +59,7 @@ export function Home() {
           />
         ))}
       </div>
-      <div className="mb-6 grid grid-cols-1 gap-y-12 gap-x-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid grid-cols-1 mb-6 gap-y-12 gap-x-6 md:grid-cols-2 xl:grid-cols-3">
         {statisticsChartsData.map((props) => (
           <StatisticsChart
             key={props.title}
@@ -58,20 +69,20 @@ export function Home() {
                 variant="small"
                 className="flex items-center font-normal text-blue-gray-600"
               >
-                <ClockIcon strokeWidth={2} className="h-4 w-4 text-blue-gray-400" />
+                <ClockIcon strokeWidth={2} className="w-4 h-4 text-blue-gray-400" />
                 &nbsp;{props.footer}
               </Typography>
             }
           />
         ))}
       </div>
-      <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <Card className="overflow-hidden xl:col-span-2 border border-blue-gray-100 shadow-sm">
+      <div className="grid grid-cols-1 gap-6 mb-4 xl:grid-cols-3">
+        <Card className="overflow-hidden border shadow-sm xl:col-span-2 border-blue-gray-100">
           <CardHeader
             floated={false}
             shadow={false}
             color="transparent"
-            className="m-0 flex items-center justify-between p-6"
+            className="flex items-center justify-between p-6 m-0"
           >
             <div>
               <Typography variant="h6" color="blue-gray" className="mb-1">
@@ -81,7 +92,7 @@ export function Home() {
                 variant="small"
                 className="flex items-center gap-1 font-normal text-blue-gray-600"
               >
-                <CheckCircleIcon strokeWidth={3} className="h-4 w-4 text-blue-gray-200" />
+                <CheckCircleIcon strokeWidth={3} className="w-4 h-4 text-blue-gray-200" />
                 <strong>30 done</strong> this month
               </Typography>
             </div>
@@ -91,7 +102,7 @@ export function Home() {
                   <EllipsisVerticalIcon
                     strokeWidth={3}
                     fill="currenColor"
-                    className="h-6 w-6"
+                    className="w-6 h-6"
                   />
                 </IconButton>
               </MenuHandler>
@@ -102,7 +113,7 @@ export function Home() {
               </MenuList>
             </Menu>
           </CardHeader>
-          <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+          <CardBody className="px-0 pt-0 pb-2 overflow-x-scroll">
             <table className="w-full min-w-[640px] table-auto">
               <thead>
                 <tr>
@@ -110,7 +121,7 @@ export function Home() {
                     (el) => (
                       <th
                         key={el}
-                        className="border-b border-blue-gray-50 py-3 px-6 text-left"
+                        className="px-6 py-3 text-left border-b border-blue-gray-50"
                       >
                         <Typography
                           variant="small"
@@ -173,7 +184,7 @@ export function Home() {
                           <div className="w-10/12">
                             <Typography
                               variant="small"
-                              className="mb-1 block text-xs font-medium text-blue-gray-600"
+                              className="block mb-1 text-xs font-medium text-blue-gray-600"
                             >
                               {completion}%
                             </Typography>
@@ -193,12 +204,12 @@ export function Home() {
             </table>
           </CardBody>
         </Card>
-        <Card className="border border-blue-gray-100 shadow-sm">
+        <Card className="border shadow-sm border-blue-gray-100">
           <CardHeader
             floated={false}
             shadow={false}
             color="transparent"
-            className="m-0 p-6"
+            className="p-6 m-0"
           >
             <Typography variant="h6" color="blue-gray" className="mb-2">
               Orders Overview
