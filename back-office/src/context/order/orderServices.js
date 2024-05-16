@@ -1,4 +1,4 @@
-import { loadOrdersBegin, loadOrdersServerError, loadOrdersSuccess,  } from "..";
+import { loadOrdersBegin, loadOrdersServerError, loadOrdersSuccess, updateOrderStatusBegin, updateOrderStatusError, updateOrderStatusSuccess,  } from "..";
 
 
 export const fetchOrdersService = async (dispatch, page = 1, filters) => {
@@ -29,5 +29,40 @@ export const fetchOrdersService = async (dispatch, page = 1, filters) => {
       } catch (error) {
         console.log("Error: Something went wrong while fetching orders", error);
         loadOrdersServerError(dispatch)
+      }
+    }
+
+    
+export const updateOrderStatus = async (dispatch,oldStatusId, newStatus) => {
+  
+    // updateOrderStatusBegin(dispatch)
+      try {
+            const response = await fetch(
+          `http://localhost:3000/api/orders/updateOrderStatus/${oldStatusId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ newStatus}),
+          }
+        );
+  
+        if (!response.ok) {
+            // throw new Error("Failed to fetch orders");
+            // updateOrderStatusError(dispatch)
+            console.log('update order errorr')
+        }
+  
+        const data = await response.json();
+        console.log('update order success')
+
+        // updateOrderStatusSuccess(dispatch, data.response)
+        
+      } catch (error) {
+        console.log("Error: Something went wrong while updating orders", error);
+        // updateOrderStatusError(dispatch)
+        console.log('update order error')
+
       }
     }

@@ -88,4 +88,14 @@ export const loadOrdersServerError = (dispatch) => {
   dispatch({type: 'LOAD_ORDERS_ERROR'})
 }
 
+export const updateOrderStatusBegin = (dispatch) => {
+  dispatch({type: "UPDATE_ORDER_STTAUS_BEGIN"})
+}
+export const updateOrderStatusSuccess =  (dispatch, value) => {
+  dispatch({ type: "UPDATE_ORDER_STATUS_SUCCESS", value });
+}
+export const updateOrderStatusError = (dispatch) => {
+  dispatch({type: 'UPDATE_ORDER_STATUS_ERROR'})
+}
+
 // STATS

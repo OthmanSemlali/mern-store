@@ -1,7 +1,7 @@
 import { PaginationControls } from "@/container";
-import { fetchOrdersService, useOrderContext } from "@/context"
+import { fetchOrdersService, updateOrderStatus, useOrderContext } from "@/context"
 import queryString from "query-string";
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import {
     Card,
@@ -59,6 +59,24 @@ const parsed = queryString.parse(location.search);
     //     navigate(newUrl);
     
     //   };
+
+
+
+  const handleChange = (event, id) => {
+    const newValue = event.target.value;
+
+    const confirmChange = window.confirm(`Are you sure you want to change the value to ${newValue}?`);
+
+    if (confirmChange) {
+        updateOrderStatus(dispatch, id, newValue)
+    }
+  };
+
+  if(orders.length == 0){
+    return <div className="flex flex-col gap-12 mt-12 mb-8">
+            <p>No orders</p>
+    </div>
+  }
   return (
     <div className="flex flex-col gap-12 mt-12 mb-8">
            
@@ -89,84 +107,11 @@ const parsed = queryString.parse(location.search);
             </thead>
             <tbody>
               {orders.map(
-                ({ user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt }, key) => {
+                ({id,  user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt }, key) => {
 
-                    const {line1, city, country} = shipping.address
-                  const className = `py-3 px-5 ${
-                    key === authorsTableData.length - 1
-                      ? ""
-                      : "border-b border-blue-gray-50"
-                  }`;
+         
 
-                  return (
-                    <tr key={key}>
-                      <td className={className}>
-                        <div className="flex items-center gap-4">
-                          {/* <Avatar src={img} alt={name} size="sm" variant="rounded" /> */}
-                          <div>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-semibold"
-                            >
-                              
-
-                              {user.firstName && user.firstName} {user.lastName && user.lastName}
-                            </Typography>
-                            <Typography className="text-xs font-normal text-blue-gray-500">
-                              {user && user.email && user.email}
-                            </Typography>
-                            
-                          </div>
-                        </div>
-                      </td>
-                      <td className={className}>
-                        
-                        <Typography className="text-sm font-normal text-blue-gray-500">
-                          {line1}, {city} 
-                          
-                        </Typography>
-                        <Typography className="text-sm font-normal text-blue-gray-500">
-                          
-                          {country}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        
-                        <Typography className="text-sm font-normal underline text-blue-gray-500">
-                          products
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-normal text-blue-gray-500">
-                          ${totalPrice}
-                        </Typography>
-                      </td>
-                      
-                      <td className={className}>
-                        <Chip
-                          variant="gradient"
-                          color={paymentStatus =='succeeded' ? "green" : "blue-gray"}
-                          value={paymentStatus == 'succeeded' ? "succeeded" : "failed"}
-                          className="py-0.5 px-2 text-[11px] font-medium w-fit"
-                        />
-                      </td>
-                      <td className={className}>
-                        <Typography className="text-xs font-semibold text-blue-gray-600">
-                          {formatDate(createdAt)}
-                        </Typography>
-                      </td>
-                      <td className={className}>
-                      <select
-                          class="peer h-full   border-blue-gray-200 border-t-transparent bg-transparent   font-sans text-sm font-normal text-blue-gray-700 outline outline-0  placeholder-shown:border-t-blue-gray-200  focus:border-t-transparent disabled:border-0 disabled:bg-blue-gray-50">
-                          <option value="pending">pending</option>
-                          <option value="confirmed">confirmed</option>
-                          <option value="shipped">shipped</option>
-                          <option value="delivered">delivered</option>
-                        </select>
-                      </td>
-                    </tr>
-                  );
+                  return <OrderRow {...{id, user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt, key}} handleChange={handleChange} />;
                 }
               )}
             </tbody>
@@ -182,3 +127,93 @@ const parsed = queryString.parse(location.search);
 }
 
 export default Orders
+
+
+const OrderRow = ({ id, user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt, key, handleChange }) => {
+
+    console.log('***id', id)
+    const {line1, city, country} = shipping.address
+
+    const className = `py-3 px-5 ${
+        key === authorsTableData.length - 1
+          ? ""
+          : "border-b border-blue-gray-50"
+      }`;
+      
+      const [showProducts, setShowProducts] = useState(false)
+      return (
+
+
+        <tr key={key}>
+        <td className={className}>
+          <div className="flex items-center gap-4">
+            {/* <Avatar src={img} alt={name} size="sm" variant="rounded" /> */}
+            <div>
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="font-semibold"
+              >
+                
+
+                {user.firstName && user.firstName} {user.lastName && user.lastName}
+              </Typography>
+              <Typography className="text-xs font-normal text-blue-gray-500">
+                {user && user.email && user.email}
+              </Typography>
+              
+            </div>
+          </div>
+        </td>
+        <td className={className}>
+          
+          <Typography className="text-sm font-normal text-blue-gray-500">
+            {line1}, {city} 
+            
+          </Typography>
+          <Typography className="text-sm font-normal text-blue-gray-500">
+            
+            {country}
+          </Typography>
+        </td>
+        <td className={className}>
+          
+          <Typography className="text-sm font-normal underline text-blue-gray-500">
+            products
+          </Typography>
+        </td>
+        <td className={className}>
+          <Typography className="text-xs font-normal text-blue-gray-500">
+            ${totalPrice}
+          </Typography>
+        </td>
+        
+        <td className={className}>
+          <Chip
+            variant="gradient"
+            color={paymentStatus =='succeeded' ? "green" : "blue-gray"}
+            value={paymentStatus == 'succeeded' ? "succeeded" : "failed"}
+            className="py-0.5 px-2 text-[11px] font-medium w-fit"
+          />
+        </td>
+        <td className={className}>
+          <Typography className="text-xs font-semibold text-blue-gray-600">
+            {formatDate(createdAt)}
+          </Typography>
+        </td>
+        <td className={className}>
+        <select
+          // value={orderStatus} 
+          onChange={(e) => handleChange(e, id)}
+            className="h-full font-sans text-sm font-normal bg-transparent peer border-blue-gray-200 border-t-transparent text-blue-gray-700 outline outline-0 placeholder-shown:border-t-blue-gray-200 focus:border-t-transparent disabled:border-0 disabled:bg-blue-gray-50">
+            <option value="pending" selected={orderStatus == 'pending' ? true : null}>pending</option>
+            <option value="confirmed" selected={orderStatus == 'confirmed' ? true : null}>confirmed</option>
+            <option value="shipped" selected={orderStatus == 'shipped' ? true : null}>shipped</option>
+            <option value="delivered" selected={orderStatus == 'delivered' ? true : null}>delivered</option>
+          </select>
+        </td>
+      </tr>
+
+
+    )
+}
