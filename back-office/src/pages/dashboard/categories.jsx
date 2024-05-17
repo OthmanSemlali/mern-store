@@ -122,24 +122,24 @@ export function Categories() {
   
   
   return (
-          <div className="mt-12 mb-8 flex flex-col gap-12">
+          <div className="flex flex-col gap-12 mt-12 mb-8">
 
     <Card>
-      <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
-        <Typography className="flex justify-between px-7 items-center" variant="h6" color="white">
-          <p className="font-bold text-lg	">Categories</p> 
-          <button className="border px-5 p-3" onClick={()=>{setShowAddForm(!showAddForm)}} >Add  Category</button>
+      <CardHeader variant="gradient" color="gray" className="p-6 mb-8">
+        <Typography className="flex items-center justify-between px-7" variant="h6" color="white">
+          <p className="text-lg font-bold ">Categories</p> 
+          <button className="p-3 px-5 border" onClick={()=>{setShowAddForm(!showAddForm)}} >Add  Category</button>
         </Typography>
       </CardHeader>
       
-      <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+      <CardBody className="px-0 pt-0 pb-2 overflow-x-scroll">
         <table className="w-full min-w-[640px] table-auto">
           <thead>
             <tr>
               {['name', '', ''].map((el) => (
                 <th
                   key={el}
-                  className="border-b border-blue-gray-50 py-3 px-5 text-left"
+                  className="px-5 py-3 text-left border-b border-blue-gray-50"
                 >
                   <Typography
                     variant="small"
@@ -203,28 +203,28 @@ export function Categories() {
 
     {showForm && (  
   <div className="fixed inset-0 z-50 flex items-center justify-center">
-    <div className="bg-gray-600 bg-opacity-75 absolute inset-0"></div>
-    <div className="rounded-lg w-1/2 h-60 bg-white px-6 pt-11 max-w-sm mx-auto relative z-50">
-      <p className="text-lg font-semibold mb-2">Edit Category</p>
+    <div className="absolute inset-0 bg-gray-600 bg-opacity-75"></div>
+    <div className="relative z-50 w-1/2 max-w-sm px-6 mx-auto bg-white rounded-lg h-60 pt-11">
+      <p className="mb-2 text-lg font-semibold">Edit Category</p>
       <input
         type="text"
         placeholder="Name"
-        className="mt-2 p-2 border-solid border-4 rounded-md w-full focus:outline-none"
+        className="w-full p-2 mt-2 border-4 border-solid rounded-md focus:outline-none"
         onChange={(event) => setOldCategory((prevState) => ({ ...prevState, name: event.target.value }))}
         value={oldCategory.name}
       />
       {/* {categoryError && (
-        <p className="text-red-500 text-sm mt-2">{categoryError}</p>
+        <p className="mt-2 text-sm text-red-500">{categoryError}</p>
       )} */}
       <div className="flex justify-end mt-4">
         <button
-          className="px-4 w-1/2 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+          className="w-1/2 px-4 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
           onClick={toggleForm}
         >
           Cancel
         </button>
         <button
-          className="px-4 w-1/2 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+          className="w-1/2 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
           onClick={confirmEdit}
         >
           Update
@@ -236,19 +236,19 @@ export function Categories() {
  
  {showDeleteForm && (
   <div className="fixed inset-0 z-50 flex items-center justify-center">
-    <div className="bg-gray-600 bg-opacity-75 absolute inset-0"></div>
-    <div className="rounded-lg w-1/2 h-60 bg-white px-6 pt-11 max-w-sm mx-auto relative z-50">
-      <p className="text-lg font-semibold mb-2">Delete Category</p>
+    <div className="absolute inset-0 bg-gray-600 bg-opacity-75"></div>
+    <div className="relative z-50 w-1/2 max-w-sm px-6 mx-auto bg-white rounded-lg h-60 pt-11">
+      <p className="mb-2 text-lg font-semibold">Delete Category</p>
       <p className="mb-4">Are you sure you want to delete this category?</p>
       <div className="flex justify-end">
         <button
-          className="px-4 w-1/2 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+          className="w-1/2 px-4 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
           onClick={toggleDelete}
         >
           Cancel
         </button>
         <button
-          className="px-4 w-1/2 py-2 text-white bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
+          className="w-1/2 px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600 focus:outline-none focus:bg-red-600"
           onClick={confirmDelete}
         >
           Delete
@@ -260,25 +260,25 @@ export function Categories() {
 
   {showAddForm && (
   <div className="fixed inset-0 z-50 flex items-center justify-center">
-    <div className="bg-gray-600 bg-opacity-75 absolute inset-0"></div>
-    <div className=" rounded-lg w-1/2 h-60 bg-white px-6 pt-11 max-w-sm mx-auto relative z-50">
-      <p className="text-lg font-semibold mb-2">Add new category</p>
+    <div className="absolute inset-0 bg-gray-600 bg-opacity-75"></div>
+    <div className="relative z-50 w-1/2 max-w-sm px-6 mx-auto bg-white rounded-lg h-60 pt-11">
+      <p className="mb-2 text-lg font-semibold">Add new category</p>
       <input
         type="text"
         placeholder="Name"
-        className="mt-2 p-2 border-solid border-4 rounded-md w-full focus:outline-none"
+        className="w-full p-2 mt-2 border-4 border-solid rounded-md focus:outline-none"
         onChange={(e) => setAddCategoryName(e.target.value)}
         value={addCategoryName}
       />
       <div className="flex justify-end mt-4">
         <button
-          className="px-4 w-1/2 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+          className="w-1/2 px-4 py-2 mr-2 text-white bg-gray-500 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
           onClick={toggleAddForm}
         >
           Cancel
         </button>
         <button
-          className="px-4 w-1/2 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+          className="w-1/2 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
           onClick={AddCategory}
         >
           Add
