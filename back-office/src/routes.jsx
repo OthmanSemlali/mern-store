@@ -12,7 +12,7 @@ import {
   
 } from "@heroicons/react/24/solid";
 
-import { Home, Profile, Tables, Notifications, Orders, Categories } from "@/pages/dashboard";
+import { Home, Profile, Tables, Notifications, Orders, Categories, Customers } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import {NotFound} from "@/pages/Error";
 const icon = {
@@ -46,25 +46,13 @@ export const routes = [
         icon: <UsersIcon {...icon} />,
         name: "customers",
         path: "/customers",
-        element: "customers",
+        element: <Customers />,
       },
       {
         icon: <ShoppingCartIcon {...icon} />,
         name: "orders",
         path: "/orders",
         element: <Orders />,
-      },
-      {
-        icon: <CreditCardIcon {...icon} />,
-        name: "transactions",
-        path: "/transactions",
-        element: "transactions",
-      },
-      {
-        icon: <UserCircleIcon {...icon} />,
-        name: "profile",
-        path: "/profile",
-        element: <Profile />,
       },
       
       // {

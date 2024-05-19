@@ -32,4 +32,27 @@ const deleteSellerProfile = async (req, res) => {
     }
 };
 
-module.exports = { deleteSellerProfile}
+
+const fetchPaginatedUsers = async (req, res) => {
+    const {
+      page = 1,
+      pageSize = 6,
+      filters
+    } = req.query;
+    
+    try {
+      
+      const response = await User.fetchUsers(
+        parseInt(page),
+        parseInt(pageSize),
+        filters
+      );
+      res.json({ response });
+    } catch (error) {
+   
+        res.status(500).json({ message: "Server Error" });
+      
+    }
+  }
+
+module.exports = { deleteSellerProfile , fetchPaginatedUsers}

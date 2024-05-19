@@ -1,4 +1,3 @@
-import { PaginationControls } from "@/container";
 import { fetchOrdersService, updateOrderStatus, useOrderContext } from "@/context"
 import queryString from "query-string";
 import { useEffect, useMemo, useState } from "react"
@@ -16,6 +15,7 @@ import {
   } from "@material-tailwind/react";
 import { authorsTableData, projectsTableData } from "@/data";
 import { formatDate } from "@/configs";
+import { PaginationControls, SearchInput } from "@/components";
 
 
 export function Orders() {
@@ -81,9 +81,12 @@ const parsed = queryString.parse(location.search);
     <div className="flex flex-col gap-12 mt-12 mb-8">
            
       <Card>
-        <CardHeader variant="gradient" color="gray" className="p-6 mb-8">
+        <CardHeader variant="gradient" color="gray" className="flex items-center justify-between p-6 mb-8">
           <Typography variant="h6" color="white">
             Orders
+          </Typography>
+          <Typography variant="h6" color="white">
+            <SearchInput />
           </Typography>
         </CardHeader>
         <CardBody className="px-0 pt-0 pb-2 overflow-x-scroll">
