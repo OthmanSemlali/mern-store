@@ -14,17 +14,16 @@
     "@material-tailwind/react": "2.1.4",
     "apexcharts": "3.44.0",
     "axios": "^1.6.8",
+    "lodash.debounce": "^4.0.8",
     "prop-types": "15.8.1",
     "query-string": "^9.0.0",
     "react": "18.2.0",
     "react-apexcharts": "1.4.1",
     "react-dom": "18.2.0",
-
-    "styled-components": "^6.1.11",
-
     "react-hook-form": "^7.51.4",
     "react-modal": "^3.16.1",
     "react-router-dom": "6.17.0",
+    "styled-components": "^6.1.11",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -3,8 +3,24 @@ const Category = require("../Models/category.model");
 
 class CategoryController {
   async fetchCategories(req, res) {
-    const categories = await Category.fetchCategories();
-    res.json(categories);
+    const {name,page,perPage} = req.query
+    const search = {}
+
+        
+    if(name){
+      search.name = {
+        $regex: name,
+        $options: 'i'
+      }
+    }
+    try {
+      const pageNumber = parseInt(page) || 1;
+      const itemsPerPage = parseInt(perPage) || 7;
+      const categories = await Category.fetchCategories(search,pageNumber,itemsPerPage);
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch categories' });
+    }
   }
 
   async createCategory(req, res) {

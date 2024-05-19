@@ -20,8 +20,9 @@ const CategorySchema = new Schema(
   }
 );
 
-CategorySchema.statics.fetchCategories = async function () {
-  return this.find();
+CategorySchema.statics.fetchCategories = async function (search = {}, page = 1, perPage = 7) {
+  const skip = (page - 1) * perPage;
+  return this.find(search).skip(skip).limit(perPage);
 };
 
 CategorySchema.statics.createCategory = async function (name) {
