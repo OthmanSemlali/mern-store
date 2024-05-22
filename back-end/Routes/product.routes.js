@@ -10,6 +10,7 @@ const router = express.Router();
 router.get('/', productController.fetchPaginatedProducts);
 
 router.get('/fetchSingleProductBySlug/:slug', productController.fetchProductBySlug);
+router.get('/fetchProductsByName/:name', productController.fetchProductsByName);
 router.get('/fetchSingleProductByID/:id', productController.fetchProductById);
 
 router.get('/getCategoriesWithProductsCounts', productController.getCategoriesWithProductsCounts)
@@ -18,10 +19,9 @@ router.get('/getRelatedProducts', productController.getRelatedProducts)
 // router.get('/:title', productController.fetchProductById);
 
 // router.get('/search/:title', productController.findByTitle);
-router.post('/create', requireRole(['seller']), [
+router.post('/create', [
     body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
     body('description').notEmpty().withMessage('Description is required').escape(),
-    body('seoDescription').notEmpty().withMessage('seoDescription is required').escape(),
     body('price').notEmpty(),
     body('stock').notEmpty(),
     body('size').notEmpty(),

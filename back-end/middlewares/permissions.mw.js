@@ -19,11 +19,11 @@ const verifyOwnership = async (req, res, next) => {
         console.log('req.user.id', req.user.id)
         if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
             return res.status(400).json({ error: 'Invalid user ID' });
-          }
-          
-          if (product.sellerID.toString() !== req.user.id) {
+        }
+
+        if (product.sellerID.toString() !== req.user.id) {
             return res.status(403).json({ error: 'You are not authorized to manage this product' });
-          }
+        }
         // if (product.sellerID !== new ObjectId(req.user.id)) {
         //     return res.status(403).json({ error: 'You are not authorized to manage this product' });
         // }
@@ -35,4 +35,4 @@ const verifyOwnership = async (req, res, next) => {
     }
 };
 
-module.exports = {verifyOwnership}
+module.exports = { verifyOwnership }
