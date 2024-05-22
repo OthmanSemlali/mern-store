@@ -6,4 +6,5 @@ export * from "@/pages/dashboard/notifications";
 export * from "@/pages/dashboard/orders"
 
 export * from "@/pages/dashboard/categories";
+export * from "@/pages/dashboard/customers"
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUserById, getUserOrders, updateUserById, deleteSellerProfile } = require('../Controllers/user.controller');
+const { getUserById, getUserOrders, updateUserById, deleteSellerProfile, fetchPaginatedUsers } = require('../Controllers/user.controller');
 const { checkAuthenticated, requireRole } = require('../middlewares/auth.mw');
 const router = express.Router();
 // const { deleteSellerProfile } = require('./controllers');
@@ -16,5 +16,5 @@ router.get('/:id/orders', getUserOrders);
 router.put('/:id', updateUserById);
 
 router.delete('/seller/delete', checkAuthenticated, requireRole(['seller']), deleteSellerProfile);
-
+router.get('/', fetchPaginatedUsers)
 module.exports = router;

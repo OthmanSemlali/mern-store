@@ -48,7 +48,7 @@ class UserClass {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
-        createrAt: user.createrAt
+        createdAt: user.createdAt
       }
     }else{
       return null
@@ -58,6 +58,24 @@ class UserClass {
 
 UserSchema.statics.getUserByGoogleId = async function (googleId) {
   return this.findOne({ googleId });
+};
+
+UserSchema.statics.fetchUsers = async function (page, pageSize, filters) {
+  const skip = (page - 1) * pageSize;
+
+  const getUsersQuery = this.find(filters)
+    .skip(skip)
+    .limit(pageSize)
+    .select("firstName lastName email role createdAt");
+
+  const getUsersCount = this.countDocuments(filters);
+
+  const [users, totalUsers] = await Promise.all([
+    getUsersQuery.exec(),
+    getUsersCount.exec(),
+  ]);
+
+  return { users, totalUsers };
 };
 
 UserSchema.loadClass(UserClass);
