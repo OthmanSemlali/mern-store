@@ -6,7 +6,7 @@ export const SearchInput = () => {
   
       <div className="">
         <Input
-          type="email"
+          type="text"
           placeholder="search by name"
           className="!border !border-gray-300 bg-white text-gray-900  "
           labelProps={{

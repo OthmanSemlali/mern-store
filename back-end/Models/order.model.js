@@ -9,6 +9,7 @@ const orderSchema = new mongoose.Schema(
         required: true,
       },
     
+
       firstName: {
         type: String,
       },
@@ -72,13 +73,15 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-orderSchema.statics.fetchOrders = async function (page, pageSize, filters) {
+orderSchema.statics.fetchOrders = async function (page, pageSize, filters,sort) {
   const skip = (page - 1) * pageSize;
-  // console.log("skip", skip);
+  console.log("skip", skip);
+  
 
   // console.log("filters ", filters);
 
   const getOrdersQuery = this.find(filters)
+    .sort(sort)
     .skip(skip)
     .limit(pageSize)
     // .select("slug name seodescription description image price");
