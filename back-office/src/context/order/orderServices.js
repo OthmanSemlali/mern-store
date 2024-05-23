@@ -1,13 +1,18 @@
 import { loadOrdersBegin, loadOrdersServerError, loadOrdersSuccess, updateOrderStatusBegin, updateOrderStatusError, updateOrderStatusSuccess,  } from "..";
 
-
-export const fetchOrdersService = async (dispatch, page = 1, filters) => {
+ 
+export const fetchOrdersService = async (dispatch, page = 1, filters,  handelInput,handelStatus,handelDate) => {
   
+  console.log('handleInput service ', handelInput)
+  console.log('handleInput s ', handelStatus)
     loadOrdersBegin(dispatch)
       try {
         const queryParams = new URLSearchParams({
           page: page.toString(),
           pageSize: 6,
+          firstName:handelInput,
+          status : handelStatus,
+          date : handelDate,
           ...filters,
         }).toString();
   

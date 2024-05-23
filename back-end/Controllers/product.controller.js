@@ -18,6 +18,22 @@ class ProductController {
       }
     }
   }
+  async fetchProductsByName(req, res) {
+    const name = req.params.name;
+
+    console.log("name", name); return
+    try {
+      const product = await Product.fetchProductsByName(name);
+      res.json(product);
+    } catch (error) {
+      if (error instanceof Error) {
+        // res.status(500).json({ message: error.message });
+        console.error("fetchProductsByName ", error.message);
+      } else {
+        res.status(500).json({ message: "Server Error" });
+      }
+    }
+  }
 
   async getRelatedProducts(req, res) {
     const { categoryID } = req.body;
@@ -139,6 +155,7 @@ class ProductController {
     }
   }
   async createProduct(req, res) {
+    console.log("create new product", req);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log("errors: ", errors);
@@ -148,7 +165,6 @@ class ProductController {
     const {
       name,
       description,
-      seoDescription,
       image,
       price,
       stock,
@@ -166,7 +182,6 @@ class ProductController {
       const product = await Product.createProduct(
         name,
         description,
-        seoDescription,
         image,
         price,
         stock,

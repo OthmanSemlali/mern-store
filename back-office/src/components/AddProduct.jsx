@@ -21,7 +21,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
 
   const handleCancel = () => {
     setShowAddForm(false);
-    setShowTable(true);
+    setShowTable(true)
   };
 
   const handleConfirm = async () => {
@@ -71,17 +71,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
         onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
       ></textarea>
     </div>
-    <div className="w-full mt-2">
-      <label className="block text-sm font-medium text-gray-700">SEO Description</label>
-      <textarea
-        name="seodescription"
-        id="seodescription"
-        rows="3"
-        className="w-full p-2 border border-gray-300 rounded-md"
-        value={newProduct.seodescription}
-        onChange={(e) => setNewProduct({ ...newProduct, seodescription: e.target.value })}
-      ></textarea>
-    </div>
+    
     <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Image URL</label>
       <input
@@ -254,9 +244,9 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
       </select>
     </div>
     </div>          
-          <div className="flex justify-between mt-4">
-            <button onClick={handleCancel}>Cancel</button>
-            <button onClick={handleConfirm}>Confirm</button>
+      <div className="flex gap-4 justify-center mt-4">
+            <button className="text-grey-500" onClick={handleCancel}>Cancel</button>
+            <button  className="text-green-500"  onClick={handleConfirm}>Confirm</button>
           </div>
         </CardBody>
       </Card>

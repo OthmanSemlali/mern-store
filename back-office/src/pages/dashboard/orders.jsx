@@ -1,7 +1,12 @@
-import { fetchOrdersService, updateOrderStatus, useOrderContext } from "@/context"
-import queryString from "query-string";
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import queryString from "query-string";
+import { format } from "date-fns";
+import { DayPicker } from "react-day-picker";
+import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
+
+import { fetchOrdersService, updateOrderStatus, useOrderContext } from "@/context";
+
 import {
     Card,
     CardHeader,
@@ -12,34 +17,48 @@ import {
     Tooltip,
     Progress,
     Select,
-  } from "@material-tailwind/react";
+    Input,
+    Popover,
+    PopoverHandler,
+    PopoverContent,
+    Checkbox,
+    List,
+    ListItem,
+    ListItemPrefix,
+    Option
+} from "@material-tailwind/react";
+
 import { authorsTableData, projectsTableData } from "@/data";
 import { formatDate } from "@/configs";
-import { PaginationControls, SearchInput } from "@/components";
-
+import { PaginationControls } from "@/components";
+// import { Select, Option } from "@material-tailwind/react";
+ 
+ 
 
 export function Orders() {
 
-const [state, dispatch] = useOrderContext();
-const navigate = useNavigate()
+  const [state, dispatch] = useOrderContext();
+  const navigate = useNavigate()
+  const [handelInput, setHandelInput] = useState('')
+  const {orders, totalOrders} = state;
+  // const [date, setDate] = React.useState<Date>(new Date());;
+  const [handelStatus, setHandelStatus] = useState('')
+  const [handelDate, setHandelDate] = useState('')
+  console.log('totalOrders', totalOrders)
+  const parsed = queryString.parse(location.search);
 
-const {orders, totalOrders} = state;
-
-console.log('totalOrders', totalOrders)
-const parsed = queryString.parse(location.search);
-
-// const { page } = parsed;
+  // const { page } = parsed;
   const filters = useMemo(() => ({ ...parsed }), [parsed]);
-
   const {page, orderStatus } = filters
 
 
-    useEffect(() => {
-        fetchOrdersService(dispatch, page, filters)
-    }, [page, orderStatus])
+
+  useEffect(() => {
+    fetchOrdersService(dispatch, page, filters, handelInput,handelStatus,handelDate)
+  }, [page, orderStatus, handelInput,handelStatus,handelDate])
 
 
-    //* FILTER ORDERS
+  //* FILTER ORDERS
     // const setFilter = (name, value) => {
    
     //     const params = new URLSearchParams(window.location.search);
@@ -59,17 +78,14 @@ const parsed = queryString.parse(location.search);
     //     navigate(newUrl);
     
     //   };
-
-
-
   const handleChange = (event, id) => {
-    const newValue = event.target.value;
+  const newValue = event.target.value;
 
-    const confirmChange = window.confirm(`Are you sure you want to change the value to ${newValue}?`);
+  const confirmChange = window.confirm(`Are you sure you want to change the value to ${newValue}?`);
 
-    if (confirmChange) {
-        updateOrderStatus(dispatch, id, newValue)
-    }
+  if (confirmChange) {
+    updateOrderStatus(dispatch, id, newValue)
+  }
   };
 
   if(orders.length == 0){
@@ -81,13 +97,45 @@ const parsed = queryString.parse(location.search);
     <div className="flex flex-col gap-12 mt-12 mb-8">
            
       <Card>
-        <CardHeader variant="gradient" color="gray" className="flex items-center justify-between p-6 mb-8">
+        <CardHeader variant="gradient" color="gray" className="flex items-center justify-between p-6 mb-8 overflow-visible">
           <Typography variant="h6" color="white">
             Orders
           </Typography>
+    <div>
+
+      <select name="" id=""
+        // label="Select satatus "        
+        onChange={(e)=>{setHandelStatus(e.target.value); console.log('trr ', e.target.value);}}
+        className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333">
+        <option value="" className="">All</option>
+        <option value="pending" className="">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="shipped">Shipped</option>
+        <option value="delivered">Delivered</option>
+       </select>
+
+       <select name="" id=""
+        // label="Select satatus "        
+        onChange={(e)=>{setHandelDate(e.target.value)}}
+        className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333">
+        <option value="" className="">All</option>
+        <option value="3" className="">last 7 days</option>
+        <option value="30">last 30 days</option>
+        <option value="60">last 60 days</option>
+       </select>
+    </div>
+            
           <Typography variant="h6" color="white">
-            <SearchInput />
+            <Input type="text" placeholder="search by name"
+              className="!border !border-gray-300 bg-white text-gray-900  "
+              labelProps={{
+                className: "hidden",
+              }}
+              containerProps={{ className: "min-w-[100px]" }}
+              onChange={(e)=>setHandelInput(e.target.value)}
+            />
           </Typography>
+          
         </CardHeader>
         <CardBody className="px-0 pt-0 pb-2 overflow-x-scroll">
           <table className="w-full min-w-[640px] table-auto">
@@ -120,11 +168,12 @@ const parsed = queryString.parse(location.search);
             </tbody>
           </table>
         </CardBody>
+        
       </Card>
 
-
-
-        <PaginationControls currentPage={page} navigate={navigate} totalItems={totalOrders} />
+      <PaginationControls currentPage={page} navigate={navigate} totalItems={totalOrders} />
+      
+     
     </div>
   )
 }

@@ -1,5 +1,5 @@
-if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
 }
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
@@ -12,7 +12,7 @@ const session = require("express-session");
 const methodOverride = require("method-override");
 
 const flash = require("express-flash");
-const {body, validationResult} = require("express-validator");
+const { body, validationResult } = require("express-validator");
 
 const User = require('./Models/user.model');
 const { connectDB } = require('./database/connect');
@@ -24,6 +24,7 @@ const userRouter = require('./Routes/user.routes')
 const orderRouter = require('./Routes/order.routes')
 const cors = require('cors');
 const { addOrder, placeOrder } = require('./Controllers/order.controller');
+const productController = require('./Controllers/product.controller');
 connectDB();
 
 const corsOptions = {
@@ -33,19 +34,19 @@ const corsOptions = {
 }
 app.use(cors(corsOptions));
 initializePassport(
-    passport,
-    User.getUserByEmail,
-    User.getUserByGoogleId,
-    User.addUser,
-    User.fetchUserById
+  passport,
+  User.getUserByEmail,
+  User.getUserByGoogleId,
+  User.addUser,
+  User.fetchUserById
 );
 
 app.use(flash());
 app.use(session({
-    secret:process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false, 
-    cookie:{secure:false}
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
 // this is to initialize the passport
@@ -59,93 +60,97 @@ app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const validateInputs = [
-    body("email").isEmail().normalizeEmail(),
-    body("password").isLength({min: 6}).withMessage("Password must be at least 6 characters long").escape(),
-    (req, res, next) => {
-        const errors = validationResult(req);
-        if(!errors.isEmpty()){
-            return res.json({errors: errors.array()})
-        }
-        next();
+  body("email").isEmail().normalizeEmail(),
+  body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters long").escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.json({ errors: errors.array() })
     }
+    next();
+  }
 ];
 
+app.get('/fetchProductsByName/:name', productController.fetchProductsByName)
+
 // ** Routes Call **
-app.use('/api/categories', categoryRouter );
+app.use('/api/categories', categoryRouter);
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 
 
 const sanitizeLoginInput = [
-    body("username").trim().escape()
+  body("username").trim().escape()
 ];
 
 app.post("/api/login", sanitizeLoginInput, checkNotAuthenticated, (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return res.status(500).json({ error: 'An error occurred during authentication' });
-      }
-      if (!user) {
-        return res.status(200).json({ error: 'Invalid username or password' });
-      }
-      req.logIn(user, (err) => {
-        if (err) {
-          return res.status(500).json({ error: 'An error occurred during login' });
-        }
-        return res.status(200).json({ message: 'Login successful', user: {id: user.id, email: user.email, role:user.role, firstName: user.firstName, lastName: user.lastName} });
-      });
-    })(req, res, next);
-  });
-  
-app.post("/api/register",validateInputs,checkNotAuthenticated, async (req, res) => {
-    try {
-
-      const {firstName, lastName, email, password, role} = req.body;
-      // const user = ;
-      if(await User.getUserByEmail(email)){
-      
-          return res.status(400).json({ errors: [{"type":"field","value":email, "msg":"Email Already Exist","path":"email"}] });
-      }
-   
-        const hashedPassword = await bcrypt.hash(password, 10);
-       
-        const newUser = await User.addUser({
-          firstName,
-          lastName,
-            email,
-            password: hashedPassword,
-            role:role
-            })
-        return res.status(201).json({ message: 'User registered successfully!', user: newUser });
-    } catch {
-        return res.status(500).json({ error: 'An error occurred during registration' });
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ error: 'An error occurred during authentication' });
     }
+    if (!user) {
+      return res.status(200).json({ error: 'Invalid username or password' });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'An error occurred during login' });
+      }
+      return res.status(200).json({ message: 'Login successful', user: { id: user.id, email: user.email, role: user.role, firstName: user.firstName, lastName: user.lastName } });
+    });
+  })(req, res, next);
+});
+
+app.post("/api/register", validateInputs, checkNotAuthenticated, async (req, res) => {
+  try {
+
+    const { firstName, lastName, email, password, role } = req.body;
+    // const user = ;
+    if (await User.getUserByEmail(email)) {
+
+      return res.status(400).json({ errors: [{ "type": "field", "value": email, "msg": "Email Already Exist", "path": "email" }] });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.addUser({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role: role
+    })
+    return res.status(201).json({ message: 'User registered successfully!', user: newUser });
+  } catch {
+    return res.status(500).json({ error: 'An error occurred during registration' });
+  }
 });
 
 // server logout!!!
 app.delete("/api/logout", (req, res) => {
 
-    // req.session.destroy()
-    // req.logOut((err) => {
-    //     if (err) {
-    //         console.error(err);
-    //         return res.status(500).send(err);
-    //     }
-    //     return res.json({message: "Logged OUT"})
-    // });
+  // req.session.destroy()
+  // req.logOut((err) => {
+  //     if (err) {
+  //         console.error(err);
+  //         return res.status(500).send(err);
+  //     }
+  //     return res.json({message: "Logged OUT"})
+  // });
 
-    req.logout(() => {
-      res.end();
-    });
-  
+  req.logout(() => {
+    res.end();
+  });
+
 });
 
 //google auth routes
 app.get('/auth/google',
-  passport.authenticate('google', { scope:
-      [ 'email', 'profile' ] }
-));
+  passport.authenticate('google', {
+    scope:
+      ['email', 'profile']
+  }
+  ));
 
 app.get('/auth/google/callback', checkNotAuthenticated,
   passport.authenticate('google', {
@@ -154,16 +159,16 @@ app.get('/auth/google/callback', checkNotAuthenticated,
   }),
   (req, res) => {
     if (req.user) {
-   
-     // created property, indicating a new registration (authenticate in passport-config.js)
-     const registrationSuccess = req.user.created === true;
 
-     if (registrationSuccess) {
-       res.status(201).json({ message: 'Google registration success', user: req.user });
-     } else {
-       res.status(200).json({ message: 'Google login success', user: req.user });
-     }
-     
+      // created property, indicating a new registration (authenticate in passport-config.js)
+      const registrationSuccess = req.user.created === true;
+
+      if (registrationSuccess) {
+        res.status(201).json({ message: 'Google registration success', user: req.user });
+      } else {
+        res.status(200).json({ message: 'Google login success', user: req.user });
+      }
+
     } else {
       res.status(401).json({ error: 'Google authentication failed' });
     }
@@ -189,8 +194,9 @@ app.post('/create-payment-intent', async (req, res) => {
       // state: 'CA', // Customer's state
       // postal_code: '12345', // Customer's postal code
       country: 'US' // Customer's country code
-    }}
-console.log('cartaa', cart)
+    }
+  }
+  console.log('cartaa', cart)
   const calculateOrderAmount = () => {
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
@@ -215,14 +221,14 @@ console.log('cartaa', cart)
   }
 });
 
-app.post('/placeOrder',checkAuthenticated , placeOrder);
+app.post('/placeOrder', checkAuthenticated, placeOrder);
 
 
 //? This route for test middlewares/auth etc..
-app.get('/auth/protected',checkAuthenticated, (req, res) => {
-    let email = req.user.email;
-    console.log('req.user.id', req.user.id)
-    res.send(`Hello ${email}`);
+app.get('/auth/protected', checkAuthenticated, (req, res) => {
+  let email = req.user.email;
+  console.log('req.user.id', req.user.id)
+  res.send(`Hello ${email}`);
 })
 
 

@@ -7,21 +7,39 @@ const fetchPaginatedOrders = async (req, res) => {
   const {
     page = 1,
     pageSize = 6,
-    // orderStatus
+    firstName = '' ,
+    status = '',
+    date = ''
   } = req.query;
-  console.log("req.query", req.query);
 
   const filters = {};
+  if(firstName !==''){
 
-  // if (orderStatus) {
-  //   filters.orderStatus = orderStatus;
-  // }
-
+    console.log('firstName not null ', firstName)
+    filters['user.firstName'] = 
+    {$regex: firstName, 
+    $options: 'i'}
+     
+  }
+  console.log('firstName null', firstName)
+  if ( status){
+    filters.orderStatus = status
+  }
+  // const sort = {}
+  if (date){
+    const today = new Date()
+    const otherDay = new Date(today.getTime() - parseInt(date))
+    filters.createdAt = {
+      $gte: otherDay,
+      $lte: today,
+  }
+  }
   try {
     const response = await Order.fetchOrders(
       parseInt(page),
       parseInt(pageSize),
-      filters
+      filters,
+      { createdAt: -1 }
     );
     console.log("order response", response);
     res.json({ response });
