@@ -83,15 +83,15 @@ export function Configurator() {
           color="blue-gray"
           onClick={() => setOpenConfigurator(dispatch, false)}
         >
-          <XMarkIcon strokeWidth={2.5} className="h-5 w-5" />
+          <XMarkIcon strokeWidth={2.5} className="w-5 h-5" />
         </IconButton>
       </div>
-      <div className="py-4 px-6">
+      <div className="px-6 py-4">
         <div className="mb-12">
           <Typography variant="h6" color="blue-gray">
             Sidenav Colors
           </Typography>
-          <div className="mt-3 flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-3">
             {Object.keys(sidenavColors).map((color) => (
               <span
                 key={color}
@@ -112,7 +112,7 @@ export function Configurator() {
           <Typography variant="small" color="gray">
             Choose between 3 different sidenav types.
           </Typography>
-          <div className="mt-3 flex items-center gap-2">
+          <div className="flex items-center gap-2 mt-3">
             <Button
               variant={sidenavType === "dark" ? "gradient" : "outlined"}
               onClick={() => setSidenavType(dispatch, "dark")}
@@ -146,11 +146,9 @@ export function Configurator() {
             />
           </div>
           <hr />
-          <div className="my-8 flex flex-col gap-4">
+          <div className="flex flex-col gap-4 my-8">
             
           </div>
-          
-          
         </div>
       </div>
     </aside>

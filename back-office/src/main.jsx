@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "@material-tailwind/react";
 import { AuthenticationContextProvider, CustomerContextProvider, MaterialTailwindControllerProvider, OrderContextProvider, ProductContextProvider } from "@/context";
 import "../public/css/tailwind.css";
+import { ChartContextProvider } from "./context/dash/dashContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -16,7 +17,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <ProductContextProvider>
             <OrderContextProvider>
               <CustomerContextProvider>
-                <App />
+                <ChartContextProvider>
+
+                  <App />
+                </ChartContextProvider>
+
               </CustomerContextProvider>
             </OrderContextProvider>
           </ProductContextProvider>

@@ -5,3 +5,5 @@ export * from '@/context/order/orderContext'
 export * from '@/context/customer/customerContext'
 
 export * from '@/context/order/orderServices'
+export * from '@/context/dash/dashServices'
+export * from '@/context/dash/dashContext'

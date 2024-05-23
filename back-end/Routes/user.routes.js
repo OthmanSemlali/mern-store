@@ -1,5 +1,5 @@
 const express = require('express');
-const { deleteSellerProfile, fetchPaginatedUsers } = require('../Controllers/user.controller');
+const { deleteSellerProfile, fetchPaginatedUsers, getThisWeekAndLastWeekUserCountComparison, getUsersCountByDayOfWeek } = require('../Controllers/user.controller');
 const { checkAuthenticated, requireRole } = require('../middlewares/auth.mw');
 const router = express.Router();
 // const { deleteSellerProfile } = require('./controllers');
@@ -7,4 +7,7 @@ const router = express.Router();
 // Add middleware for authentication and role checking
 router.delete('/seller/delete', checkAuthenticated, requireRole(['seller']), deleteSellerProfile);
 router.get('/', fetchPaginatedUsers)
+
+router.get('/getThisWeekAndLastWeekUserCountComparison', getThisWeekAndLastWeekUserCountComparison)
+router.get('/getUsersCountByDayOfWeek', getUsersCountByDayOfWeek)
 module.exports = router;
