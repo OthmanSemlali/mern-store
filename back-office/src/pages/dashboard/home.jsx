@@ -35,7 +35,7 @@ import {
 } from "@/data";
 import { CheckCircleIcon, ClockIcon,
   BanknotesIcon,
-  UserPlusIcon,
+  ShoppingCartIcon,
   UsersIcon,
   ChartBarIcon,
  } from "@heroicons/react/24/solid";
@@ -80,7 +80,7 @@ export function Home({dashState}) {
     },
     {
       color: "gray",
-      icon: UserPlusIcon,
+      icon: ShoppingCartIcon,
       title: "Today's Orders",
       value: todays_orders.orders,
       footer: {
