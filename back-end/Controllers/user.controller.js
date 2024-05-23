@@ -3,6 +3,8 @@ const User = require("../Models/user.model");
 const Order = require("../Models/order.model")
 
 const getUserById = async (req, res) => {
+
+  console.log('getUserById');
     try {
         const user = await User.findById(req.params.id);
         if (!user) {
@@ -170,6 +172,8 @@ const fetchPaginatedUsers = async (req, res) => {
 
 
   const getUsersCountByDayOfWeek = async (req, res) => {
+
+    // console.log('getUsersCountByDayOfWeek**'); return
     try {
       const usersByDayOfWeek = await User.aggregate([
         {
@@ -205,4 +209,4 @@ const fetchPaginatedUsers = async (req, res) => {
       res.status(500).json({ error: 'Error fetching user counts by day of week' });
     }
   };
-module.exports = { deleteSellerProfile , fetchPaginatedUsers, getThisWeekAndLastWeekUserCountComparison, getUsersCountByDayOfWeek}
+module.exports = { getUserById, getUserOrders, updateUserById, deleteSellerProfile , fetchPaginatedUsers, getThisWeekAndLastWeekUserCountComparison, getUsersCountByDayOfWeek}

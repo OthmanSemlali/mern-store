@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUserById, getUserOrders, updateUserById, deleteSellerProfile, fetchPaginatedUsers,getThisWeekAndLastWeekUserCountComparison, getUsersCountByDayOfWeek } = require('../Controllers/user.controller');
+const { getUserById, getUserOrders, updateUserById, deleteSellerProfile, fetchPaginatedUsers, getThisWeekAndLastWeekUserCountComparison, getUsersCountByDayOfWeek } = require('../Controllers/user.controller');
 const { checkAuthenticated, requireRole } = require('../middlewares/auth.mw');
 const router = express.Router();
 // const { deleteSellerProfile } = require('./controllers');
@@ -7,7 +7,7 @@ const router = express.Router();
 // Add middleware for authentication and role checking
 
 //* Get user info by ID
-router.get('/:id', getUserById);
+// router.get('/:id', getUserById);
 
 //* Get user orders
 router.get('/:id/orders', getUserOrders);
