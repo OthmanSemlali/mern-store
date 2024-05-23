@@ -7,27 +7,40 @@ import {
   Chip,
 
 } from "@material-tailwind/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import queryString from "query-string";
-import PaginationControls from "./PaginationControls";
-import { AddProduct } from "@/components";
+// import PaginationControls from "./PaginationControls";
+import { AddProduct, PaginationControls } from "@/components";
 import { EditProduct } from "@/components";
 import { PencilSquareIcon,TrashIcon,PlusCircleIcon } from "@heroicons/react/24/solid";
 import { Input } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
 
 
 
 export function Tables() {
+
+  const parsed = queryString.parse(location.search);
+
+  // const { page } = parsed;
+  const filters = useMemo(() => ({ ...parsed }), [parsed]);
+  const {page, category } = filters
+
+  console.log('*page* ', page)
+
+
+  const navigate = useNavigate();
+
+  
    const [Products, setProducts] = useState([])
    const[totalProducts, settotalProducts]=useState()
-   const parsed = queryString.parse(location.search);
-   const { page } = parsed;
+   
    const [categories,setCategories]=useState([])
    const [showAddForm, setShowAddForm] = useState(false); 
    const [showEditForm, setShowEditForm] = useState(false);
    const [showTable, setShowTable] = useState(true);
-   const [searchTerm,setSearchTerm]=useState("")
+  //  const [searchTerm,setSearchTerm]=useState("")
    const [editProductId, setEditProductId] = useState(null);
    const [editProduct, setEditProduct] = useState({
   name: "",
@@ -61,51 +74,48 @@ export function Tables() {
      tileUse: "",
    });
 
-   useEffect(() => {
 
-const fetchData = async () => {
-     
-        const response = await axios.get(`http://localhost:3000/api/products?page=${page}&pageSize=6&category=${searchTerm}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
-        setProducts(response.data.response.products);
-        settotalProducts(response.data.response.totalProducts);
-      }
+const fetchData = async (page, category) => {
+     console.log('page in fetch data', page)
+    const response = await axios.get(`http://localhost:3000/api/products?page=${page}&pageSize=6&category=${category}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    setProducts(response.data.response.products);
+    settotalProducts(response.data.response.totalProducts);
+}
 const fetchCategories = async() => {
-  const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-    setCategories(categoriesResponse.data);
-   }
+const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+});
+setCategories(categoriesResponse.data);
+}
+// const fetchProductsFilter = async () => {
+//     const response = await axios.get(`http://localhost:3000/api/products/fetchProductsByName/${searchTerm}`, {
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       withCredentials: true,
+//     });
+//     console.log(response.data);
+//     // setProducts(response.data.response.products);
+// }
 
-const fetchProductsFilter = async () => {
-        const response = await axios.get(`http://localhost:3000/api/products/fetchProductsByName/${searchTerm}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        });
-        console.log(response.data);
-        // setProducts(response.data.response.products);
-      }
-        
-    fetchData();
+
+useEffect(() => {
+    fetchData(page, category);
     fetchCategories();
-     if(searchTerm){
-          fetchProductsFilter();
-        }
-  }, [page,searchTerm]);
+}, [page,category]);
 
 
 const AddNewProduct=  ()=>{
-     setShowTable(false)
-    setShowAddForm(true); 
+  setShowTable(false)
+  setShowAddForm(true); 
 } 
 const handleEditProduct = async (id) => {
   setEditProductId(id);
@@ -156,16 +166,21 @@ const deleteProduct = async (id) => {
     }
 
   return (
-    <div className="mt-12 mb-8 flex flex-col gap-12">
+    <div className="flex flex-col gap-12 mt-12 mb-8">
       {showTable && 
+
+      <>
+      
+
+
       <Card> 
-        <CardHeader variant="gradient" color="gray" className="flex justify-between mb-8 p-6">
+        <CardHeader variant="gradient" color="gray" className="flex justify-between p-6 mb-8">
           <Typography 
           variant="h6" color="white" ripple="light"
           onClick={() => { AddNewProduct() }}   style={{ cursor: 'pointer' }}
 
             >
-       <PlusCircleIcon className="h-10 w-8 text-gray-200 " />
+       <PlusCircleIcon className="w-8 h-10 text-gray-200 " />
           </Typography>
 
           <Typography>
@@ -177,19 +192,19 @@ const deleteProduct = async (id) => {
           className: "hidden",
         }}
         containerProps={{ className: "min-w-[100px]" }}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        // value={searchTerm}
+        // onChange={(e) => setSearchTerm(e.target.value)}
       />
          </Typography>
         </CardHeader>
-        <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+        <CardBody className="px-0 pt-0 pb-2 overflow-x-scroll">
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
                 {["Product", "Price","Stock",  "Published", "Action"].map((el) => (
                   <th
                     key={el}
-                    className="border-b border-blue-gray-50 py-3 px-5 text-left"
+                    className="px-5 py-3 text-left border-b border-blue-gray-50"
                   >
                     <Typography
                       variant="small"
@@ -267,10 +282,18 @@ const deleteProduct = async (id) => {
             </tbody>
           </table>
         </CardBody>
-        <PaginationControls currentPage={page} totalProducts={totalProducts} />
+
 
       </Card>
+
+      <PaginationControls currentPage={page} navigate={navigate} totalItems={totalProducts} />
+
+      </>
+
+
       }
+
+
         
 {showAddForm && (
         <AddProduct
