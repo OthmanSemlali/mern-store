@@ -17,6 +17,7 @@ import { PencilSquareIcon,TrashIcon,PlusCircleIcon } from "@heroicons/react/24/s
 import { Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import debounce from "lodash.debounce";
+import { toast } from "react-toastify";
 
 
 
@@ -89,37 +90,39 @@ export function Tables({setFilter}) {
   }
   
 const fetchData = async (page, category, searchQuery) => {
-     console.log('page in fetch data', page)
-    const response = await axios.get(`http://localhost:3000/api/products?page=${page}&pageSize=6&category=${category}&searchQuery=${searchQuery}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
-    setProducts(response.data.response.products);
-    settotalProducts(response.data.response.totalProducts);
+     try {
+      console.log('page in fetch data', page)
+      const response = await axios.get(`http://localhost:3000/api/products?page=${page}&pageSize=6&category=${category}&searchQuery=${searchQuery}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      setProducts(response.data.response.products);
+      settotalProducts(response.data.response.totalProducts);
+     } catch (error) {
+      toast.error("There was an error while fetching products. try later!");
+      
+     }
 }
 
-// const fetchProductsFilter = async () => {
-//     const response = await axios.get(`http://localhost:3000/api/products/fetchProductsByName/${searchTerm}`, {
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       withCredentials: true,
-//     });
-//     console.log(response.data);
-//     // setProducts(response.data.response.products);
-// }
-
-
 const fetchCategories = async() => {
+ try {
+
   const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
   });
   setCategories(categoriesResponse.data);
+  
+ } catch (error) {
+  // toast.error("There was an error while fetching products. try later!");
+
+  console.error('error fetching categories', error)
+  
+ }
   
   }
 
@@ -127,6 +130,8 @@ const fetchCategories = async() => {
     fetchCategories();
 
   },[])
+
+
 useEffect(() => {
 
     fetchData(page, category, searchQuery);
@@ -165,7 +170,12 @@ const handleEditProduct = async (id) => {
     });
     setShowTable(false)
     setShowEditForm(true);
+
+    toast.error("Product Updated");
+
   } catch (err) {
+    toast.error("There was an error while updating this product. try later!");
+
     console.log(err);
   }
     }
@@ -179,8 +189,14 @@ const deleteProduct = async (id) => {
           withCredentials: true,
         });
             console.log(response);
+
+            // if(!toast.isActive('deleteProductSuccess')){
+              toast.success("Product Deleted", { toastId: 'deleteProductSuccess' });
+            // }
         }
         catch (err) {
+
+            toast.error("There was an error while deleting this product", { toastId: 'deleteProductError' });
             console.log(err);
         }
     }
@@ -190,9 +206,6 @@ const deleteProduct = async (id) => {
       {showTable && 
 
       <>
-      
-
-
       <Card> 
         <CardHeader variant="gradient" color="gray" className="flex justify-between p-6 mb-8">
           <Typography 
