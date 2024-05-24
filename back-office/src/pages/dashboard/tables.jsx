@@ -171,7 +171,6 @@ const handleEditProduct = async (id) => {
     setShowTable(false)
     setShowEditForm(true);
 
-    toast.error("Product Updated");
 
   } catch (err) {
     toast.error("There was an error while updating this product. try later!");
@@ -181,6 +180,10 @@ const handleEditProduct = async (id) => {
     }
 
 const deleteProduct = async (id) => {
+
+  if(!confirm('Are u sure?')){
+    return
+  }
    try {
             const response = await axios.delete(`http://localhost:3000/api/products/${id}`, {
           headers: {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Card, CardBody } from "@material-tailwind/react";
+import { toast } from "react-toastify";
 
 
 export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProduct, categories,showTable,setShowTable }) {
@@ -25,6 +26,8 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
   };
 
   const handleConfirm = async () => {
+
+    console.log('new pro ', newProduct); 
     try {
       const response = await axios.post(
         "http://localhost:3000/api/products/create",
@@ -36,8 +39,18 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
           withCredentials: true,
         }
       );
-      console.log(response);
+      console.log('create pro respnse: ',response);
+
+      const updatedPro = response.data
+
+      if(updatedPro){
+        toast.success('Product Added')
+      console.log('create pro respnse data: ',response.data);
+
+      }
     } catch (err) {
+      toast.error('Internal Server error. try later!')
+
       console.log("err", err);
     }
     setShowAddForm(false);
@@ -83,7 +96,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
         onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
       />
     </div>
-    <div className="w-full flex gap-2 mt-2">
+    <div className="flex w-full gap-2 mt-2">
     <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Price</label>
       <input
@@ -107,7 +120,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
       />
     </div>
     </div>
-     <div className="w-full flex gap-2 mt-2">
+     <div className="flex w-full gap-2 mt-2">
     <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Style</label>
       <input
@@ -132,7 +145,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
     </div>
     </div>
 
-    <div className="w-full flex gap-2 mt-2">
+    <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Width</label>
       <input
@@ -143,7 +156,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
         value={newProduct.size.width}
         onChange={(e) => setNewProduct({ ...newProduct, size: { ...newProduct.size, width: e.target.value } })}
       /></div>
-      <div className="w-full  mt-2">
+      <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Height</label>
 
        <input
@@ -156,7 +169,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
       /></div>
     </div>
    
-         <div className="w-full flex gap-2 mt-2">
+         <div className="flex w-full gap-2 mt-2">
  
       <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">TileUse</label>
@@ -179,15 +192,17 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
         value={newProduct.categoryID}
         onChange={(e) => setNewProduct({ ...newProduct, categoryID: e.target.value })}
         >
+
+          <option>select category</option>
           {categories.map((category) => (
-                  <option key={category._id} value={category._id}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))}        
       </select>
     </div>
     </div>
-        {/* <div className="w-full flex gap-2 mt-2">
+        {/* <div className="flex w-full gap-2 mt-2">
       <label className="block text-sm font-medium text-gray-700">Options</label>
 <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Color</label>
@@ -212,11 +227,11 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
 
     </div>
     <button 
-    className=" "
+    className=""
     onClick={AddOption}>Add</button>
 
     </div> */}
-        <div className="w-full flex gap-2 mt-2">
+        <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Featured</label>
       <select
@@ -244,7 +259,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
       </select>
     </div>
     </div>          
-      <div className="flex gap-4 justify-center mt-4">
+      <div className="flex justify-center gap-4 mt-4">
             <button className="text-grey-500" onClick={handleCancel}>Cancel</button>
             <button  className="text-green-500"  onClick={handleConfirm}>Confirm</button>
           </div>

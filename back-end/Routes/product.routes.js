@@ -20,28 +20,28 @@ router.get('/getRelatedProducts', productController.getRelatedProducts)
 
 // router.get('/search/:title', productController.findByTitle);
 router.post('/create', [
-    body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
-    body('description').notEmpty().withMessage('Description is required').escape(),
-    body('price').notEmpty(),
-    body('stock').notEmpty(),
-    body('size').notEmpty(),
-    body('options').notEmpty(),
-    body('style').notEmpty(),
-    body('tileUse').notEmpty(),
-    body('materials').notEmpty(),
-    body('featured').notEmpty(),
-    body('published').notEmpty(),
+    // body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
+    // body('description').notEmpty().withMessage('Description is required').escape(),
+    // body('price').notEmpty(),
+    // body('stock').notEmpty(),
+    // body('size').notEmpty(),
+    // body('options').notEmpty(),
+    // body('style').notEmpty(),
+    // body('tileUse').notEmpty(),
+    // body('materials').notEmpty(),
+    // body('featured').notEmpty(),
+    // body('published').notEmpty(),
 
     // body('sellerID').notEmpty(),
-    body('categoryID').notEmpty()
+    // body('categoryID').notEmpty()
 ], productController.createProduct);
 
 router.delete('/:id', productController.deleteProductById);
 router.put('/:id', [
 
-    body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
-    body('description').notEmpty().withMessage('Description is required').escape(),
-    body('seoDescription').notEmpty().withMessage('seoDescription is required').escape(),
+    // body('name').notEmpty().withMessage('Name is required').isLength({ min: 5 }).withMessage('name must be alteas 5 chars long').escape(),
+    // body('description').notEmpty().withMessage('Description is required').escape(),
+    // body('seoDescription').notEmpty().withMessage('seoDescription is required').escape(),
 
 ], productController.updateProductById);
 

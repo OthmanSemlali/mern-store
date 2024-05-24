@@ -164,8 +164,9 @@ class ProductController {
     console.log("create new product", req);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log("errors: ", errors);
-      return res.status(400).json({ errors: errors.array() });
+      console.log(" validation errors create pro: ", errors);
+      return;
+      // return res.status(400).json({ errors: errors.array() });
     }
 
     const {
@@ -183,6 +184,8 @@ class ProductController {
       published,
       categoryID,
     } = req.body;
+
+    console.log('req.body create pro', req.body)
 
     try {
       const product = await Product.createProduct(

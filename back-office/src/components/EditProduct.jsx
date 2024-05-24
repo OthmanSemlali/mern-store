@@ -7,6 +7,7 @@ import {
  
 
 } from "@material-tailwind/react";
+import { toast } from 'react-toastify';
 export function EditProduct({ showEditForm, setShowEditForm,editProductId, setEditProduct, editProduct, categories,showTable,setShowTable }) {
 const getCategoryById = (id) => {
    const category = categories.find(category => category.id == id);
@@ -14,6 +15,7 @@ const getCategoryById = (id) => {
   return category.name;
    }
 const handleEditConfirm = async () => {
+  alert()
   try {
     const response = await axios.put(`http://localhost:3000/api/products/${editProductId}`, editProduct, {
       headers: {
@@ -21,10 +23,17 @@ const handleEditConfirm = async () => {
       },
       withCredentials: true,
     });
-    console.log(response);
+
+    
+    // console.log(response);
     setShowTable(true);
     setShowEditForm(false);
+
+
+    // toast.success('Product updated')
   } catch (err) {
+
+    toast.error('There was an error updating this product. Try later!')
     console.log(err);
   }
 };
@@ -78,7 +87,7 @@ const handleEditConfirm = async () => {
           onChange={(e) => setEditProduct({ ...editProduct, image: e.target.value })}
         />
       </div>
-              <div className="w-full flex gap-2 mt-2">
+              <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">Price</label>
         <input
@@ -102,13 +111,13 @@ const handleEditConfirm = async () => {
         />
       </div>
       </div>
-      <div className="w-full flex gap-2 mt-2">
+      <div className="flex w-full gap-2 mt-2">
         <label className="block text-sm font-medium text-gray-700">Size</label>
         <input
           type="number"
           name="width"
           id="width"
-          className="w-1/2 p-2 border border-gray-300 rounded-md mr-2"
+          className="w-1/2 p-2 mr-2 border border-gray-300 rounded-md"
           placeholder="Width"
           value={editProduct.size.width}
           onChange={(e) => setEditProduct({ ...editProduct, size: { ...editProduct.size, width: parseInt(e.target.value, 10) } })}
@@ -123,7 +132,7 @@ const handleEditConfirm = async () => {
           onChange={(e) => setEditProduct({ ...editProduct, size: { ...editProduct.size, height: parseInt(e.target.value, 10) } })}
         />
         </div>
-    <div className="w-full flex gap-2 mt-2">
+    <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">Style</label>
         <input
@@ -147,7 +156,7 @@ const handleEditConfirm = async () => {
         />
       </div>
       </div>
-    <div className="w-full flex gap-2 mt-2">
+    <div className="flex w-full gap-2 mt-2">
        <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">tileUse</label>
         <input
@@ -177,7 +186,7 @@ const handleEditConfirm = async () => {
       </select>
       </div>
       </div>
-   <div className="w-full flex gap-2 mt-2">
+   <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">featured</label> 
         <select
@@ -205,12 +214,12 @@ const handleEditConfirm = async () => {
               </select>
         </div>
     </div>
-      <div className="flex gap-4 justify-center mt-4">
+      <div className="flex justify-center gap-4 mt-4">
         <Typography color="grey" onClick={() => {setShowEditForm(false);setShowTable(true)}}   style={{ cursor: 'pointer' }}
 >
           Cancel
         </Typography>
-        <Typography color="green" onClick={handleEditConfirm}   style={{ cursor: 'pointer' }}
+        <Typography color="green" onClick={()=>handleEditConfirm()}   style={{ cursor: 'pointer' }}
 >
           Confirm
         </Typography>
