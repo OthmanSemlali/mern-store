@@ -1,23 +1,74 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import {
   Card,
   CardBody,
+  Checkbox,
   Typography,
  
-
 } from "@material-tailwind/react";
 import { toast } from 'react-toastify';
-export function EditProduct({ showEditForm, setShowEditForm,editProductId, setEditProduct, editProduct, categories,showTable,setShowTable }) {
-const getCategoryById = (id) => {
-   const category = categories.find(category => category.id == id);
-     console.log("id and name",id,category.name,categories);
-  return category.name;
-   }
+import { Link, useNavigate, useParams } from 'react-router-dom';
+export function EditProduct() {
+
+    const navigate = useNavigate()
+  const [categories,setCategories]=useState([])
+  const fetchCategories = async () => {
+    console.log('Fetching categories...');
+    try {
+      const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+    //   console.log('Categories***********:', categoriesResponse);
+      setCategories(categoriesResponse.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+  const fetchOldProductInfos = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/products/fetchSingleProductByID/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      const product = response.data;
+      console.log("comming product",product);
+      setEditProduct({
+        name: product.name,
+        description: product.description,
+        image: product.image,
+        price: product.price,
+        stock: product.stock,
+        size:{width:product.size.width,height:product.size.height},
+        options: product.options,
+        style: product.style,
+        tileUse: product.tileUse,
+        materials: product.materials,
+        featured: product.featured,
+        published: product.published,
+        categoryID: product.categoryID,
+      });
+      
+  
+  
+    } catch (err) {
+      toast.error("There was an error. try later!");
+  
+      console.log(err);
+    }
+      }
+  const {id} = useParams()
+
 const handleEditConfirm = async () => {
-  alert()
+
   try {
-    const response = await axios.put(`http://localhost:3000/api/products/${editProductId}`, editProduct, {
+    const response = await axios.put(`http://localhost:3000/api/products/${id}`, editProduct, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -25,12 +76,13 @@ const handleEditConfirm = async () => {
     });
 
     
-    // console.log(response);
-    setShowTable(true);
-    setShowEditForm(false);
+    console.log('edit response', response.data);
 
+    if(response.data.id){
+        toast.success('Product updated')
+        navigate('/dashboard/products')
+    }
 
-    // toast.success('Product updated')
   } catch (err) {
 
     toast.error('There was an error updating this product. Try later!')
@@ -38,9 +90,32 @@ const handleEditConfirm = async () => {
   }
 };
 
+const [editProduct, setEditProduct] = useState({
+  name: "",
+  description: "",
+  image: "",
+  price: 0,
+  stock: 0,
+  size: { width: 0, height: 0 },
+  options: [],
+  style: "",
+  tileUse: "",
+  materials: "",
+  featured: false,
+  published: false,
+  categoryID: "",
+});
+
+
+useEffect(() => {
+  fetchCategories()
+  fetchOldProductInfos(id)
+
+  console.log("edit ----- products");
+},[id])
+
   return (
     <>
-{showEditForm && (
     <Card className="w-4/5 mx-auto bg-gray-100 bg-opacity-50 rounded-lg">
      <CardBody>
       <div className="w-full">
@@ -178,10 +253,12 @@ const handleEditConfirm = async () => {
         // value={getCategoryById(editProduct.categoryID)}
         onChange={(e) => setEditProduct({ ...editProduct, categoryID: e.target.value })}
         >
-        <option key={editProduct.categoryID} value={editProduct.categoryID}>{getCategoryById(editProduct.categoryID)} </option>
+        {/* <option key={editProduct.categoryID} value={editProduct.categoryID}>
+          {getCategoryById(editProduct.categoryID)}
+         </option> */}
 
       {categories.map((category) => (
-       <option key={category.id} value={category.id}>{category.name} </option>
+       <option key={category.id} value={category.id} selected={category.id === editProduct.categoryID ? 'selected' : null} >{category.name} </option>
      ))}
       </select>
       </div>
@@ -189,35 +266,33 @@ const handleEditConfirm = async () => {
    <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">featured</label> 
-        <select
-                name="featured"
-                id="featured"
-                className="w-full p-2 border border-gray-300 rounded-md"
-                value={editProduct.featured}
-                onChange={(e) => {setEditProduct({ ...editProduct, featured: e.target.value === "true" }); console.log('featt',editProduct.featured);}}
-              >
-                <option value="true" >yes</option>
-                <option value="false">no</option>
-              </select>
+        <Checkbox 
+         name="featured"
+         checked={editProduct.featured}
+         onChange={ (e) => setEditProduct({ ...editProduct, featured: e.target.checked })}
+          />
+            
+
       </div>
       <div className="w-full mt-2">
-        <label className="block text-sm font-medium text-gray-700">published</label>
-        <select
-                name="published"
-                id="published"
-                className="w-full p-2 border border-gray-300 rounded-md"
-                value={editProduct.published}
-                onChange={(e) => {setEditProduct({ ...editProduct, published: e.target.value }); console.log('pub',editProduct.published);}}
-              >
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
-        </div>
+
+      <label className="block text-sm font-medium text-gray-700">published</label>
+        <Checkbox 
+         name="published"
+         checked={editProduct.published}
+         onChange={ (e) => setEditProduct({ ...editProduct, published: e.target.checked })}
+          />
+   
+        </div> 
     </div>
       <div className="flex justify-center gap-4 mt-4">
-        <Typography color="grey" onClick={() => {setShowEditForm(false);setShowTable(true)}}   style={{ cursor: 'pointer' }}
+        <Typography color="grey"   style={{ cursor: 'pointer' }}
 >
-          Cancel
+<Link to={'/dashboard/products'}>
+
+Cancel
+
+</Link>
         </Typography>
         <Typography color="green" onClick={()=>handleEditConfirm()}   style={{ cursor: 'pointer' }}
 >
@@ -226,7 +301,7 @@ const handleEditConfirm = async () => {
       </div>
     </CardBody>
   </Card>
-)}
+
     </>
   )
 }

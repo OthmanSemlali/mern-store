@@ -10,19 +10,29 @@ import {
 import routes from "@/routes";
 import { useMaterialTailwindController, useChartContext, fetchCardsData, fetchChartsData } from "@/context";
 import { NotFound } from "@/pages/Error";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Categories, Customers, Home, Orders, Tables } from "@/pages/dashboard";
+import { AddProduct, EditProduct } from "@/components";
+import axios from "axios";
 
 export function Dashboard() {
-  console.log('dashboard');
+  console.log('--dashboard--');
   const [controller, dispatch] = useMaterialTailwindController();
   const [dashState, dashDispatch] = useChartContext()
   const { sidenavType } = controller;
 
+  
+     
+     
 
   useEffect(() => {
+
+    
+    
     fetchCardsData(dashDispatch)
     fetchChartsData(dashDispatch)
+
+    console.log('eeeeeYY');
   },[])
 
   const navigate = useNavigate();
@@ -48,6 +58,9 @@ export function Dashboard() {
 
   };
 
+
+
+
   return (
     <div className="min-h-screen bg-blue-gray-50/50">
 
@@ -65,6 +78,8 @@ export function Dashboard() {
 
           <Route exact path="/home" element={<Home dashState={dashState} />} />
           <Route exact path="/products" element={<Tables setFilter={setFilter} />} />
+          <Route exact path="/products/:id/edit" element={<EditProduct   />}  />
+          <Route exact path="/products/add" element={<AddProduct />}  />
           <Route exact path="/categories" element={<Categories/>} />
           <Route exact path="/customers" element={<Customers/>} />
           <Route exact path="/orders" element={<Orders/>} />

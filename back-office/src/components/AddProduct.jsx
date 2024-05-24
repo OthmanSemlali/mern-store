@@ -1,13 +1,52 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody } from "@material-tailwind/react";
+import { Card, CardBody, Checkbox } from "@material-tailwind/react";
 import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 
-export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProduct, categories,showTable,setShowTable }) {
+export function AddProduct() {
   const [color, setColor] = useState("");
   const [images, setImages] = useState([]);
 
+  const navigate = useNavigate()
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    description: "",
+    image: "",
+    price: 0,
+    stock: 0,
+    size:{ width: "", height: "",},
+    style: "",
+    materials: "",
+    featured: false,
+    published: true,
+    categoryID: "",
+    options: [],
+    tileUse: "",
+  });
+
+  const [categories,setCategories]=useState([])
+  const fetchCategories = async () => {
+    console.log('Fetching categories...');
+    try {
+      const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+    //   console.log('Categories***********:', categoriesResponse);
+      setCategories(categoriesResponse.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+  useEffect(()=>{
+    fetchCategories()
+  },[])
   const AddOption = () => {
     if (color && images) {
       setNewProduct((prev) => ({
@@ -20,14 +59,9 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
     console.log("options", newProduct.options);
   };
 
-  const handleCancel = () => {
-    setShowAddForm(false);
-    setShowTable(true)
-  };
 
   const handleConfirm = async () => {
 
-    console.log('new pro ', newProduct); 
     try {
       const response = await axios.post(
         "http://localhost:3000/api/products/create",
@@ -44,8 +78,14 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
       const updatedPro = response.data
 
       if(updatedPro){
+
         toast.success('Product Added')
-      console.log('create pro respnse data: ',response.data);
+        console.log('create pro respnse data: ',response.data);
+        navigate('/dashboard/products')
+
+      }else{
+        toast.error('there was an error. try later!')
+
 
       }
     } catch (err) {
@@ -53,13 +93,12 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
 
       console.log("err", err);
     }
-    setShowAddForm(false);
-    setShowTable(true);
+
   };
 
   return (
     <div>
-    {showAddForm && (
+
       <Card className="w-4/5 mx-auto bg-gray-100 bg-opacity-50 rounded-lg">
         <CardBody>
           <div className="w-full">
@@ -233,39 +272,38 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
     </div> */}
         <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
-      <label className="block text-sm font-medium text-gray-700">Featured</label>
-      <select
-        name="featured"
-        id="featured"
-        className="w-full p-2 border border-gray-300 rounded-md"
-        value={newProduct.featured}
-        onChange={(e) => setNewProduct({ ...newProduct, featured: e.target.value })}
-      >
-        <option value={true}>Yes</option>
-        <option value={false}>No</option>
-      </select>
-    </div>
-    <div className="w-full mt-2">
-      <label className="block text-sm font-medium text-gray-700">Published</label>
-      <select
-        name="published"
-        id="published"
-        className="w-full p-2 border border-gray-300 rounded-md"
-        value={newProduct.published}
-        onChange={(e) => setNewProduct({ ...newProduct, published: e.target.value })}
-      >
-        <option value={true}>Yes</option>
-        <option value={false}>No</option>
-      </select>
+      <label className="block text-sm font-medium text-gray-700">featured</label> 
+        <Checkbox
+         name="featured"
+         checked={newProduct.featured}
+         onChange={ (e) => setNewProduct({ ...newProduct, featured: e.target.checked })}
+          />
+            
+
+      </div>
+      <div className="w-full mt-2">
+
+      <label className="block text-sm font-medium text-gray-700">published</label>
+        <Checkbox 
+         name="published"
+         checked={newProduct.published}
+         onChange={ (e) => setNewProduct({ ...newProduct, published: e.target.checked })}
+          />
     </div>
     </div>          
       <div className="flex justify-center gap-4 mt-4">
-            <button className="text-grey-500" onClick={handleCancel}>Cancel</button>
+            <button className="text-grey-500" >
+              <Link to={'/dashboard/products'}>
+
+              Cancel
+              
+              </Link>
+            </button>
             <button  className="text-green-500"  onClick={handleConfirm}>Confirm</button>
           </div>
         </CardBody>
       </Card>
-    )}
+
     </div>
   );
 }

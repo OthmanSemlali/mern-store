@@ -206,11 +206,9 @@ class ProductController {
       );
       res.status(201).json(product);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("createProduct ", error.message);
-      } else {
+     
         res.status(500).json({ message: "Server Error" });
-      }
+     
     }
   }
   async deleteProductById(req, res) {
