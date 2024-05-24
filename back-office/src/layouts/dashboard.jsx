@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { IconButton } from "@material-tailwind/react";
 import {
@@ -25,6 +25,29 @@ export function Dashboard() {
     fetchChartsData(dashDispatch)
   },[])
 
+  const navigate = useNavigate();
+
+  
+  const setFilter = (name, value) => {
+   
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', 1);
+    
+    // Set the filter value if it's not empty
+    if (value.trim() !== "") {
+      params.set(name, value);
+    } else {
+      // If the value is empty, remove the filter from the query string
+      params.delete(name);
+    }
+    
+    const newParamsString = params.toString();
+    const newUrl = `${window.location.pathname}${newParamsString ? '?' + newParamsString : ''}`;
+    
+    navigate(newUrl);
+
+  };
+
   return (
     <div className="min-h-screen bg-blue-gray-50/50">
 
@@ -41,7 +64,7 @@ export function Dashboard() {
         <Routes>
 
           <Route exact path="/home" element={<Home dashState={dashState} />} />
-          <Route exact path="/products" element={<Tables />} />
+          <Route exact path="/products" element={<Tables setFilter={setFilter} />} />
           <Route exact path="/categories" element={<Categories/>} />
           <Route exact path="/customers" element={<Customers/>} />
           <Route exact path="/orders" element={<Orders/>} />

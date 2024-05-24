@@ -7,7 +7,7 @@ import {
   Chip,
 
 } from "@material-tailwind/react";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 import queryString from "query-string";
 // import PaginationControls from "./PaginationControls";
@@ -16,16 +16,17 @@ import { EditProduct } from "@/components";
 import { PencilSquareIcon,TrashIcon,PlusCircleIcon } from "@heroicons/react/24/solid";
 import { Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
+import debounce from "lodash.debounce";
 
 
 
-export function Tables() {
+export function Tables({setFilter}) {
 
   const parsed = queryString.parse(location.search);
 
   // const { page } = parsed;
   const filters = useMemo(() => ({ ...parsed }), [parsed]);
-  const {page, category } = filters
+  const {page, category, q: searchQuery } = filters
 
   console.log('*page* ', page)
 
@@ -40,7 +41,6 @@ export function Tables() {
    const [showAddForm, setShowAddForm] = useState(false); 
    const [showEditForm, setShowEditForm] = useState(false);
    const [showTable, setShowTable] = useState(true);
-  //  const [searchTerm,setSearchTerm]=useState("")
    const [editProductId, setEditProductId] = useState(null);
    const [editProduct, setEditProduct] = useState({
   name: "",
@@ -75,9 +75,22 @@ export function Tables() {
    });
 
 
-const fetchData = async (page, category) => {
+
+   const updateFilters = useCallback(
+    debounce(({ target }) => {
+      setFilter(target.name, target.value);
+
+    }, 300),
+    [setFilter]
+  );
+
+  const handleSearchInputChange = (e) => {
+    updateFilters(e)
+  }
+  
+const fetchData = async (page, category, searchQuery) => {
      console.log('page in fetch data', page)
-    const response = await axios.get(`http://localhost:3000/api/products?page=${page}&pageSize=6&category=${category}`, {
+    const response = await axios.get(`http://localhost:3000/api/products?page=${page}&pageSize=6&category=${category}&searchQuery=${searchQuery}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -86,15 +99,7 @@ const fetchData = async (page, category) => {
     setProducts(response.data.response.products);
     settotalProducts(response.data.response.totalProducts);
 }
-const fetchCategories = async() => {
-const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-});
-setCategories(categoriesResponse.data);
-}
+
 // const fetchProductsFilter = async () => {
 //     const response = await axios.get(`http://localhost:3000/api/products/fetchProductsByName/${searchTerm}`, {
 //       headers: {
@@ -107,10 +112,25 @@ setCategories(categoriesResponse.data);
 // }
 
 
-useEffect(() => {
-    fetchData(page, category);
+const fetchCategories = async() => {
+  const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+  });
+  setCategories(categoriesResponse.data);
+  
+  }
+
+  useEffect(()=>{
     fetchCategories();
-}, [page,category]);
+
+  },[])
+useEffect(() => {
+
+    fetchData(page, category, searchQuery);
+}, [page,category, searchQuery]);
 
 
 const AddNewProduct=  ()=>{
@@ -180,20 +200,40 @@ const deleteProduct = async (id) => {
           onClick={() => { AddNewProduct() }}   style={{ cursor: 'pointer' }}
 
             >
-       <PlusCircleIcon className="w-8 h-10 text-gray-200 " />
+              <PlusCircleIcon className="w-8 h-10 text-gray-200 " />
           </Typography>
 
+
+<Typography>
+<select name="category" id=""
+        // label="Select satatus "        
+        onChange={updateFilters}
+        className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333">
+        <option value="" className="">All</option>
+
+{
+  categories.map((c)=> {
+    return (
+      <option value={c.name} className="">{c.name}</option>
+
+    )
+  })
+}
+       </select>
+</Typography>
           <Typography>
            <Input
-        type="email"
+        type="text"
+        name="q"
         placeholder="Seach Product"
         className="!border !border-gray-300 bg-white text-gray-900 shadow-lg shadow-gray-900/5 ring-4 ring-transparent placeholder:text-gray-500 placeholder:opacity-100 focus:!border-gray-900 focus:!border-t-gray-900 focus:ring-gray-900/10"
         labelProps={{
           className: "hidden",
         }}
         containerProps={{ className: "min-w-[100px]" }}
-        // value={searchTerm}
+        // value={searchQuery}
         // onChange={(e) => setSearchTerm(e.target.value)}
+        onChange={handleSearchInputChange}
       />
          </Typography>
         </CardHeader>

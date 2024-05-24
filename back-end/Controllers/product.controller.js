@@ -73,6 +73,7 @@ class ProductController {
       style,
       tileUse,
       materials,
+      searchQuery
     } = req.query;
     console.log("req.query", req.query);
 
@@ -103,6 +104,11 @@ class ProductController {
     }
     if (materials) {
       filters.materials = materials;
+    }
+
+    if(searchQuery !== 'undefined'){
+
+      filters.name = {$regex: searchQuery, $options: 'i'}
     }
     try {
       const response = await Product.fetchPaginatedProducts(
