@@ -114,7 +114,7 @@ useEffect(() => {
   console.log("edit ----- products");
 },[id])
 
-const [currentOption, setCurrentOption] = useState({ color: "", images: [] });
+const [currentOption, setCurrentOption] = useState({ color: '', images: [] });
   const [uploading, setUploading] = useState(false);
 
   const handleFileChange = async (event, optionIndex = null) => {
@@ -125,11 +125,11 @@ const [currentOption, setCurrentOption] = useState({ color: "", images: [] });
         const uploadedImages = await Promise.all(
           files.map(async (file) => {
             const formData = new FormData();
-            formData.append("image", file);
+            formData.append('image', file);
 
-            const response = await axios.post("http://localhost:3000/upload", formData, {
+            const response = await axios.post('http://localhost:3000/upload', formData, {
               headers: {
-                "Content-Type": "multipart/form-data",
+                'Content-Type': 'multipart/form-data',
               },
             });
 
@@ -159,9 +159,10 @@ const [currentOption, setCurrentOption] = useState({ color: "", images: [] });
           }));
         }
       } catch (error) {
-        console.error("Error uploading images:", error);
+        console.error('Error uploading images:', error);
       } finally {
         setUploading(false);
+        event.target.value = ''; // Clear the file input
       }
     }
   };
@@ -171,7 +172,7 @@ const [currentOption, setCurrentOption] = useState({ color: "", images: [] });
       ...prevProduct,
       options: [...prevProduct.options, { ...currentOption }],
     }));
-    setCurrentOption({ color: "", images: [] });
+    setCurrentOption({ color: '', images: [] });
   };
 
   const handleDeleteOption = (index) => {
@@ -188,7 +189,6 @@ const [currentOption, setCurrentOption] = useState({ color: "", images: [] });
       return { ...prevProduct, options: updatedOptions };
     });
   };
-
 
   return (
     <>
@@ -240,98 +240,114 @@ const [currentOption, setCurrentOption] = useState({ color: "", images: [] });
       </div>
               <div className="flex w-full gap-2 mt-2">
 
+              <div className="w-full mt-4">
+      <h3 className="block text-sm font-medium text-gray-700">Add Options</h3>
 
-              <div className="w-full mt-2">
-  <label className="block text-sm font-medium text-gray-700">Options</label>
-  {editProduct.options.map((option, index) => (
-    <div key={index} className="mt-4">
-      <h4 className="text-lg font-medium">{option.color}</h4>
-      <div className="flex items-center mt-2">
-        {option.images.map((image, imgIndex) => (
-          <div key={imgIndex} className="relative w-16 h-16 mb-2 mr-2">
-            <img
-              src={image}
-              alt={option.color}
-              className="object-cover w-full h-full rounded-md"
-            />
+      <div className="mt-2">
+        <label className="block text-sm font-medium text-gray-700">Color</label>
+        <input
+          type="text"
+          name="color"
+          className="w-full p-2 border border-gray-300 rounded-md"
+          value={currentOption.color}
+          onChange={(e) => setCurrentOption({ ...currentOption, color: e.target.value })}
+        />
+      </div>
+
+      <div className="mt-2">
+        <label className="block text-sm font-medium text-gray-700">Upload Images (1 to 5)</label>
+        <input
+          type="file"
+          name="images"
+          multiple
+          accept="image/*"
+          className="hidden"
+          id="file-input-new-option"
+          onChange={(e) => handleFileChange(e)}
+        />
+        <label
+          htmlFor="file-input-new-option"
+          className="block w-full p-2 mt-2 text-center bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300"
+        >
+          Add Images
+        </label>
+        {uploading && <p className="text-sm text-gray-600">Uploading...</p>}
+      </div>
+
+      <div className="mt-4">
+        <button
+          type="button"
+          className="px-3 py-1 text-white bg-green-500 rounded-md hover:bg-green-600"
+          onClick={handleAddOption}
+          disabled={uploading || !currentOption.color || currentOption.images.length === 0}
+        >
+          Add Option
+        </button>
+      </div>
+
+      <div className="mt-4">
+        <h4 className="text-sm font-medium text-gray-700">Current Options</h4>
+        {editProduct.options.map((option, optionIndex) => (
+          <div key={optionIndex} className="p-2 mt-2 border border-gray-300 rounded-md">
+            <h5 className="font-medium">Color: {option.color}</h5>
+            <div className="flex items-center mt-2">
+              {option.images.map((image, imageIndex) => (
+                <div key={imageIndex} className="relative w-16 h-16 mb-2 mr-2">
+                  <img src={image} alt={`option-${optionIndex}-${imageIndex}`} className="object-cover w-full h-full rounded-md" />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
+                    onClick={() => handleDeleteImage(optionIndex, imageIndex)}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+              {option.images.length < 5 && (
+                <>
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, optionIndex)}
+                    accept="image/*"
+                    id={`file-input-${optionIndex}`}
+                  />
+                  <label
+                    htmlFor={`file-input-${optionIndex}`}
+                    className={`flex items-center justify-center w-16 h-16 bg-gray-200 rounded-md cursor-pointer ${
+                      option.images.length < 5 ? 'hover:bg-gray-300' : ''
+                    }`}
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                  </label>
+                </>
+              )}
+            </div>
             <button
-              onClick={() => handleDeleteImage(index, imgIndex)}
-              className="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
+              type="button"
+              className="px-3 py-1 mt-2 text-white bg-red-500 rounded-md hover:bg-red-600"
+              onClick={() => handleDeleteOption(optionIndex)}
             >
-              X
+              Delete Option
             </button>
           </div>
         ))}
-        {option.images.length < 5 && (
-          <input
-            type="file"
-            multiple
-            className="hidden"
-            onChange={(e) => handleFileChange(e, index)}
-            accept="image/*"
-            id={`file-input-${index}`}
-          />
-        )}
-        <label
-          htmlFor={`file-input-${index}`}
-          className={`flex items-center justify-center w-16 h-16 bg-gray-200 rounded-md cursor-pointer ${
-            option.images.length < 5 ? 'hover:bg-gray-300' : ''
-          }`}
-        >
-          <svg
-            className="w-6 h-6 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
-          </svg>
-        </label>
       </div>
-      <button
-        onClick={() => handleDeleteOption(index)}
-        className="px-3 py-1 mt-2 text-white bg-red-500 rounded-md hover:bg-red-600"
-      >
-        Delete Option
-      </button>
     </div>
-  ))}
-  <div className="mt-4">
-    <input
-      type="text"
-      placeholder="Color"
-      value={currentOption.color}
-      onChange={(e) => setCurrentOption({ ...currentOption, color: e.target.value })}
-      className="w-full p-2 border border-gray-300 rounded-md"
-    />
-    <input
-      type="file"
-      multiple
-      className="hidden"
-      onChange={handleFileChange}
-      accept="image/*"
-      id="file-input-new-option"
-    />
-    <label
-      htmlFor="file-input-new-option"
-      className="block w-full p-2 mt-2 text-center bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300"
-    >
-      Add Images
-    </label>
-    <button
-      onClick={handleAddOption}
-      className="px-3 py-1 mt-2 text-white bg-green-500 rounded-md hover:bg-green-600"
-    >
-      Add Option
-    </button>
-  </div>
-</div>
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">Price</label>
         <input
