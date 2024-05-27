@@ -106,6 +106,8 @@ export function Home({dashState}) {
 
   const charts = Charts(usersByDays, ordersByMonths, salesByMonths)
   
+
+
   return (
     <div className="mt-12">
       <div className="grid mb-12 gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">

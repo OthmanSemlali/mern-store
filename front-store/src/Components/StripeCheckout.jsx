@@ -112,6 +112,8 @@ const CheckoutForm = () => {
     setDisabled(event.empty);
     setError(event.error ? event.error.message : "");
   };
+
+  
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setProcessing(true);

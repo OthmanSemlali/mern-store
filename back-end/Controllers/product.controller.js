@@ -73,6 +73,7 @@ class ProductController {
       style,
       tileUse,
       materials,
+      searchQuery
     } = req.query;
     console.log("req.query", req.query);
 
@@ -103,6 +104,11 @@ class ProductController {
     }
     if (materials) {
       filters.materials = materials;
+    }
+
+    if(searchQuery && searchQuery != 'undefined' ){
+
+      filters.name = {$regex: searchQuery, $options: 'i'}
     }
     try {
       const response = await Product.fetchPaginatedProducts(
@@ -158,8 +164,9 @@ class ProductController {
     console.log("create new product", req);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log("errors: ", errors);
-      return res.status(400).json({ errors: errors.array() });
+      console.log(" validation errors create pro: ", errors);
+      return;
+      // return res.status(400).json({ errors: errors.array() });
     }
 
     const {
@@ -177,6 +184,8 @@ class ProductController {
       published,
       categoryID,
     } = req.body;
+
+    console.log('req.body create pro', req.body)
 
     try {
       const product = await Product.createProduct(
@@ -197,11 +206,11 @@ class ProductController {
       );
       res.status(201).json(product);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("createProduct ", error.message);
-      } else {
+
+      console.error('create pr ', error)
+     
         res.status(500).json({ message: "Server Error" });
-      }
+     
     }
   }
   async deleteProductById(req, res) {

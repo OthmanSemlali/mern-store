@@ -1,30 +1,54 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody } from "@material-tailwind/react";
+import { Card, CardBody, Checkbox } from "@material-tailwind/react";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 
 
-export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProduct, categories,showTable,setShowTable }) {
-  const [color, setColor] = useState("");
-  const [images, setImages] = useState([]);
+export function AddProduct() {
+  
 
-  const AddOption = () => {
-    if (color && images) {
-      setNewProduct((prev) => ({
-        ...prev,
-        options: [...prev.options, { color: color, images: images }],
-      }));
-      setColor("");
-      setImages([]);
+  const navigate = useNavigate()
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    description: "",
+    image: "",
+    price: 0,
+    stock: 0,
+    size:{ width: "", height: "",},
+    style: "",
+    materials: "",
+    featured: false,
+    published: true,
+    categoryID: "",
+    options: [],
+    tileUse: "",
+  });
+
+  const [categories,setCategories]=useState([])
+  const fetchCategories = async () => {
+    console.log('Fetching categories...');
+    try {
+      const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+    //   console.log('Categories***********:', categoriesResponse);
+      setCategories(categoriesResponse.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
     }
-    console.log("options", newProduct.options);
   };
 
-  const handleCancel = () => {
-    setShowAddForm(false);
-    setShowTable(true)
-  };
+  useEffect(()=>{
+    fetchCategories()
+  },[])
 
   const handleConfirm = async () => {
+
     try {
       const response = await axios.post(
         "http://localhost:3000/api/products/create",
@@ -36,17 +60,122 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
           withCredentials: true,
         }
       );
-      console.log(response);
+      console.log('create pro respnse: ',response);
+
+      const updatedPro = response.data
+
+      if(updatedPro){
+
+        toast.success('Product Added')
+        console.log('create pro respnse data: ',response.data);
+        navigate('/dashboard/products')
+
+      }else{
+        toast.error('there was an error. try later!')
+
+
+      }
     } catch (err) {
+      toast.error('Internal Server error. try later!')
+
       console.log("err", err);
     }
-    setShowAddForm(false);
-    setShowTable(true);
+
   };
+
+
+  const [currentOption, setCurrentOption] = useState({
+    color: "",
+    images: [],
+  });
+
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = async (event, optionIndex = null) => {
+    const files = Array.from(event.target.files);
+    if (files.length > 0) {
+      setUploading(true);
+      try {
+        const uploadedImages = await Promise.all(
+          files.map(async (file) => {
+            const formData = new FormData();
+            formData.append("image", file);
+  
+            const response = await axios.post("http://localhost:3000/upload", formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            });
+  
+            return response.data.url;
+          })
+        );
+  
+        if (optionIndex !== null) {
+          setNewProduct((prevProduct) => {
+            const updatedOptions = [...prevProduct.options];
+            const newImages = [
+              ...updatedOptions[optionIndex].images,
+              ...uploadedImages
+            ].slice(0, 5);
+  
+            updatedOptions[optionIndex] = {
+              ...updatedOptions[optionIndex],
+              images: [...new Set(newImages)], // Remove duplicates
+            };
+  
+            return { ...prevProduct, options: updatedOptions };
+          });
+        } else {
+          setCurrentOption((prevOption) => ({
+            ...prevOption,
+            images: [...new Set([...prevOption.images, ...uploadedImages])].slice(0, 5), // Remove duplicates and limit to 5
+          }));
+        }
+      } catch (error) {
+        console.error("Error uploading images:", error);
+      } finally {
+        setUploading(false);
+      }
+    }
+  };
+
+  const handleAddOption = () => {
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      options: [...prevProduct.options, currentOption],
+    }));
+    setCurrentOption({ color: "", images: [] });
+  };
+
+  const handleDeleteOption = (index) => {
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      options: prevProduct.options.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleDeleteImage = (optionIndex, imageIndex) => {
+    const updatedOptions = newProduct.options.map((option, i) => {
+      if (i === optionIndex) {
+        return {
+          ...option,
+          images: option.images.filter((_, j) => j !== imageIndex),
+        };
+      }
+      return option;
+    });
+
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      options: updatedOptions,
+    }));
+  };
+
 
   return (
     <div>
-    {showAddForm && (
+
       <Card className="w-4/5 mx-auto bg-gray-100 bg-opacity-50 rounded-lg">
         <CardBody>
           <div className="w-full">
@@ -83,7 +212,91 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
         onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
       />
     </div>
-    <div className="w-full flex gap-2 mt-2">
+    <div className="w-full mt-4">
+        <h3 className="block text-sm font-medium text-gray-700">Add Options</h3>
+
+        <div className="mt-2">
+          <label className="block text-sm font-medium text-gray-700">Color</label>
+          <input
+            type="text"
+            name="color"
+            className="w-full p-2 border border-gray-300 rounded-md"
+            value={currentOption.color}
+            onChange={(e) => setCurrentOption({ ...currentOption, color: e.target.value })}
+          />
+        </div>
+
+        <div className="mt-2">
+          <label className="block text-sm font-medium text-gray-700">Upload Images (1 to 5)</label>
+          <input
+            type="file"
+            name="images"
+            multiple
+            accept="image/*"
+            className="w-full p-2 border border-gray-300 rounded-md"
+            onChange={(e) => handleFileChange(e)}
+          />
+          {uploading && <p>Uploading...</p>}
+        </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            className="p-2 text-white bg-green-500 rounded-md"
+            onClick={handleAddOption}
+            disabled={uploading || !currentOption.color || currentOption.images.length === 0}
+          >
+            Add Option
+          </button>
+        </div>
+
+        <div className="mt-4">
+          <h4 className="text-sm font-medium text-gray-700">Current Options</h4>
+          {newProduct.options.map((option, optionIndex) => (
+            <div key={optionIndex} className="p-2 mt-2 border border-gray-300 rounded-md">
+              <h5 className="font-medium">Color: {option.color}</h5>
+              <ul className="flex space-x-2">
+                {option.images.map((image, imageIndex) => (
+                  <li key={imageIndex} className="relative">
+                    <img src={image} alt={`option-${optionIndex}-${imageIndex}`} className="w-16 h-16" />
+                    <button
+                      type="button"
+                      className="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
+                      onClick={() => handleDeleteImage(optionIndex, imageIndex)}
+                    >
+                      x
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              {option.images.length < 5 && (
+                <div className="mt-2">
+                  <label className="block text-sm font-medium text-gray-700">Add More Images</label>
+                  <input
+                    type="file"
+                    name={`images-${optionIndex}`}
+                    multiple
+                    accept="image/*"
+                    className="w-full p-2 border border-gray-300 rounded-md"
+                    onChange={(e) => handleFileChange(e, optionIndex)}
+                  />
+                </div>
+              )}
+              <button
+                type="button"
+                className="p-2 mt-2 text-white bg-red-500 rounded-md"
+                onClick={() => handleDeleteOption(optionIndex)}
+              >
+                Delete Option
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      
+
+    <div className="flex w-full gap-2 mt-2">
     <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Price</label>
       <input
@@ -107,7 +320,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
       />
     </div>
     </div>
-     <div className="w-full flex gap-2 mt-2">
+     <div className="flex w-full gap-2 mt-2">
     <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Style</label>
       <input
@@ -132,7 +345,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
     </div>
     </div>
 
-    <div className="w-full flex gap-2 mt-2">
+    <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Width</label>
       <input
@@ -143,7 +356,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
         value={newProduct.size.width}
         onChange={(e) => setNewProduct({ ...newProduct, size: { ...newProduct.size, width: e.target.value } })}
       /></div>
-      <div className="w-full  mt-2">
+      <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">Height</label>
 
        <input
@@ -156,7 +369,7 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
       /></div>
     </div>
    
-         <div className="w-full flex gap-2 mt-2">
+         <div className="flex w-full gap-2 mt-2">
  
       <div className="w-full mt-2">
       <label className="block text-sm font-medium text-gray-700">TileUse</label>
@@ -179,78 +392,51 @@ export function AddProduct({ showAddForm, setShowAddForm, setNewProduct, newProd
         value={newProduct.categoryID}
         onChange={(e) => setNewProduct({ ...newProduct, categoryID: e.target.value })}
         >
+
+          <option>select category</option>
           {categories.map((category) => (
-                  <option key={category._id} value={category._id}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))}        
       </select>
     </div>
     </div>
-        {/* <div className="w-full flex gap-2 mt-2">
-      <label className="block text-sm font-medium text-gray-700">Options</label>
-<div className="w-full mt-2">
-      <label className="block text-sm font-medium text-gray-700">Color</label>
-      <input
-        type="text"
-        name="color"
-        id="color"
-        className="w-full p-2 border border-gray-300 rounded-md"
-        value={color}
-        onChange={(e) => setColor(e.target.value)}
-      /></div>
-      <div className="w-full mt-2">
-       <label className="block text-sm font-medium text-gray-700">Images</label>
-     <input
-  type="text"
-  name="images"
-  id="images"
-  className="w-full p-2 border border-gray-300 rounded-md"
-  value={images}
-  onChange={(e) => setImages([e.target.value])}
-/>
 
-    </div>
-    <button 
-    className=" "
-    onClick={AddOption}>Add</button>
-
-    </div> */}
-        <div className="w-full flex gap-2 mt-2">
+        <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
-      <label className="block text-sm font-medium text-gray-700">Featured</label>
-      <select
-        name="featured"
-        id="featured"
-        className="w-full p-2 border border-gray-300 rounded-md"
-        value={newProduct.featured}
-        onChange={(e) => setNewProduct({ ...newProduct, featured: e.target.value })}
-      >
-        <option value={true}>Yes</option>
-        <option value={false}>No</option>
-      </select>
-    </div>
-    <div className="w-full mt-2">
-      <label className="block text-sm font-medium text-gray-700">Published</label>
-      <select
-        name="published"
-        id="published"
-        className="w-full p-2 border border-gray-300 rounded-md"
-        value={newProduct.published}
-        onChange={(e) => setNewProduct({ ...newProduct, published: e.target.value })}
-      >
-        <option value={true}>Yes</option>
-        <option value={false}>No</option>
-      </select>
+      <label className="block text-sm font-medium text-gray-700">featured</label> 
+        <Checkbox
+         name="featured"
+         checked={newProduct.featured}
+         onChange={ (e) => setNewProduct({ ...newProduct, featured: e.target.checked })}
+          />
+            
+
+      </div>
+      <div className="w-full mt-2">
+
+      <label className="block text-sm font-medium text-gray-700">published</label>
+        <Checkbox 
+         name="published"
+         checked={newProduct.published}
+         onChange={ (e) => setNewProduct({ ...newProduct, published: e.target.checked })}
+          />
     </div>
     </div>          
-      <div className="flex gap-4 justify-center mt-4">
-            <button className="text-grey-500" onClick={handleCancel}>Cancel</button>
+      <div className="flex justify-center gap-4 mt-4">
+            <button className="text-grey-500" >
+              <Link to={'/dashboard/products'}>
+
+              Cancel
+              
+              </Link>
+            </button>
             <button  className="text-green-500"  onClick={handleConfirm}>Confirm</button>
           </div>
         </CardBody>
       </Card>
-    )}
+
     </div>
   );
 }

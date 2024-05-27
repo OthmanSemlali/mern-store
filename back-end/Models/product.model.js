@@ -8,7 +8,7 @@ const ProductShcema = new Schema(
   {
     name: { type: String, required: true },
     description: { type: String, required: true },
-    seodescription: { type: String },
+    // seodescription: { type: String },
     image: { type: String, require: true },
     price: { type: Number, reqiured: true },
     stock: { type: Number, reqiured: true },
@@ -208,7 +208,6 @@ class ProductClass {
   static createProduct(
     name,
     description,
-    seodescription,
     image,
     price,
     stock,
@@ -225,7 +224,6 @@ class ProductClass {
     return this.create({
       name,
       description,
-      seodescription,
       image,
       price,
       stock,
