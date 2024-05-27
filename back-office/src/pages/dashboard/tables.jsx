@@ -262,12 +262,13 @@ const deleteProduct = async (id) => {
                       </button> */}
 
                       <Link to={id + `/edit`}>
-                        <PencilSquareIcon class="h-6 w-6 text-green-500" />
+                        <PencilSquareIcon class="h-6 w-6 text-gray-800" />
+
                       </Link>
                       <button
                         onClick={() => deleteProduct(id)}
                       >
-<TrashIcon class="h-6 w-6 text-red-500" />
+<TrashIcon class="h-6 w-6 text-red-900" />
                       </button>
                       </div>
                     </td>

@@ -106,7 +106,7 @@ class ProductController {
       filters.materials = materials;
     }
 
-    if(searchQuery !== 'undefined'){
+    if(searchQuery && searchQuery != 'undefined' ){
 
       filters.name = {$regex: searchQuery, $options: 'i'}
     }
@@ -206,6 +206,8 @@ class ProductController {
       );
       res.status(201).json(product);
     } catch (error) {
+
+      console.error('create pr ', error)
      
         res.status(500).json({ message: "Server Error" });
      
