@@ -43,7 +43,7 @@ export const updateOrderStatus = async (dispatch,oldStatusId, newStatus) => {
     // updateOrderStatusBegin(dispatch)
       try {
             const response = await fetch(
-          `http://localhost:3000/api/orders/updateOrderStatus/${oldStatusId}`, {
+            `http://localhost:3000/api/orders/updateOrderStatus/${oldStatusId}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

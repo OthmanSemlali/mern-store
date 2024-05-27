@@ -9,7 +9,7 @@ const fetchPaginatedOrders = async (req, res) => {
     pageSize = 6,
     firstName = '' ,
     status = '',
-    date = ''
+    date ,
   } = req.query;
 
   const filters = {};
@@ -21,29 +21,32 @@ const fetchPaginatedOrders = async (req, res) => {
     $options: 'i'}
      
   }
-  console.log('firstName null', firstName)
+  // console.log('firstName null', firstName)
   if ( status){
     filters.orderStatus = status
   }
-  // const sort = {}
   if (date){
+    const daysAgo = parseInt(date)
     const today = new Date()
-    const otherDay = new Date(today.getTime() - parseInt(date))
+    today.setDate(today.getDate() - daysAgo);
     filters.createdAt = {
-      $gte: otherDay,
-      $lte: today,
+      $gte: today,
+      $lte: new Date(),
   }
   }
   try {
+    // console.log('filters', filters)
     const response = await Order.fetchOrders(
       parseInt(page),
       parseInt(pageSize),
       filters,
-      { createdAt: -1 }
     );
+
+    
     console.log('response', response)
-    console.log('order response', response)
+    // console.log('order response', response)
     res.json({ response });
+    
   } catch (error) {
  
       res.status(500).json({ message: "Server Error" });
