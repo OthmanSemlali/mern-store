@@ -19,5 +19,7 @@ router.get('/getTotalRevenue', getTotalRevenue)
 
 // router.get('/getOrderDetails/:id', checkAuthenticated, requireRole(['seller']), getOrderDetails)
 // router.get('/getAllOrders', checkAuthenticated, requireRole(['admin']), getAllOrders)
-router.post('/updateOrderStatus/:id', checkAuthenticated, updateOrderStatus )
+router.post('/updateOrderStatus/:id', 
+// checkAuthenticated, 
+updateOrderStatus )
 module.exports = router;
