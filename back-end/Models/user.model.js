@@ -31,6 +31,7 @@ class UserClass {
   }
 
 
+
   static async getUserByEmail(email) {
     return this.findOne({ email });
   }
@@ -60,15 +61,15 @@ UserSchema.statics.getUserByGoogleId = async function (googleId) {
   return this.findOne({ googleId });
 };
 
-UserSchema.statics.fetchUsers = async function (page, pageSize, filters) {
+UserSchema.statics.fetchUsers = async function (page, pageSize, search) {
   const skip = (page - 1) * pageSize;
 
-  const getUsersQuery = this.find(filters)
+  const getUsersQuery = this.find(search)
     .skip(skip)
     .limit(pageSize)
     .select("firstName lastName email role createdAt");
 
-  const getUsersCount = this.countDocuments(filters);
+  const getUsersCount = this.countDocuments(search);
 
   const [users, totalUsers] = await Promise.all([
     getUsersQuery.exec(),

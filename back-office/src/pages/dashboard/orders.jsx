@@ -98,17 +98,17 @@ export function Orders() {
         className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333 w-1/5">
           {/* <label htmlFor="">nnnnnnnnn</label> */}
         <option value="" className="" >All</option>
-        <option value="pending" className="">Pending</option>
-        <option value="confirmed">Confirmed</option>
-        <option value="shipped">Shipped</option>
-        <option value="delivered">Delivered</option>
+        <option value="pending" className="bg-orange-800">Pending</option>
+        <option value="confirmed" className="bg-yellow-700">Confirmed</option>
+        <option value="shipped" className="bg-light-green-500">Shipped</option>
+        <option value="delivered" className="bg-green-900">Delivered</option>
        </select>
 
        <select name="" id=""
         // value="Select satatus "        
         onChange={(e)=>{setHandelDate(e.target.value)}}
         className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333 w-1/5">
-
+          
         <option value="" className="">All</option>
         <option value="7" className="">last 7 days</option>
         <option value="30">last 30 days</option>

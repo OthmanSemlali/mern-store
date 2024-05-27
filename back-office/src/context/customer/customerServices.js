@@ -1,12 +1,13 @@
 import { loadUsersBegin, loadUsersError, loadUsersSuccess } from "./customerContext";
 
-export const fetchUsersService = async (dispatch, page = 1, filters) => {
+export const fetchUsersService = async (dispatch, page = 1, handelSearch, filters) => {
   
     loadUsersBegin(dispatch)
       try {
         const queryParams = new URLSearchParams({
           page: page.toString(),
           pageSize: 6,
+          name : handelSearch,
           ...filters,
         }).toString();
   
