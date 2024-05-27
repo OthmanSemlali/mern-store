@@ -11,6 +11,7 @@ import {
     Tooltip,
     Progress,
     Select,
+    Input
   } from "@material-tailwind/react";
 import { authorsTableData, projectsTableData } from "@/data";
 import { formatDate } from "@/configs";
@@ -21,12 +22,12 @@ import { fetchUsersService } from "@/context/customer/customerServices";
 
 export function Customers() {
 
-const [state, dispatch] = useCustomerContext();
-const navigate = useNavigate()
+  const [state, dispatch] = useCustomerContext();
+  const navigate = useNavigate()
+  const [handelSearch,setHandelSearch] = useState('')
+  const {users, totalUsers} = state;
 
-const {users, totalUsers} = state;
-
-const parsed = queryString.parse(location.search);
+  const parsed = queryString.parse(location.search);
 
   const filters = useMemo(() => ({ ...parsed }), [parsed]);
 
@@ -34,8 +35,8 @@ const parsed = queryString.parse(location.search);
 
 
     useEffect(() => {
-        fetchUsersService(dispatch, page, filters)
-    }, [page, type])
+        fetchUsersService(dispatch, page, handelSearch)
+    }, [page, type,handelSearch])
 
   return (
     <div className="flex flex-col gap-12 mt-12 mb-8">
@@ -48,7 +49,15 @@ const parsed = queryString.parse(location.search);
             Users
           </Typography>
           <Typography variant="h6" color="white">
-            <SearchInput />
+            {/* <SearchInput /> */}
+            <Input type="text" placeholder="search by name"
+              className="!border !border-gray-300 bg-white text-gray-900  "
+              labelProps={{
+                className: "hidden",
+              }}
+              containerProps={{ className: "min-w-[100px]" }}
+              onChange={(e)=>setHandelSearch(e.target.value)}
+            />
           </Typography>
 
         </CardHeader>
@@ -72,11 +81,17 @@ const parsed = queryString.parse(location.search);
               </tr>
             </thead>
             <tbody>
-              {users.map(
-                ({id, firstName, lastName, email, role, createdAt }, key) => {
-                  return <OrderRow {...{id, firstName, lastName, email, role, createdAt, key}} />;
-                }
-              )}
+              { users.length !==0 ?(
+                users.map(
+                  ({id, firstName, lastName, email, role, createdAt }, key) => {
+                    return <OrderRow {...{id, firstName, lastName, email, role, createdAt, key}} />;
+                  }
+                )
+
+              ) : (
+                <p className=" py-6 px-10">No matching customers found</p>
+              )
+              }
             </tbody>
           </table>
         </CardBody>

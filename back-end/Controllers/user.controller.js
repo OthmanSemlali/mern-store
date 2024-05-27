@@ -79,17 +79,25 @@ const fetchPaginatedUsers = async (req, res) => {
     const {
       page = 1,
       pageSize = 6,
-      filters
+      name,
     } = req.query;
-    
+    const search = {}
+    if(name){
+      search.firstName ={
+        $regex : name,
+        $options : "i",
+      }
+    }
     try {
       
       const response = await User.fetchUsers(
         parseInt(page),
         parseInt(pageSize),
-        filters
+        search
       );
       res.json({ response });
+    console.log('response :', response)
+
     } catch (error) {
    
         res.status(500).json({ message: "Server Error" });
