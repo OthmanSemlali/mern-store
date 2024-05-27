@@ -5,6 +5,7 @@ import CartPage from "./Cart"
 import CheckoutPage from "./Checkout"
 import Register from "./Register"
 import Login from "./login/Login"
+import Profile from "./Profile"
 export {
     HomePage,
     AboutPage,
@@ -12,5 +13,6 @@ export {
     CartPage,
     CheckoutPage,
     Login,
-    Register
+    Register,
+    Profile
 }

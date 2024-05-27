@@ -13,6 +13,13 @@ import {
   Tooltip,
   Progress,
 } from "@material-tailwind/react";
+
+// import {
+//   BanknotesIcon,
+//   UserPlusIcon,
+//   UsersIcon,
+//   ChartBarIcon,
+// } from "@heroicons/react/24/solid";
 import {
   EllipsisVerticalIcon,
   ArrowUpIcon,
@@ -20,16 +27,24 @@ import {
 import { StatisticsCard } from "@/widgets/cards";
 import { StatisticsChart } from "@/widgets/charts";
 import {
-  statisticsCardsData,
-  statisticsChartsData,
+  // statisticsCardsData,
+  // statisticsChartsData,
   projectsTableData,
   ordersOverviewData,
+  Charts,
 } from "@/data";
-import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/solid";
+import { CheckCircleIcon, ClockIcon,
+  BanknotesIcon,
+  ShoppingCartIcon,
+  UsersIcon,
+  ChartBarIcon,
+ } from "@heroicons/react/24/solid";
 import { useAuthenticationContext } from "@/context";
 
-export function Home() {
+export function Home({dashState}) {
 
+
+  console.log('dash state in dash home ', dashState)
   const [state] = useAuthenticationContext()
   const {authenticated} = state
 
@@ -37,6 +52,59 @@ export function Home() {
     return;
   }
 
+
+  const {ordersByMonths, salesByMonths, todays_orders, todays_revenue, total_revenue, usersByDays, week_users} = dashState
+
+  const statisticsCardsData = [
+    {
+      color: "gray",
+      icon: BanknotesIcon,
+      title: "Today's Money",
+      value: `${todays_revenue.revenue} DH`,
+      footer: {
+        color: `${todays_revenue.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
+        value: `${todays_revenue.comparison >= 0 ? '+' + todays_revenue.comparison : todays_revenue.comparison}%`,
+        label: "than yesterday",
+      },
+    },
+    {
+      color: "gray",
+      icon: UsersIcon,
+      title: "This Week's Users",
+      value: week_users.users,
+      footer: {
+        color: `${week_users.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
+        value: `${week_users.comparison >= 0 ? '+' + week_users.comparison : week_users.comparison}%`,
+        label: "than last week",
+      },
+    },
+    {
+      color: "gray",
+      icon: ShoppingCartIcon,
+      title: "Today's Orders",
+      value: todays_orders.orders,
+      footer: {
+        color: `${todays_orders.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
+        value: `${todays_orders.comparison >= 0 ? '+' + todays_orders.comparison : todays_orders.comparison}%`,
+        label: "than yesterday",
+      },
+    },
+    {
+      color: "gray",
+      icon: ChartBarIcon,
+      title: "Sales",
+      value: `${total_revenue.currentYearRevenue} DH`,
+      footer: {
+        color:  `${total_revenue.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
+        value: `${total_revenue.comparison >= 0 ? '+' + total_revenue.comparison : total_revenue.comparison} %`,
+        label: "than last year",
+      },
+    },
+  ];
+
+  
+
+  const charts = Charts(usersByDays, ordersByMonths, salesByMonths)
   
   return (
     <div className="mt-12">
@@ -60,23 +128,23 @@ export function Home() {
         ))}
       </div>
       <div className="grid grid-cols-1 mb-6 gap-y-12 gap-x-6 md:grid-cols-2 xl:grid-cols-3">
-        {statisticsChartsData.map((props) => (
+        {charts.map((props) => (
           <StatisticsChart
             key={props.title}
             {...props}
-            footer={
-              <Typography
-                variant="small"
-                className="flex items-center font-normal text-blue-gray-600"
-              >
-                <ClockIcon strokeWidth={2} className="w-4 h-4 text-blue-gray-400" />
-                &nbsp;{props.footer}
-              </Typography>
-            }
+            // footer={
+            //   <Typography
+            //     variant="small"
+            //     className="flex items-center font-normal text-blue-gray-600"
+            //   >
+            //     <ClockIcon strokeWidth={2} className="w-4 h-4 text-blue-gray-400" />
+            //     &nbsp;{props.footer}
+            //   </Typography>
+            // }
           />
         ))}
       </div>
-      <div className="grid grid-cols-1 gap-6 mb-4 xl:grid-cols-3">
+      {/* <div className="grid grid-cols-1 gap-6 mb-4 xl:grid-cols-3">
         <Card className="overflow-hidden border shadow-sm xl:col-span-2 border-blue-gray-100">
           <CardHeader
             floated={false}
@@ -261,7 +329,7 @@ export function Home() {
             )}
           </CardBody>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import { format } from "date-fns";
-import { DayPicker } from "react-day-picker";
 import { ChevronRightIcon, ChevronLeftIcon,XMarkIcon } from "@heroicons/react/24/outline";
-
 import { fetchOrdersService, updateOrderStatus, useOrderContext } from "@/context";
 
 import {

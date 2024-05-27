@@ -2,13 +2,12 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
-    user:{
+    user: {
       id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
       },
-    
 
       firstName: {
         type: String,
@@ -50,7 +49,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      enum: ["pending", "confirmed", "shipped", "delivered"],
+      enum: ["pending", "confirmed", "shipped", "delivered", "conceled"],
       default: "pending",
     },
     paymentStatus: {
@@ -84,7 +83,7 @@ orderSchema.statics.fetchOrders = async function (page, pageSize, filters) {
     // .sort()
     .skip(skip)
     .limit(pageSize)
-    // .select("slug name seodescription description image price");
+  // .select("slug name seodescription description image price");
 
   const getOrdersCount = this.countDocuments(filters);
 

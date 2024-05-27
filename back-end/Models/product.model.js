@@ -95,6 +95,18 @@ class ProductClass {
       throw new Error("Failed to fetch post by id");
     }
   }
+  static async fetchProductsByName(name) {
+    try {
+      const product = await this.find({ name })
+        .select("slug name seodescription description image price stock")
+
+      return product;
+    } catch (error) {
+      console.error("Error fetching product by name:", error);
+      throw new Error("Failed to fetch post by name");
+    }
+  }
+
   static async fetchSingleProductBySlug(slug) {
     // console.log('name', name)
     try {
