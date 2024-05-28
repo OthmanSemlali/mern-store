@@ -67,6 +67,7 @@ background-color: var(--clr-primary-9);
 
   .form-wrapper {
     position: relative;
+    margin-top: 50px;
   }
   .form-wrapper i {
     position: absolute;
@@ -156,7 +157,17 @@ background-color: var(--clr-primary-9);
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
   }
+.help-text {
+  margin-top: 2em;
+  text-align: center;
+    font-size: 16px;
 
+
+}
+.help-text spam {
+  text-align: center;
+  margin-left: 0.4em;
+}
   @media (max-width: 991px) {
     .inner form {
       padding-top: 10px;

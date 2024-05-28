@@ -14,6 +14,7 @@ function App() {
       <Sidebar />
       <Routes>
         <Route exact index element={<HomePage />} />
+        
         <Route exact path="about" element={<AboutPage />} />
         <Route exact path="products/:slug" element={<Product />} />
         <Route exact path="products" element={<Products />} />

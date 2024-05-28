@@ -11,7 +11,7 @@ const Container = styled.div`
 const Title = styled.h2`
   font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 16px;
+  margin: 16px;
 `;
 
 const FlexContainer = styled.div`
@@ -25,16 +25,16 @@ const Sidebar = styled.div`
 
 const MenuList = styled.ul`
   list-style-type: none;
-  padding: 8px;
+  padding: 10px;
 `;
 
 const MenuItem = styled.li`
   button {
     width: 100%;
-    text-align: left;
-    padding: 8px 16px;
-    border: 1px solid black;
-    border-top: none;
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 6px;
 
     &:first-child {
       border-top: 1px solid black;
@@ -47,9 +47,9 @@ const MenuItem = styled.li`
 `;
 
 const Content = styled.div`
-  width: 75%;
-  padding: 24px;
-  //   border: 1px solid black;
+  width: 80%;
+  // padding: 24px;
+  // border: 1px solid black;
 `;
 
 const Form = styled.form`
@@ -151,19 +151,19 @@ const Account = () => {
   const renderSection = () => {
     switch (section) {
       case "details":
-        return <AccountDetails user={user} />;
+        return <AccountDetails user={user} setUser={setUser} />;
       //   case "address":
       //     return <Address />;
       case "orders":
         return <Orders user={user} />;
       default:
-        return <AccountDetails user={user} />;
+        return <AccountDetails user={user} setUser={setUser} />;
     }
   };
 
   return (
     <Container>
-      {/* <Title>Account</Title> */}
+      <Title>Profile</Title>
       <FlexContainer>
         <Sidebar>
           <MenuList>
@@ -199,13 +199,16 @@ const Account = () => {
   );
 };
 
-const AccountDetails = ({ user }) => {
+const AccountDetails = ({ user, setUser }) => {
   const [editedUser, setEditedUser] = useState({
     id: "",
     email: "",
     firstName: "",
     lastName: "",
   });
+  useEffect(() => {
+    setEditedUser(user);
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -219,19 +222,22 @@ const AccountDetails = ({ user }) => {
         withCredentials: true,
       }
     );
-    console.log(response);
+    const updatedUser = response.data;
+
+    sessionStorage.setItem("user", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    console.log(response.data);
   };
 
   return (
     <div>
-      <h3 className="text-xl font-bold mb-4">Account Details</h3>
       <Form onSubmit={handleSubmit}>
         <div>
           <Label>First Name</Label>
           <Input
             id="firstName"
             type="text"
-            value={user.firstName}
+            value={editedUser.firstName}
             onChange={(e) =>
               setEditedUser({ ...editedUser, firstName: e.target.value })
             }
@@ -242,7 +248,7 @@ const AccountDetails = ({ user }) => {
           <Input
             id="lastName"
             type="text"
-            value={user.lastName}
+            value={editedUser.lastName}
             onChange={(e) =>
               setEditedUser({ ...editedUser, lastName: e.target.value })
             }
@@ -264,7 +270,7 @@ const AccountDetails = ({ user }) => {
           <Input
             id="email"
             type="email"
-            value={user.email}
+            value={editedUser.email}
             onChange={(e) =>
               setEditedUser({ ...editedUser, email: e.target.value })
             }
@@ -312,7 +318,7 @@ const Orders = ({ user }) => {
           }
         );
         console.log("response", response);
-        setOrders(response);
+        setOrders(response.data);
       } catch (error) {
         console.error("Error fetching orders data:", error);
       }
@@ -336,12 +342,12 @@ const Orders = ({ user }) => {
           withCredentials: true,
         }
       );
-      console.log(response.data);
-      setOrders(
-        orders.map((order) =>
-          order.id === orderId ? { ...order, orderStatus: "canceled" } : order
-        )
-      );
+      console.log("update data", response.data);
+      // setOrders(
+      //   orders.map((order) =>
+      //     order.id === orderId ? { ...order, orderStatus: "canceled" } : order
+      //   )
+      // );
     } catch (error) {
       console.error("Error canceling order:", error);
     }

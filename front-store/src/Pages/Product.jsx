@@ -182,7 +182,7 @@ function Product() {
           </section>
         </div>
 
-        <div className="title-review">
+        {/* <div className="title-review">
           <h2>
             <span style={{color:"var(--clr-primary-10)"}}>/</span> reviews
           </h2>
@@ -194,7 +194,7 @@ function Product() {
           <h2>
             <span style={{color:"var(--clr-primary-10)"}}>/</span> Related Products
           </h2>
-        </div>
+        </div> */}
         {/* <Tabs /> */}
         {/* <CustomerReview idBook={1} />
 

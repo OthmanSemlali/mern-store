@@ -8,9 +8,7 @@ const Services = () => {
       <div className="section-center">
         <article className="header">
           <h3>Home Goods Store</h3>
-          <p>
-            Exceptional Quality ZELIJ Products that Transform Your Home
-          </p>
+          <p>Exceptional Quality ZELIJ Products that Transform Your Home</p>
         </article>
 
         <div className="services-center">
@@ -32,7 +30,6 @@ const Services = () => {
 
 const Wrapper = styled.section`
   padding: 3rem 0rem;
-
   h3,
   h4 {
     color: var(--clr-primary-1);

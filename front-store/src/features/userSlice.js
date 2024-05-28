@@ -47,6 +47,7 @@ export const login = createAsyncThunk(
 
     if (response.ok) {
       const user = await response.json();
+      //
       console.log("login success", user);
       return user;
     } else {
@@ -58,29 +59,30 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-    "user/register",
-    async ({firstName, lastName, email, password, role }) => {
-      console.log("register slice", email, password, role);
-      const response = await fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // credentials: "include",
-        body: JSON.stringify({firstName, lastName, email, password, role }),
-      });
-  
-      if (response.ok) {
-        const user = await response.json();
-        console.log("register success", user);
-        return user;
-      } else {
-        const errDetails = await response.json();
-        console.log("register error ", errDetails.error);
-        return errDetails;
-      }
+  "user/register",
+  async ({ firstName, lastName, email, password, role }) => {
+    console.log("register slice", email, password, role);
+    const response = await fetch("http://localhost:3000/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      // credentials: "include",
+      body: JSON.stringify({ firstName, lastName, email, password, role }),
+    });
+
+    if (response.ok) {
+      const user = await response.json();
+      console.log("register success", user);
+
+      return user;
+    } else {
+      const errDetails = await response.json();
+      console.log("register error ", errDetails.error);
+      return errDetails;
     }
-  );
+  }
+);
 
 const getUserInfo = createAsyncThunk("user/getUserInfo", async () => {
   const response = await fetch("/api/sessions/current", {
@@ -190,15 +192,15 @@ const userSlice = createSlice({
 
         state.loading = false
 
-        const {user, errors} = action.payload
+        const { user, errors } = action.payload
 
-        if(user){
-          console.log('*** user created ***')
-            // alert(user.role + ' created')
+        if (user) {
+          window.location.href = "/login";
+
         }
-        if(errors){
-            // state.error
-            console.log('validation errors ', errors)
+        if (errors) {
+          // state.error
+          console.log('validation errors ', errors)
         }
       })
       .addCase(register.rejected, (state, action) => {
@@ -209,5 +211,5 @@ const userSlice = createSlice({
   },
 });
 
-export const {} = userSlice.actions;
+export const { } = userSlice.actions;
 export default userSlice.reducer;

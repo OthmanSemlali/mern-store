@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import {  useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,6 @@ import { register as registerUser } from "../features/userSlice";
 import { AuthWrapper } from "./login/StyledComponents";
 import { useEffect, useRef } from "react";
 import SignupProvider from "../Components/SignupProvider";
-
 
 const schema = z.object({
   // name: z.string().min(1, { message: "Name is required" }),
@@ -18,8 +17,8 @@ const schema = z.object({
   // role: z.string().includes('user', 'admin', 'seller')
 });
 function Register() {
-
   const scrollToRef = useRef(null);
+  const navigate = useNavigate();
   useEffect(() => {
     // Scroll to the div when the component mounts
     if (scrollToRef.current) {
@@ -27,8 +26,8 @@ function Register() {
     }
   }, []);
 
-  const dispatch = useDispatch()
-  const {loading, error} = useSelector((store) => store.user)
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((store) => store.user);
   const {
     register,
     handleSubmit,
@@ -37,15 +36,16 @@ function Register() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = ({firstName, lastName, email, password }) => {
+  const onSubmit =  ({ firstName, lastName, email, password }) => {
+    console.log("onsubmit register", email, password);
+    dispatch(
+      registerUser({ firstName, lastName, email, password, role: "user" })
+    );
 
-    console.log('onsubmit register', email, password);
-    dispatch(registerUser({firstName, lastName, email, password, role: 'user'}))
-
+   
   };
   return (
-  
-<AuthWrapper
+    <AuthWrapper
       // imageUrl={
       //   "https://img.freepik.com/premium-vector/seamless-pattern-authentic-arabian-style-vector-illustration_151170-1417.jpg?w=996"
       // }
@@ -61,10 +61,9 @@ function Register() {
           />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* <SignupProvider />
 
-          <SignupProvider />
-
-          <h5 >Or Sign Up With</h5>
+          <h5>Or Sign Up With</h5> */}
           <div className="form-group">
             <input
               type="text"
@@ -81,9 +80,8 @@ function Register() {
               {...register("lastName")}
             />
             {errors.lastName && <span>{errors.lastName.message}</span>}
-
           </div>
-          
+
           <div className="form-wrapper">
             <input
               type="text"
@@ -94,7 +92,7 @@ function Register() {
             {errors.email && <span>{errors.email.message}</span>}
             {/* <i className="zmdi zmdi-email"></i> */}
           </div>
-         
+
           <div className="form-wrapper">
             <input
               type="password"
@@ -106,17 +104,27 @@ function Register() {
 
             {/* <i className="zmdi zmdi-lock"></i> */}
           </div>
-        
+
           <button type="submit">
-          {loading ? 'register..' : 'register'}
+            {loading ? "register.." : "register"}
 
             {/* <i className="zmdi zmdi-arrow-right">h</i> */}
           </button>
+          <div className="help-text">
+            <spam>Already have an account ?</spam>
+            <spam>
+              <b>
+                <Link to="/login" style={{ color: "black" }}>
+                  Log In
+                </Link>
+              </b>
+            </spam>
+          </div>
         </form>
         {/* </div> */}
       </div>
     </AuthWrapper>
-  )
+  );
 }
 
-export default Register
+export default Register;

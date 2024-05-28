@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 // import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -9,20 +8,20 @@ import { FaBars } from "react-icons/fa";
 import CartButtons from "./CartButtons";
 
 const Nav = () => {
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   return (
     <NavContainer>
       <div className="nav-center">
         <div className="nav-header">
           {/* <img src={logo} alt={brand_name} /> */}
           <ul className="nav-links">
-              <li style={{ color: 'var(--clr-primary-5)' }}>
-                {brand_name}
-                </li>
+            <li style={{ color: "var(--clr-primary-5)" }}>{brand_name}</li>
           </ul>
 
-          <button type="button" className="nav-toggle" 
-          onClick={()=>dispatch(openSideBar())}
+          <button
+            type="button"
+            className="nav-toggle"
+            onClick={() => dispatch(openSideBar())}
           >
             {/* OPEN */}
             <FaBars />
@@ -51,7 +50,8 @@ const NavContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: center;
-
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+ 
   .nav-center {
     width: 90vw;
     margin: 0 auto;

@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 function Protected({ children }) {
   const { isConnected } = useSelector((store) => store.user);
-const navigate = useNavigate()
-useEffect(()=>{
+  const navigate = useNavigate();
+  useEffect(() => {
     if (!isConnected) {
-        navigate('/login')
-      }
-}, [])
-  return  children ;
+      navigate("/login", { state: { from: "/checkout" } });
+    }
+  }, []);
+  return children;
 }
 
 export default Protected;

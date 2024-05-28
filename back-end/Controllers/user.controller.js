@@ -75,24 +75,24 @@ const deleteSellerProfile = async (req, res) => {
 
 const fetchPaginatedUsers = async (req, res) => {
     const {
-      page = 1,
-      pageSize = 6,
-      filters
-    } = req.query;
-    
-    try {
-      
-      const response = await User.fetchUsers(
-        parseInt(page),
-        parseInt(pageSize),
+        page = 1,
+        pageSize = 6,
         filters
-      );
-      res.json({ response });
-    } catch (error) {
-   
-        res.status(500).json({ message: "Server Error" });
-      
-    }
-  }
+    } = req.query;
 
-module.exports = { deleteSellerProfile , fetchPaginatedUsers}
+    try {
+
+        const response = await User.fetchUsers(
+            parseInt(page),
+            parseInt(pageSize),
+            filters
+        );
+        res.json({ response });
+    } catch (error) {
+
+        res.status(500).json({ message: "Server Error" });
+
+    }
+}
+
+module.exports = { getUserById, getUserOrders, updateUserById, deleteSellerProfile, fetchPaginatedUsers }

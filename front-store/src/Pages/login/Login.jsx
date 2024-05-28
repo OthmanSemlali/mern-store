@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,15 +10,19 @@ import { useEffect, useRef } from "react";
 import SignupProvider from "../../Components/SignupProvider";
 import { AuthWrapper } from "./StyledComponents";
 
-
 // import img1 from '../login/images/bg-registration-form-1.jpg'
 const schema = z.object({
   // name: z.string().min(1, { message: "Name is required" }),
   email: z.string().email(),
   password: z.string().min(8),
 });
+
 function Login() {
   const scrollToRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { from } = location.state || { from: { pathname: "/products" } }; // Default redirect path
+  console.log("the user camed from ", from);
   useEffect(() => {
     // Scroll to the div when the component mounts
     if (scrollToRef.current) {
@@ -27,7 +31,9 @@ function Login() {
   }, []);
 
   const dispatch = useDispatch();
-  const { loading, custom_error } = useSelector((store) => store.user);
+  const { isConnected, loading, custom_error } = useSelector(
+    (store) => store.user
+  );
   const {
     register,
     handleSubmit,
@@ -40,6 +46,12 @@ function Login() {
     console.log("onsubmit", email, password);
     dispatch(login({ email, password }));
   };
+
+  useEffect(() => {
+    if (isConnected) {
+      navigate(from);
+    }
+  }, [isConnected, navigate, from]);
   return (
     <AuthWrapper
       // imageUrl={
@@ -57,11 +69,10 @@ function Login() {
           />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
+          {/* <SignupProvider />
 
-          <SignupProvider />
+          <h5>Or Sign in With</h5> */}
 
-          <h5 >Or Sign in With</h5>
-          
           <div className="form-wrapper">
             <input
               type="text"
@@ -74,7 +85,7 @@ function Login() {
 
             {/* <i className="zmdi zmdi-email"></i> */}
           </div>
-         
+
           <div className="form-wrapper">
             <input
               type="password"
@@ -86,11 +97,21 @@ function Login() {
 
             {/* <i className="zmdi zmdi-lock"></i> */}
           </div>
-        
+
           <button type="submit">
-          {loading ? 'login..' : 'login'}
+            {loading ? "login.." : "login"}
             {/* <i className="zmdi zmdi-arrow-right">h</i> */}
           </button>
+          <div className="help-text">
+            <spam>Don't have an account ?</spam>
+            <spam>
+              <b>
+                <Link to="/register" style={{ color: "black" }}>
+                  Register
+                </Link>
+              </b>
+            </spam>
+          </div>
         </form>
         {/* </div> */}
       </div>

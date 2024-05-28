@@ -7,32 +7,34 @@ const fetchPaginatedOrders = async (req, res) => {
   const {
     page = 1,
     pageSize = 6,
-    firstName = '' ,
+    firstName = '',
     status = '',
     date = ''
   } = req.query;
 
   const filters = {};
-  if(firstName !==''){
+  if (firstName !== '') {
 
     console.log('firstName not null ', firstName)
-    filters['user.firstName'] = 
-    {$regex: firstName, 
-    $options: 'i'}
-     
+    filters['user.firstName'] =
+    {
+      $regex: firstName,
+      $options: 'i'
+    }
+
   }
   console.log('firstName null', firstName)
-  if ( status){
+  if (status) {
     filters.orderStatus = status
   }
   // const sort = {}
-  if (date){
+  if (date) {
     const today = new Date()
     const otherDay = new Date(today.getTime() - parseInt(date))
     filters.createdAt = {
       $gte: otherDay,
       $lte: today,
-  }
+    }
   }
   try {
     const response = await Order.fetchOrders(
@@ -45,65 +47,65 @@ const fetchPaginatedOrders = async (req, res) => {
     console.log('order response', response)
     res.json({ response });
   } catch (error) {
- 
-      res.status(500).json({ message: "Server Error" });
-    
+
+    res.status(500).json({ message: "Server Error" });
+
   }
 }
 
-  const placeOrder = async (req, res)=> {
+const placeOrder = async (req, res) => {
 
-    console.log('req.user.firstName', req.user.firstName)
-    const {cart, total_amount, shipping} = req.body;
+  console.log('req.user.firstName', req.user.firstName)
+  const { cart, total_amount, shipping } = req.body;
 
-    const products = cart.map(product => {
-      const [productId] = product.id.split('-');
-      return { ...product, id: productId };
+  const products = cart.map(product => {
+    const [productId] = product.id.split('-');
+    return { ...product, id: productId };
   });
 
-    // console.log('order products', products);
-    // console.log('order products', products)
-    try {
-      const userID = req.user.id;
-  
-      // Check if user exists
-      const user = await User.findById(userID);
-      if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
-      }
-  
-      // Create a new order document in the database
-      const newOrder = new Order({
-        user:{
-          id:userID,
-          firstName:req.user.firstName,
-          lastName:req.user.lastName,
-          email:req.user.email
-          
-        },
-        products,
-        totalPrice: total_amount,
-        shipping,
-        // orderStatus: 'pending', // Default status
-        // paymentStatus: 'pending' // Default status
-      });
-  
-      // Save the order to the database
-      await newOrder.save();
-  
-      // Update stock levels of the ordered products
-      await productController.updateProductStock(products);
-  
-      // Return success response
-      console.log('add order success')
+  // console.log('order products', products);
+  // console.log('order products', products)
+  try {
+    const userID = req.user.id;
 
-      res.status(201).json({ success: true, message: 'Order placed successfully' });
-    } catch (error) {
-      // Return error response
-      res.status(500).json({ success: false, error: error.message });
-      console.log('add order error', error.message)
+    // Check if user exists
+    const user = await User.findById(userID);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
+
+    // Create a new order document in the database
+    const newOrder = new Order({
+      user: {
+        id: userID,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        email: req.user.email
+
+      },
+      products,
+      totalPrice: total_amount,
+      shipping,
+      // orderStatus: 'pending', // Default status
+      // paymentStatus: 'pending' // Default status
+    });
+
+    // Save the order to the database
+    await newOrder.save();
+
+    // Update stock levels of the ordered products
+    await productController.updateProductStock(products);
+
+    // Return success response
+    console.log('add order success')
+
+    res.status(201).json({ success: true, message: 'Order placed successfully' });
+  } catch (error) {
+    // Return error response
+    res.status(500).json({ success: false, error: error.message });
+    console.log('add order error', error.message)
   }
+}
 // const getOrderHistoryForClient = async (req, res) => {
 //   try {
 //     const userID = req.params.id;
@@ -120,10 +122,10 @@ const fetchPaginatedOrders = async (req, res) => {
 //     try {
 //       // Retrieve order ID from request
 //       const orderId = req.params.id;
-  
+
 //       // Fetch order details
 //       const order = await Order.findById(orderId);
-  
+
 //       if(!order){
 //         return res.json({success:false, error:'order not found or deleted from DB'})
 //       }
@@ -167,25 +169,23 @@ const fetchPaginatedOrders = async (req, res) => {
 // };
 
 const updateOrderStatus = async (req, res) => {
-    try {
-        const orderID = req.params.id;
-        const { newStatus } = req.body;
+  try {
+    const orderID = req.params.id;
+    const { newStatus } = req.body;
 
-        const order = await Order.findById(orderID);
-        if (!order) {
-            return res.status(404).json({ success: false, message: 'Order not found' });
-        }
-
-        // Update the order status
-        order.orderStatus = newStatus;
-        await order.save();
-
-        console.log('order', order)
-
-        return res.status(200).json({ success: true, message: 'Order status updated successfully' });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+    const order = await Order.findById(orderID);
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
     }
+
+    // Update the order status
+    order.orderStatus = newStatus;
+    console.log(order.orderStatus);
+    await order.save();
+    return res.status(200).json({ success: true, message: 'the order status updated successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 };
 
 
@@ -197,5 +197,5 @@ module.exports = {
   // getAllOrders,
   updateOrderStatus,
   fetchPaginatedOrders
-  
+
 };

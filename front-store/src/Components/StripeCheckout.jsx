@@ -68,7 +68,7 @@ const CheckoutForm = () => {
       }
     } catch (error) {
       console.log("error create order ", error.response);
-      throw Error(error.response)
+      throw Error(error.response);
     }
   };
   // create payment
@@ -128,29 +128,26 @@ const CheckoutForm = () => {
       try {
         await createOrder();
         setError(null);
-      setProcessing(false);
-      setSucceeded(true);
+        setProcessing(false);
+        setSucceeded(true);
 
-      setTimeout(() => {
-        dispatch(clearCart());
-        navigate('/cart');
-      }, 3000);
+        setTimeout(() => {
+          dispatch(clearCart());
+          navigate("/cart");
+        }, 3000);
       } catch (error) {
         setProcessing(false);
 
-        alert("SERVER LOGIN! PLEASAE LOGIN AGAIN")
-        dispatch(logout())
-        navigate('/login')
+        alert("SERVER LOGIN! PLEASAE LOGIN AGAIN");
+        dispatch(logout());
+        navigate("/login");
+
         // alert(error.message)
         // setError(`Payment failed ${error.message}`);
-        console.log('errorrtrt', error)
-        
+        console.log("errorrtrt", error);
       }
-      
 
       //   PLACE ORDER
-
-      
     }
   };
   return (
