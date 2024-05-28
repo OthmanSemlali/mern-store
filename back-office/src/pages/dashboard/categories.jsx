@@ -247,7 +247,7 @@ export function Categories() {
               )
             ) :(
             <tr>
-            <td colSpan={3} className="text-center py-3 px-5">
+            <td colSpan={3} className="text-center py-6 px-5">
               No matching categories
             </td>
           </tr>

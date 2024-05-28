@@ -1,37 +1,197 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import {
   Card,
   CardBody,
+  Checkbox,
   Typography,
  
-
 } from "@material-tailwind/react";
-export function EditProduct({ showEditForm, setShowEditForm,editProductId, setEditProduct, editProduct, categories,showTable,setShowTable }) {
-const getCategoryById = (id) => {
-   const category = categories.find(category => category.id == id);
-     console.log("id and name",id,category.name,categories);
-  return category.name;
-   }
+import { toast } from 'react-toastify';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+export function EditProduct() {
+
+    const navigate = useNavigate()
+  const [categories,setCategories]=useState([])
+  const fetchCategories = async () => {
+    console.log('Fetching categories...');
+    try {
+      const categoriesResponse = await axios.get("http://localhost:3000/api/categories", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
+    //   console.log('Categories***********:', categoriesResponse);
+      setCategories(categoriesResponse.data);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+  const fetchOldProductInfos = async (id) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/products/fetchSingleProductByID/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      const product = response.data;
+      console.log("comming product",product);
+      setEditProduct({
+        name: product.name,
+        description: product.description,
+        image: product.image,
+        price: product.price,
+        stock: product.stock,
+        size:{width:product.size.width,height:product.size.height},
+        options: product.options,
+        style: product.style,
+        tileUse: product.tileUse,
+        materials: product.materials,
+        featured: product.featured,
+        published: product.published,
+        categoryID: product.categoryID,
+      });
+      
+  
+  
+    } catch (err) {
+      toast.error("There was an error. try later!");
+  
+      console.log(err);
+    }
+      }
+  const {id} = useParams()
+
 const handleEditConfirm = async () => {
+
   try {
-    const response = await axios.put(`http://localhost:3000/api/products/${editProductId}`, editProduct, {
+    const response = await axios.put(`http://localhost:3000/api/products/${id}`, editProduct, {
       headers: {
         "Content-Type": "application/json",
       },
       withCredentials: true,
     });
-    console.log(response);
-    setShowTable(true);
-    setShowEditForm(false);
+
+    
+    console.log('edit response', response.data);
+
+    if(response.data.id){
+        toast.success('Product updated')
+        navigate('/dashboard/products')
+    }
+
   } catch (err) {
+
+    toast.error('There was an error updating this product. Try later!')
     console.log(err);
   }
 };
 
+const [editProduct, setEditProduct] = useState({
+  name: "",
+  description: "",
+  image: "",
+  price: 0,
+  stock: 0,
+  size: { width: 0, height: 0 },
+  options: [],
+  style: "",
+  tileUse: "",
+  materials: "",
+  featured: false,
+  published: false,
+  categoryID: "",
+});
+
+
+useEffect(() => {
+  fetchCategories()
+  fetchOldProductInfos(id)
+
+  console.log("edit ----- products");
+},[id])
+
+const [currentOption, setCurrentOption] = useState({ color: '', images: [] });
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = async (event, optionIndex = null) => {
+    const files = Array.from(event.target.files);
+    if (files.length > 0) {
+      setUploading(true);
+      try {
+        const uploadedImages = await Promise.all(
+          files.map(async (file) => {
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const response = await axios.post('http://localhost:3000/upload', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+
+            return response.data.url;
+          })
+        );
+
+        if (optionIndex !== null) {
+          setEditProduct((prevProduct) => {
+            const updatedOptions = [...prevProduct.options];
+            const newImages = [
+              ...updatedOptions[optionIndex].images,
+              ...uploadedImages,
+            ].slice(0, 5);
+
+            updatedOptions[optionIndex] = {
+              ...updatedOptions[optionIndex],
+              images: [...new Set(newImages)], // Remove duplicates
+            };
+
+            return { ...prevProduct, options: updatedOptions };
+          });
+        } else {
+          setCurrentOption((prevOption) => ({
+            ...prevOption,
+            images: [...new Set([...prevOption.images, ...uploadedImages])].slice(0, 5), // Remove duplicates and limit to 5
+          }));
+        }
+      } catch (error) {
+        console.error('Error uploading images:', error);
+      } finally {
+        setUploading(false);
+        event.target.value = ''; // Clear the file input
+      }
+    }
+  };
+
+  const handleAddOption = () => {
+    setEditProduct((prevProduct) => ({
+      ...prevProduct,
+      options: [...prevProduct.options, { ...currentOption }],
+    }));
+    setCurrentOption({ color: '', images: [] });
+  };
+
+  const handleDeleteOption = (index) => {
+    setEditProduct((prevProduct) => ({
+      ...prevProduct,
+      options: prevProduct.options.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleDeleteImage = (optionIndex, imageIndex) => {
+    setEditProduct((prevProduct) => {
+      const updatedOptions = [...prevProduct.options];
+      updatedOptions[optionIndex].images = updatedOptions[optionIndex].images.filter((_, i) => i !== imageIndex);
+      return { ...prevProduct, options: updatedOptions };
+    });
+  };
+
   return (
     <>
-{showEditForm && (
     <Card className="w-4/5 mx-auto bg-gray-100 bg-opacity-50 rounded-lg">
      <CardBody>
       <div className="w-full">
@@ -78,7 +238,116 @@ const handleEditConfirm = async () => {
           onChange={(e) => setEditProduct({ ...editProduct, image: e.target.value })}
         />
       </div>
-              <div className="w-full flex gap-2 mt-2">
+              <div className="flex w-full gap-2 mt-2">
+
+              <div className="w-full mt-4">
+      <h3 className="block text-sm font-medium text-gray-700">Add Options</h3>
+
+      <div className="mt-2">
+        <label className="block text-sm font-medium text-gray-700">Color</label>
+        <input
+          type="text"
+          name="color"
+          className="w-full p-2 border border-gray-300 rounded-md"
+          value={currentOption.color}
+          onChange={(e) => setCurrentOption({ ...currentOption, color: e.target.value })}
+        />
+      </div>
+
+      <div className="mt-2">
+        <label className="block text-sm font-medium text-gray-700">Upload Images (1 to 5)</label>
+        <input
+          type="file"
+          name="images"
+          multiple
+          accept="image/*"
+          className="hidden"
+          id="file-input-new-option"
+          onChange={(e) => handleFileChange(e)}
+        />
+        <label
+          htmlFor="file-input-new-option"
+          className="block w-full p-2 mt-2 text-center bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300"
+        >
+          Add Images
+        </label>
+        {uploading && <p className="text-sm text-gray-600">Uploading...</p>}
+      </div>
+
+      <div className="mt-4">
+        <button
+          type="button"
+          className="px-3 py-1 text-white bg-green-500 rounded-md hover:bg-green-600"
+          onClick={handleAddOption}
+          disabled={uploading || !currentOption.color || currentOption.images.length === 0}
+        >
+          Add Option
+        </button>
+      </div>
+
+      <div className="mt-4">
+        <h4 className="text-sm font-medium text-gray-700">Current Options</h4>
+        {editProduct.options.map((option, optionIndex) => (
+          <div key={optionIndex} className="p-2 mt-2 border border-gray-300 rounded-md">
+            <h5 className="font-medium">Color: {option.color}</h5>
+            <div className="flex items-center mt-2">
+              {option.images.map((image, imageIndex) => (
+                <div key={imageIndex} className="relative w-16 h-16 mb-2 mr-2">
+                  <img src={image} alt={`option-${optionIndex}-${imageIndex}`} className="object-cover w-full h-full rounded-md" />
+                  <button
+                    type="button"
+                    className="absolute top-0 right-0 p-1 text-white bg-red-500 rounded-full"
+                    onClick={() => handleDeleteImage(optionIndex, imageIndex)}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+              {option.images.length < 5 && (
+                <>
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e, optionIndex)}
+                    accept="image/*"
+                    id={`file-input-${optionIndex}`}
+                  />
+                  <label
+                    htmlFor={`file-input-${optionIndex}`}
+                    className={`flex items-center justify-center w-16 h-16 bg-gray-200 rounded-md cursor-pointer ${
+                      option.images.length < 5 ? 'hover:bg-gray-300' : ''
+                    }`}
+                  >
+                    <svg
+                      className="w-6 h-6 text-gray-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                  </label>
+                </>
+              )}
+            </div>
+            <button
+              type="button"
+              className="px-3 py-1 mt-2 text-white bg-red-500 rounded-md hover:bg-red-600"
+              onClick={() => handleDeleteOption(optionIndex)}
+            >
+              Delete Option
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">Price</label>
         <input
@@ -102,13 +371,13 @@ const handleEditConfirm = async () => {
         />
       </div>
       </div>
-      <div className="w-full flex gap-2 mt-2">
+      <div className="flex w-full gap-2 mt-2">
         <label className="block text-sm font-medium text-gray-700">Size</label>
         <input
           type="number"
           name="width"
           id="width"
-          className="w-1/2 p-2 border border-gray-300 rounded-md mr-2"
+          className="w-1/2 p-2 mr-2 border border-gray-300 rounded-md"
           placeholder="Width"
           value={editProduct.size.width}
           onChange={(e) => setEditProduct({ ...editProduct, size: { ...editProduct.size, width: parseInt(e.target.value, 10) } })}
@@ -123,7 +392,7 @@ const handleEditConfirm = async () => {
           onChange={(e) => setEditProduct({ ...editProduct, size: { ...editProduct.size, height: parseInt(e.target.value, 10) } })}
         />
         </div>
-    <div className="w-full flex gap-2 mt-2">
+    <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">Style</label>
         <input
@@ -147,7 +416,7 @@ const handleEditConfirm = async () => {
         />
       </div>
       </div>
-    <div className="w-full flex gap-2 mt-2">
+    <div className="flex w-full gap-2 mt-2">
        <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">tileUse</label>
         <input
@@ -169,55 +438,55 @@ const handleEditConfirm = async () => {
         // value={getCategoryById(editProduct.categoryID)}
         onChange={(e) => setEditProduct({ ...editProduct, categoryID: e.target.value })}
         >
-        <option key={editProduct.categoryID} value={editProduct.categoryID}>{getCategoryById(editProduct.categoryID)} </option>
+        {/* <option key={editProduct.categoryID} value={editProduct.categoryID}>
+          {getCategoryById(editProduct.categoryID)}
+         </option> */}
 
       {categories.map((category) => (
-       <option key={category.id} value={category.id}>{category.name} </option>
+       <option key={category.id} value={category.id} selected={category.id === editProduct.categoryID ? 'selected' : null} >{category.name} </option>
      ))}
       </select>
       </div>
       </div>
-   <div className="w-full flex gap-2 mt-2">
+   <div className="flex w-full gap-2 mt-2">
       <div className="w-full mt-2">
         <label className="block text-sm font-medium text-gray-700">featured</label> 
-        <select
-                name="featured"
-                id="featured"
-                className="w-full p-2 border border-gray-300 rounded-md"
-                value={editProduct.featured}
-                onChange={(e) => {setEditProduct({ ...editProduct, featured: e.target.value === "true" }); console.log('featt',editProduct.featured);}}
-              >
-                <option value="true" >yes</option>
-                <option value="false">no</option>
-              </select>
+        <Checkbox 
+         name="featured"
+         checked={editProduct.featured}
+         onChange={ (e) => setEditProduct({ ...editProduct, featured: e.target.checked })}
+          />
+            
+
       </div>
       <div className="w-full mt-2">
-        <label className="block text-sm font-medium text-gray-700">published</label>
-        <select
-                name="published"
-                id="published"
-                className="w-full p-2 border border-gray-300 rounded-md"
-                value={editProduct.published}
-                onChange={(e) => {setEditProduct({ ...editProduct, published: e.target.value }); console.log('pub',editProduct.published);}}
-              >
-                <option value="true">Yes</option>
-                <option value="false">No</option>
-              </select>
-        </div>
+
+      <label className="block text-sm font-medium text-gray-700">published</label>
+        <Checkbox 
+         name="published"
+         checked={editProduct.published}
+         onChange={ (e) => setEditProduct({ ...editProduct, published: e.target.checked })}
+          />
+   
+        </div> 
     </div>
-      <div className="flex gap-4 justify-center mt-4">
-        <Typography color="grey" onClick={() => {setShowEditForm(false);setShowTable(true)}}   style={{ cursor: 'pointer' }}
+      <div className="flex justify-center gap-4 mt-4">
+        <Typography color="grey"   style={{ cursor: 'pointer' }}
 >
-          Cancel
+<Link to={'/dashboard/products'}>
+
+Cancel
+
+</Link>
         </Typography>
-        <Typography color="green" onClick={handleEditConfirm}   style={{ cursor: 'pointer' }}
+        <Typography color="green" onClick={()=>handleEditConfirm()}   style={{ cursor: 'pointer' }}
 >
           Confirm
         </Typography>
       </div>
     </CardBody>
   </Card>
-)}
+
     </>
   )
 }

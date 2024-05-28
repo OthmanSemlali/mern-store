@@ -1,6 +1,11 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
+
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 
 const initializePassport = require("./config/passport-config");
@@ -230,6 +235,25 @@ app.get('/auth/protected', checkAuthenticated, (req, res) => {
   console.log('req.user.id', req.user.id)
   res.send(`Hello ${email}`);
 })
+
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  const path = req.file.path;
+
+  cloudinary.uploader.upload(path, (error, result) => {
+    if (error) {
+      return res.status(500).json({ error: 'Image upload failed' });
+    }
+    res.status(200).json({ url: result.secure_url });
+  });
+});
 
 
 // error Middlewares

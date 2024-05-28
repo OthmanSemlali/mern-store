@@ -12,6 +12,7 @@ function App() {
 
       <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
       {/* <Route path="*" element='err' /> */}
+
     </Routes>
   );
 }

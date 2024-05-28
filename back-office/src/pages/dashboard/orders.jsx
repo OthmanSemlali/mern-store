@@ -1,17 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import queryString from "query-string";
-import { format } from "date-fns";
-import { DayPicker } from "react-day-picker";
-import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
-
+import { ChevronRightIcon, ChevronLeftIcon,XMarkIcon } from "@heroicons/react/24/outline";
 import { fetchOrdersService, updateOrderStatus, useOrderContext } from "@/context";
 
 import {
-    Card,
     CardHeader,
     CardBody,
-    Typography,
     Avatar,
     Chip,
     Tooltip,
@@ -25,7 +20,9 @@ import {
     List,
     ListItem,
     ListItemPrefix,
-    Option
+    Option,
+    Card, 
+    Typography,
 } from "@material-tailwind/react";
 
 import { authorsTableData, projectsTableData } from "@/data";
@@ -41,10 +38,8 @@ export function Orders() {
   const navigate = useNavigate()
   const [handelInput, setHandelInput] = useState('')
   const {orders, totalOrders} = state;
-  // const [date, setDate] = React.useState<Date>(new Date());;
   const [handelStatus, setHandelStatus] = useState('')
   const [handelDate, setHandelDate] = useState('')
-  console.log('totalOrders', totalOrders)
   const parsed = queryString.parse(location.search);
 
   // const { page } = parsed;
@@ -88,42 +83,37 @@ export function Orders() {
   }
   };
 
-  if(orders.length == 0){
-    return <div className="flex flex-col gap-12 mt-12 mb-8">
-            <p>No orders</p>
-    </div>
-  }
   return (
-    <div className="flex flex-col gap-12 mt-12 mb-8">
+    <div className="flex flex-col gap-12 mt-12 mb-8 justify-center">
            
       <Card>
-        <CardHeader variant="gradient" color="gray" className="flex items-center justify-between p-6 mb-8 overflow-visible">
+        <CardHeader variant="gradient" color="gray" className="flex items-center justify-between p-6 px-7 mb-8 overflow-visible">
           <Typography variant="h6" color="white">
             Orders
           </Typography>
-    <div>
 
       <select name="" id=""
         // label="Select satatus "        
         onChange={(e)=>{setHandelStatus(e.target.value); console.log('trr ', e.target.value);}}
-        className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333">
-        <option value="" className="">All</option>
-        <option value="pending" className="">Pending</option>
-        <option value="confirmed">Confirmed</option>
-        <option value="shipped">Shipped</option>
-        <option value="delivered">Delivered</option>
+        className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333 w-1/5">
+          {/* <label htmlFor="">nnnnnnnnn</label> */}
+        <option value="" className="" >All</option>
+        <option value="pending" className="bg-orange-800">Pending</option>
+        <option value="confirmed" className="bg-yellow-700">Confirmed</option>
+        <option value="shipped" className="bg-light-green-500">Shipped</option>
+        <option value="delivered" className="bg-green-900">Delivered</option>
        </select>
 
        <select name="" id=""
-        // label="Select satatus "        
+        // value="Select satatus "        
         onChange={(e)=>{setHandelDate(e.target.value)}}
-        className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333">
+        className=" px-4 py-2 rounded-lg text-black border border-solid bg-#333333 w-1/5">
+          
         <option value="" className="">All</option>
-        <option value="3" className="">last 7 days</option>
+        <option value="7" className="">last 7 days</option>
         <option value="30">last 30 days</option>
         <option value="60">last 60 days</option>
        </select>
-    </div>
             
           <Typography variant="h6" color="white">
             <Input type="text" placeholder="search by name"
@@ -157,14 +147,21 @@ export function Orders() {
               </tr>
             </thead>
             <tbody>
-              {orders.map(
+              { orders.length  != 0 ? 
+              (
+              orders.map(
                 ({id,  user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt }, key) => {
 
-         
+
 
                   return <OrderRow {...{id, user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt, key}} handleChange={handleChange} />;
-                }
-              )}
+                })
+              ) : (
+              <div className=" text-center py-6 px-5">
+                <p>No matching order found</p>
+              </div>
+              )
+              }
             </tbody>
           </table>
         </CardBody>
@@ -183,6 +180,21 @@ export default Orders
 
 const OrderRow = ({ id, user, products, totalPrice, shipping, orderStatus, paymentStatus, createdAt, key, handleChange }) => {
 
+  const getStatusBgColor = (status) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-orange-800';
+      case 'confirmed':
+        return 'bg-yellow-700';
+      case 'delivered':
+        return 'bg-light-green-500';
+      case 'shipped':
+        return 'bg-green-900';
+      default:
+        return '';
+    }
+  };
+
     console.log('***id', id)
     const {line1, city, country} = shipping.address
 
@@ -191,12 +203,16 @@ const OrderRow = ({ id, user, products, totalPrice, shipping, orderStatus, payme
           ? ""
           : "border-b border-blue-gray-50"
       }`;
-      
-      const [showProducts, setShowProducts] = useState(false)
-      return (
+    const [showProductDetails, setShowProductDetails] = useState(false)
 
+    const handelProduct = (products)=>{
+      console.log('products', products)
+      setShowProductDetails(!showProductDetails)
+    }  
+  return (
+  <>
 
-        <tr key={key}>
+  <tr key={key}>
         <td className={className}>
           <div className="flex items-center gap-4">
             {/* <Avatar src={img} alt={name} size="sm" variant="rounded" /> */}
@@ -230,8 +246,10 @@ const OrderRow = ({ id, user, products, totalPrice, shipping, orderStatus, payme
         </td>
         <td className={className}>
           
-          <Typography className="text-sm font-normal underline text-blue-gray-500">
-            products
+          <Typography className="text-sm font-normal underline text-blue-gray-500"
+          
+          >
+           <button onClick={()=>handelProduct(products)}>products</button> 
           </Typography>
         </td>
         <td className={className}>
@@ -253,19 +271,77 @@ const OrderRow = ({ id, user, products, totalPrice, shipping, orderStatus, payme
             {formatDate(createdAt)}
           </Typography>
         </td>
-        <td className={className}>
+        <td className={`${className} `}>
         <select
           // value={orderStatus} 
+          
           onChange={(e) => handleChange(e, id)}
-            className="h-full font-sans text-sm font-normal bg-transparent peer border-blue-gray-200 border-t-transparent text-blue-gray-700 outline outline-0 placeholder-shown:border-t-blue-gray-200 focus:border-t-transparent disabled:border-0 disabled:bg-blue-gray-50">
-            <option value="pending" selected={orderStatus == 'pending' ? true : null}>pending</option>
-            <option value="confirmed" selected={orderStatus == 'confirmed' ? true : null}>confirmed</option>
-            <option value="shipped" selected={orderStatus == 'shipped' ? true : null}>shipped</option>
-            <option value="delivered" selected={orderStatus == 'delivered' ? true : null}>delivered</option>
-          </select>
+            className={`p-1  h-full font-sans text-sm font-normal bg-transparent  text-blue-gray-700 outline  rounded-md ${getStatusBgColor(orderStatus)} `}
+            // value={orderStatus}
+            >
+            
+            <option value="pending" className="p-4 bg-orange-800" selected={orderStatus == 'pending'}>pending</option>
+            <option value="confirmed" className="bg-yellow-700" selected={orderStatus == 'confirmed' }>confirmed</option>
+            <option value="shipped" className="bg-light-green-500" selected={orderStatus == 'shipped' }>shipped</option>
+            <option value="delivered" className="bg-green-900" selected={orderStatus == 'delivered' }>delivered</option>
+        </select>
         </td>
-      </tr>
+  </tr>
+  {showProductDetails && (
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-gray-600 bg-opacity-75">
+    <Card className=" rounded-lg w-3/5 h-2/6">
+      <table className="relative table-auto text-center h-24">
+        <thead>
+          <tr>
+             {["Name", "OptionColor", "Amount", "Price",<XMarkIcon onClick={handelProduct} class=" text-gray-500 cursor-pointer" /> ].map((clm) => (
+               <th className=" bg-opacity-75  border-b border-blue-gray-100 bg-blue-gray-50 p-5 ">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal leading-none opacity-70"
+                  >
+                  {clm}
+                </Typography>
+               </th>
+             ))}
+          </tr>
+        </thead>
+        <tbody className="h-20">
+           {products.map((e) => {
 
+             return (
+               <tr key={id}>
+                 <td >
+                   <Typography variant="small" color="blue-gray" className="font-normal">
+                     {e.name}
+                   </Typography>
+                 </td>
+                 <td>
+                   <Typography variant="small" color="blue-gray" className="font-normal">
+                     {e.optionColor}
+                   </Typography>
+                 </td>
+                 <td >
+                   <Typography variant="small" color="blue-gray" className="font-normal">
+                     {e.amount}
+                   </Typography>
+                 </td>
+                 <td>
+                   <Typography variant="small" color="blue-gray" className="font-normal">
+                     {e.price}
+                   </Typography>
+                 </td>
+               </tr>
+             );
+           })}
+        </tbody>
 
-    )
+      </table>
+      
+    </Card>
+    </div>
+  )}
+ </>
+  )
+
 }
