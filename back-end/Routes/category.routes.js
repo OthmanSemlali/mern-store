@@ -9,6 +9,8 @@ const router = express.Router();
 const Category = new CategoryController();
 
 router.get('/', Category.fetchCategories);
+router.get('/fetchPaginatedCategories', Category.fetchPaginatedCategories);
+
 
 router.post('/create', [
     body('name').notEmpty().withMessage('Name is required').isLength({ min: 3 }).withMessage('Name must be at least 3 characters long').escape(),

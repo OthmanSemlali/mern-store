@@ -1,17 +1,18 @@
+import { toast } from "react-toastify";
 import { loadUsersBegin, loadUsersError, loadUsersSuccess } from "./customerContext";
 
-export const fetchUsersService = async (dispatch, page = 1, handelSearch, filters) => {
+export const fetchUsersService = async (dispatch, page = 1, type, searchQuery) => {
   
     loadUsersBegin(dispatch)
       try {
         const queryParams = new URLSearchParams({
           page: page.toString(),
           pageSize: 6,
-          name : handelSearch,
-          ...filters,
+          searchQuery,
+          type,
         }).toString();
   
-        // console.log('order queryParams**', queryParams);
+        console.log('order queryParams**', queryParams);
         const response = await fetch(
           `http://localhost:3000/api/users?${queryParams}`
         );
@@ -25,11 +26,13 @@ export const fetchUsersService = async (dispatch, page = 1, handelSearch, filter
         const data = await response.json();
         console.log('users success ', data)
 
-        loadUsersSuccess(dispatch, data.response)
+        loadUsersSuccess(dispatch, data)
         
       } catch (error) {
         console.log("Error: Something went wrong while fetching users", error);
         loadUsersError(dispatch)
+        toast.error('Something went wrong. Try later!')
+
 
       }
     }

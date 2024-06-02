@@ -75,35 +75,157 @@ const deleteSellerProfile = async (req, res) => {
 };
 
 
-const fetchPaginatedUsers = async (req, res) => {
-    const {
-      page = 1,
-      pageSize = 6,
-      name,
-    } = req.query;
-    const search = {}
-    if(name){
-      search.firstName ={
-        $regex : name,
-        $options : "i",
-      }
-    }
-    try {
+// const fetchPaginatedUsers = async (req, res) => {
+//     const {
+//       page = 1,
+//       pageSize = 6,
+//       searchQuery,
+//       type
+  
+//     } = req.query;
+//     const search = {}
+//     if(searchQuery){
+//       search.firstName ={
+//         $regex : searchQuery,
+//         $options : "i",
+//       }
+//     }
+
+//     if(type){
+
+//     }
+
+    
+//     try {
       
-      const response = await User.fetchUsers(
-        parseInt(page),
-        parseInt(pageSize),
-        search
-      );
-      res.json({ response });
-    console.log('response :', response)
+//       const response = await User.fetchUsers(
+//         parseInt(page),
+//         parseInt(pageSize),
+//         search
+//       );
+//       res.json({ response });
+//     console.log('response :', response)
 
-    } catch (error) {
+//     } catch (error) {
 
-        res.status(500).json({ message: "Server Error" });
+//         res.status(500).json({ message: "Server Error" });
 
+//     }
+// }
+const fetchPaginatedUsers = async (req, res) => {
+  const {
+    page = 1,
+    pageSize = 6,
+    searchQuery,
+    type
+  } = req.query;
+
+  const search = {};
+  if (searchQuery && searchQuery != 'undefined') {
+    search.firstName = {
+      $regex: searchQuery,
+      $options: "i"
+    };
+  }
+
+  try {
+    let users = [];
+    let totalUsers = 0;
+
+    if (type === 'placedOrder') {
+      const aggregateQuery = [
+        {
+          $match: search
+        },
+        {
+          $lookup: {
+            from: "orders",
+            localField: "_id",
+            foreignField: "user.id",
+            as: "orders"
+          }
+        },
+        {
+          $match: {
+            "orders.0": { $exists: true }
+          }
+        }
+      ];
+
+      users = await User.aggregate([
+        ...aggregateQuery,
+        {
+          $skip: (page - 1) * pageSize
+        },
+        {
+          $limit: parseInt(pageSize)
+        }
+      ]);
+
+      const totalUsersResult = await User.aggregate([
+        ...aggregateQuery,
+        {
+          $count: "total"
+        }
+      ]);
+
+      totalUsers = totalUsersResult.length > 0 ? totalUsersResult[0].total : 0;
+
+    } else if (type === 'createdAccount') {
+      const aggregateQuery = [
+        {
+          $match: search
+        },
+        {
+          $lookup: {
+            from: "orders",
+            localField: "_id",
+            foreignField: "user.id",
+            as: "orders"
+          }
+        },
+        {
+          $match: {
+            "orders.0": { $exists: false }
+          }
+        }
+      ];
+
+      users = await User.aggregate([
+        ...aggregateQuery,
+        {
+          $skip: (page - 1) * pageSize
+        },
+        {
+          $limit: parseInt(pageSize)
+        }
+      ]);
+
+      const totalUsersResult = await User.aggregate([
+        ...aggregateQuery,
+        {
+          $count: "total"
+        }
+      ]);
+
+      totalUsers = totalUsersResult.length > 0 ? totalUsersResult[0].total : 0;
+
+    } else {
+      users = await User.find(search)
+        .skip((page - 1) * pageSize)
+        .limit(parseInt(pageSize));
+
+      totalUsers = await User.countDocuments(search);
     }
-}
+
+    res.json({ users, totalUsers });
+    console.log('response :', { users, totalUsers });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+    console.log(error);
+  }
+};
+
 
   const getThisWeekAndLastWeekUserCountComparison = async (req, res) => {
     try {

@@ -190,7 +190,7 @@ class ProductClass {
     const getProductsQquery = this.find(filters)
       .skip(skip)
       .limit(pageSize)
-      .select("slug name seodescription description image price stock")
+      .select("slug name options published description image price stock")
 
 
     const getCountQuery = this.countDocuments(filters)

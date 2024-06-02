@@ -40,6 +40,7 @@ import { CheckCircleIcon, ClockIcon,
   ChartBarIcon,
  } from "@heroicons/react/24/solid";
 import { useAuthenticationContext } from "@/context";
+import CardSkeletonLoader from "@/components/loaders/CardSkeletonLoader";
 
 export function Home({dashState}) {
 
@@ -55,12 +56,16 @@ export function Home({dashState}) {
 
   const {ordersByMonths, salesByMonths, todays_orders, todays_revenue, total_revenue, usersByDays, week_users} = dashState
 
+  console.log('todays_revenue', todays_revenue)
   const statisticsCardsData = [
     {
       color: "gray",
       icon: BanknotesIcon,
       title: "Today's Money",
       value: `${todays_revenue.revenue} DH`,
+      loading: todays_revenue.isLoading,
+
+      
       footer: {
         color: `${todays_revenue.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
         value: `${todays_revenue.comparison >= 0 ? '+' + todays_revenue.comparison : todays_revenue.comparison}%`,
@@ -72,6 +77,7 @@ export function Home({dashState}) {
       icon: UsersIcon,
       title: "This Week's Users",
       value: week_users.users,
+      loading:week_users.isLoading,
       footer: {
         color: `${week_users.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
         value: `${week_users.comparison >= 0 ? '+' + week_users.comparison : week_users.comparison}%`,
@@ -83,6 +89,8 @@ export function Home({dashState}) {
       icon: ShoppingCartIcon,
       title: "Today's Orders",
       value: todays_orders.orders,
+      loading:todays_orders.isLoading,
+
       footer: {
         color: `${todays_orders.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
         value: `${todays_orders.comparison >= 0 ? '+' + todays_orders.comparison : todays_orders.comparison}%`,
@@ -94,6 +102,8 @@ export function Home({dashState}) {
       icon: ChartBarIcon,
       title: "Sales",
       value: `${total_revenue.currentYearRevenue} DH`,
+      loading:total_revenue.isLoading,
+
       footer: {
         color:  `${total_revenue.comparison > 0 ? 'text-green-500' : 'text-red-500'}`,
         value: `${total_revenue.comparison >= 0 ? '+' + total_revenue.comparison : total_revenue.comparison} %`,
@@ -112,7 +122,9 @@ export function Home({dashState}) {
     <div className="mt-12">
       <div className="grid mb-12 gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
         
-        {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
+        {statisticsCardsData.map(({ icon, title,loading, footer, ...rest }) => (
+
+
           <StatisticsCard
             key={title}
             {...rest}
@@ -120,6 +132,7 @@ export function Home({dashState}) {
             icon={React.createElement(icon, {
               className: "w-6 h-6 text-white",
             })}
+            loading={loading}
             footer={
               <Typography className="font-normal text-blue-gray-600">
                 <strong className={footer.color}>{footer.value}</strong>

@@ -76,13 +76,13 @@ export function Dashboard() {
         <Configurator />
         <Routes>
 
-          <Route exact path="/home" element={<Home dashState={dashState} />} />
+          <Route exact path="/" element={<Home dashState={dashState} />} />
           <Route exact path="/products" element={<Tables setFilter={setFilter} />} />
-          <Route exact path="/products/:id/edit" element={<EditProduct   />}  />
+          <Route exact path="/products/edit/:id" element={<EditProduct   />}  />
           <Route exact path="/products/add" element={<AddProduct />}  />
-          <Route exact path="/categories" element={<Categories/>} />
-          <Route exact path="/customers" element={<Customers/>} />
-          <Route exact path="/orders" element={<Orders/>} />
+          <Route exact path="/categories" element={<Categories setFilter={setFilter}/>} />
+          <Route exact path="/customers" element={<Customers setFilter={setFilter}/>} />
+          <Route exact path="/orders" element={<Orders setFilter={setFilter}/>} />
           {/* {routes.map(
             ({ layout, pages }) =>
               layout === "dashboard" &&

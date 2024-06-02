@@ -16,7 +16,7 @@ export function reducer(state, action) {
 
     case 'LOAD_USERS_SUCCESS':
 
-    // console.log('action.value', action.value)
+    console.log('action.valuekkkkk', action.value)
     const {users, totalUsers} = action.value
       return {
         ...state,

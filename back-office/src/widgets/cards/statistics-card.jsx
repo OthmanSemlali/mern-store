@@ -1,3 +1,4 @@
+import CardSkeletonLoader from "@/components/loaders/CardSkeletonLoader";
 import {
   Card,
   CardHeader,
@@ -7,15 +8,24 @@ import {
 } from "@material-tailwind/react";
 import PropTypes from "prop-types";
 
-export function StatisticsCard({ color, icon, title, value, footer }) {
+export function StatisticsCard({ color, icon, title,loading, value, footer }) {
+
+
+
+  if(loading){
+    return <CardSkeletonLoader />
+  }
+  
   return (
-    <Card className="border border-blue-gray-100 shadow-sm">
+
+   
+    <Card className="border shadow-sm border-blue-gray-100">
       <CardHeader
         variant="gradient"
         color={color}
         floated={false}
         shadow={false}
-        className="absolute grid h-12 w-12 place-items-center"
+        className="absolute grid w-12 h-12 place-items-center"
       >
         {icon}
       </CardHeader>
@@ -28,7 +38,7 @@ export function StatisticsCard({ color, icon, title, value, footer }) {
         </Typography>
       </CardBody>
       {footer && (
-        <CardFooter className="border-t border-blue-gray-50 p-4">
+        <CardFooter className="p-4 border-t border-blue-gray-50">
           {footer}
         </CardFooter>
       )}
