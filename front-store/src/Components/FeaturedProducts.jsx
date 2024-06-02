@@ -48,7 +48,7 @@ const FeaturedProducts = () => {
       <div className="title">
         <h2>featured products</h2>
         <div className="underline"></div>
-        <p>
+        <p className="p">
           Explore our exclusive range of top-rated products handpicked just for
           you.
         </p>
@@ -90,10 +90,12 @@ const Wrapper = styled.section`
       margin: 0 auto;
       margin-bottom: 2rem;
     }
-  .underline p {
-    font-size: 1.2rem;
-    color: #666;
-    margin-bottom: 1.5rem;
+  .p {
+   
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+  
   }
 
   .featured-btn {

@@ -16,7 +16,7 @@ const Hero = () => {
         showArrows={false}
         showIndicators={false}
         interval={5000}
-        cssEase="linear"
+        // cssEase="linear"
         className="carousel"
         renderArrowPrev={(onClickHandler, hasPrev, label) =>
           hasPrev && (
@@ -69,6 +69,30 @@ const Hero = () => {
           <img
             src="https://www.mainzu.com/src/image/slider_home/grd/TERRA-MOKA-SAJONIA-MAINZU.jpg"
             alt="Background 4"
+          />
+        </div>
+        <div>
+          <img
+            src="https://www.mainzu.com/src/image/slider_home/grd/SHOJI-VILLAGE-MAINZU.jpg"
+            alt="Background 5"
+          />
+        </div>
+        <div>
+          <img
+            src="https://www.mainzu.com/src/image/slider_home/grd/COTTO-TEGUISE-MAINZU.jpg"
+            alt="Background 6"
+          />
+        </div>
+        <div>
+          <img
+            src="https://www.mainzu.com/src/image/slider_home/grd/ALPES-MAINZU.jpg"
+            alt="Background 7"
+          />
+        </div>
+        <div>
+          <img
+            src="https://www.mainzu.com/src/image/slider_home/grd/GREEN-HANOI-MAINZU.jpg"
+            alt="Background 8"
           />
         </div>
       </Carousel>
