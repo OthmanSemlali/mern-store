@@ -6,17 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { openSideBar } from "../features/themeSlice";
 import { FaBars } from "react-icons/fa";
 import CartButtons from "./CartButtons";
-
+import Logo from "./images/Logo.svg";
 const Nav = () => {
   const dispatch = useDispatch();
   return (
     <NavContainer>
       <div className="nav-center">
         <div className="nav-header">
-          {/* <img src={logo} alt={brand_name} /> */}
-          <ul className="nav-links">
+          <img src={Logo} />
+          {/* <ul className="nav-links">
             <li style={{ color: "var(--clr-primary-5)" }}>{brand_name}</li>
-          </ul>
+          </ul> */}
 
           <button
             type="button"
@@ -51,7 +51,7 @@ const NavContainer = styled.nav`
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
- 
+
   .nav-center {
     width: 90vw;
     margin: 0 auto;
@@ -61,10 +61,11 @@ const NavContainer = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    img {
-      width: 175px;
-      margin-left: -15px;
-    }
+  }
+  .nav-header img {
+    max-width: 100%;
+    height: auto;
+    max-height: 150px; /* Adjust the max height as needed */
   }
   .nav-toggle {
     background: transparent;

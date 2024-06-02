@@ -6,7 +6,7 @@ import styled from "styled-components";
 function Categories() {
   const [categories, setCategories] = useState([]);
   const defaultImage =
-    "https://aitmanos.com/cdn/shop/collections/design_1b9a7efd-83d4-41ee-8df9-7a52f9a12e05_600x.jpg?v=1630656179";
+    "https://www.marazzitile.co.uk/app/uploads/2023/10/Marazzi_Contract_Home.jpg";
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,7 +54,7 @@ function Categories() {
 }
 
 const Wrapper = styled.section`
-  padding: 2rem 0;
+  padding: 5rem 0;
   background: #f7f7f7;
 
   .title {
@@ -62,7 +62,7 @@ const Wrapper = styled.section`
     margin-bottom: 2rem;
 
     h2 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-bottom: 1rem;
       color: #333;
     }
@@ -91,7 +91,7 @@ const Wrapper = styled.section`
 
 const CategoryCard = styled.div`
   background: white;
-  border-radius: 8px;
+  border-radius: 0.25rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   text-align: center;
@@ -104,9 +104,9 @@ const CategoryCard = styled.div`
   }
 
   img {
-    width: 100%;
-    // height: 0;
-    // padding-bottom: 100%; /* Creates a square aspect ratio */
+    width: 80%; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin: 1rem 0; /* Add margin to create space around the image */
     object-fit: cover;
   }
 
