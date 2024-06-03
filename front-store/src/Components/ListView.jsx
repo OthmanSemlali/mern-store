@@ -7,7 +7,8 @@ const ListView = ({ products }) => {
   return (
     <Wrapper>
       {products.map((product) => {
-        const { id, image, name,slug, price, seodescription, description } = product;
+        const { id, image, name, slug, price, seodescription, description } =
+          product;
 
         return (
           <article key={id}>
@@ -16,9 +17,9 @@ const ListView = ({ products }) => {
             <div>
               <h4>{name} </h4>
               <h5 className="price">{formatPrice(parseInt(price))} </h5>
-              <p>{description.substring(0,220)}... </p>
+              <p>{description.substring(0, 220)}... </p>
               {/* <p>{description.length}... </p> */}
-              <Link to={`/products/${slug}`} className='btn'>
+              <Link to={`/products/${slug}`} className="btn">
                 Details
               </Link>
             </div>
@@ -46,7 +47,7 @@ const Wrapper = styled.section`
     margin-bottom: 0.5rem;
   }
   .price {
-    color: var(--clr-primary-6);
+    color: var(--clr-primary-5);
     margin-bottom: 0.75rem;
   }
   p {
@@ -54,8 +55,8 @@ const Wrapper = styled.section`
     margin-bottom: 1rem;
   }
   .btn {
-    font-size: 0.5rem;
-    padding: 0.25rem 0.5rem;
+    // font-size: 0.5rem;
+    // padding: 0.25rem 0.5rem;
   }
   @media (min-width: 992px) {
     article {
@@ -65,10 +66,9 @@ const Wrapper = styled.section`
       // align-items: center;
     }
   }
-  @media (max-width:450px){
-    img{
-    width: 100%;
-
+  @media (max-width: 450px) {
+    img {
+      width: 100%;
     }
   }
 `;

@@ -63,9 +63,9 @@ function Login() {
       <div className="inner">
         <div className="image-holder">
           <img
-            src="https://img.freepik.com/free-vector/hand-drawn-persian-carpet-pattern_23-2150305718.jpg?w=740&t=st=1714928737~exp=1714929337~hmac=3d817f2e8144db5021f7c764bcc6d42cd89fff0d5e0e935be5ee9dfa00bae81d"
-            // src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/%D9%86%D8%B8%D8%B1%D8%A9_%D9%85%D9%82%D8%B1%D8%A8%D8%A9_%D9%84%D9%84%D8%B2%D9%84%D9%8A%D8%AC_%D9%81%D9%8A_%D9%85%D8%AF%D8%B1%D8%B3%D8%A9_%D8%A7%D8%A8%D9%86_%D9%8A%D9%88%D8%B3%D9%81.jpeg/330px-%D9%86%D8%B8%D8%B1%D8%A9_%D9%85%D9%82%D8%B1%D8%A8%D8%A9_%D9%84%D9%84%D8%B2%D9%84%D9%8A%D8%AC_%D9%81%D9%8A_%D9%85%D8%AF%D8%B1%D8%B3%D8%A9_%D8%A7%D8%A8%D9%86_%D9%8A%D9%88%D8%B3%D9%81.jpeg"
-            alt=""
+            src="https://www.cementocollection.com/cdn/shop/files/868-Pretoria.png?v=1689947804"
+            // src="
+            https:alt="" //upload.wikimedia.org/wikipedia/commons/thumb/3/35/%D9%86%D8%B8%D8%B1%D8%A9_%D9%85%D9%82%D8%B1%D8%A8%D8%A9_%D9%84%D9%84%D8%B2%D9%84%D9%8A%D8%AC_%D9%81%D9%8A_%D9%85%D8%AF%D8%B1%D8%B3%D8%A9_%D8%A7%D8%A8%D9%86_%D9%8A%D9%88%D8%B3%D9%81.jpeg/330px-%D9%86%D8%B8%D8%B1%D8%A9_%D9%85%D9%82%D8%B1%D8%A8%D8%A9_%D9%84%D9%84%D8%B2%D9%84%D9%8A%D8%AC_%D9%81%D9%8A_%D9%85%D8%AF%D8%B1%D8%B3%D8%A9_%D8%A7%D8%A8%D9%86_%D9%8A%D9%88%D8%B3%D9%81.jpeg"
           />
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>

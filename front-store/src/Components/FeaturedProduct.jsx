@@ -14,27 +14,41 @@ const Product = ({ slug, image, name, price, id }) => {
       </div>
       <footer>
         <h5>{name}</h5>
-
         <p>{formatPrice(price)}</p>
       </footer>
     </Wrapper>
   );
 };
-export default Product;
 
 const Wrapper = styled.article`
+  background: var(--clr-white);
+  border: 1px solid var(--clr-grey-9);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
   .container {
     position: relative;
-    // background-color: #222;
-    border-radius: var(--radius);
+    background: var(--clr-grey-10);
+    border-bottom: 1px solid var(--clr-grey-9);
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+    padding: 1rem; /* Adjust the padding as needed */
   }
+
   img {
     width: 100%;
     display: block;
     object-fit: cover;
-    border-radius: var(--radius);
     transition: var(--transition);
   }
+
   .link {
     position: absolute;
     top: 50%;
@@ -50,32 +64,46 @@ const Wrapper = styled.article`
     transition: var(--transition);
     opacity: 0;
     cursor: pointer;
+
     svg {
       font-size: 1.25rem;
       color: var(--clr-white);
     }
   }
+
   .container:hover img {
     opacity: 0.5;
   }
+
   .container:hover .link {
     opacity: 1;
   }
+
   footer {
-    margin-top: 1rem;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  footer h5,
-  footer p {
-    margin-bottom: 0;
-    font-weight: 400;
-  }
+    background: var(--clr-grey-10);
+    border-radius: 0 0 var(--radius) var(--radius);
 
-  footer p {
-    color: var(--clr-primary-5);
-    letter-spacing: var(--spacing);
+    h5,
+    p {
+      margin-bottom: 0;
+      font-weight: 400;
+    }
+
+    h5 {
+      font-size: 1rem;
+      color: var(--clr-grey-1);
+    }
+
+    p {
+      color: var(--clr-primary-5);
+      letter-spacing: var(--spacing);
+      font-size: 1rem;
+    }
   }
 `;
-// export default Product
+
+export default Product;

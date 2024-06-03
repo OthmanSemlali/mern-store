@@ -58,9 +58,6 @@ const Wrapper = styled.section`
   background: #f7f7f7;
 
   .title {
-    text-align: center;
-    margin-bottom: 2rem;
-
     h2 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
@@ -71,14 +68,6 @@ const Wrapper = styled.section`
       font-size: 1.2rem;
       color: #666;
       margin-bottom: 1.5rem;
-    }
-
-    .underline {
-      width: 6rem;
-      height: 0.25rem;
-      background: #333;
-      margin: 0 auto;
-      margin-bottom: 2rem;
     }
   }
 
@@ -105,10 +94,11 @@ const CategoryCard = styled.div`
 
   img {
     width: 80%; /* Adjust the width as needed */
-    height: auto; /* Maintain aspect ratio */
+    height: 200px; /* Maintain aspect ratio */
     margin: 1rem 0; /* Add margin to create space around the image */
     object-fit: cover;
   }
+
 
   h3 {
     margin: 1rem 0;

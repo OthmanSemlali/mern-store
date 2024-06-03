@@ -9,9 +9,9 @@ function AddToCartBtn({ id, optionColor, amount, product }) {
   const dispatch = useDispatch();
   //   const { addToCart,cart_loader,cart_alert,cart_alert_type } = useCartContext();
   const { cart } = useSelector((store) => store.cart);
-//   const { selected_option_with_images } = useSelector((store) => store.product);
+  //   const { selected_option_with_images } = useSelector((store) => store.product);
 
-//   const {color} = selected_option_with_images
+  //   const {color} = selected_option_with_images
   useEffect(() => {
     console.log("--localstorage--");
     localStorage.setItem("cart", JSON.stringify(cart));
@@ -19,15 +19,14 @@ function AddToCartBtn({ id, optionColor, amount, product }) {
   }, [cart]);
 
   const addProductToCart = () => {
-    dispatch(addToCart({ id, optionColor, amount, product }))
+    dispatch(addToCart({ id, optionColor, amount, product }));
     // dispatch(countCartTotals())
-    dispatch(countCartTotals())
-
-  }
+    dispatch(countCartTotals());
+  };
   return (
     <button
       //   to="/cart"
-      className=""
+      className="btn"
       //   onClick={()=> addToCart(id, mainColor, amount, product)}
       onClick={addProductToCart}
     >

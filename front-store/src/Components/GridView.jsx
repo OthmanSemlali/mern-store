@@ -3,7 +3,7 @@ import Product from "./Product";
 const GridView = ({ products }) => {
   return (
     <Wrapper>
-      <div className="products-container">
+      <div className="products-container product">
         {products.map((product) => {
           return <Product key={product.id} {...product} />;
         })}
@@ -13,28 +13,21 @@ const GridView = ({ products }) => {
 };
 
 const Wrapper = styled.section`
-
   .products-container {
-
     display: grid;
     gap: 2rem 1.5rem;
-  
-
   }
   img {
     // height: 175px;
     height: 300px;
     // width: 300px;
-
   }
- 
+
   @media (min-width: 930px) {
-    
     img {
       // height: 175px;
       height: 250px;
       // width: 300px;
-
     }
     .products-container {
       grid-template-columns: repeat(2, 1fr);
@@ -46,7 +39,6 @@ const Wrapper = styled.section`
     .products-container {
       grid-template-columns: repeat(3, 1fr);
       // background-color:aqua
-
     }
 
     img {
@@ -56,24 +48,19 @@ const Wrapper = styled.section`
   }
 
   @media (max-width: 766px) and (min-width: 645px) {
-
     .products-container {
       grid-template-columns: repeat(2, 1fr);
       // background-color:aqua
-
     }
   }
-
 
   @media (max-width: 450px) {
     img {
       width: 100%;
-      height:200px
+      height: 200px;
     }
     .products-container {
- 
       // background-color:black
-
     }
   }
 `;

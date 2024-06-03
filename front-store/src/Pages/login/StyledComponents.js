@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const AuthWrapper = styled.section`
-background-color: var(--clr-primary-9);
+background-color: #E0DCD4;
   color: #333;
   font-size: 13px;
   margin: 0;

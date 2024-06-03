@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openSideBar } from "../features/themeSlice";
 import { FaBars } from "react-icons/fa";
 import CartButtons from "./CartButtons";
-import Logo from "./images/Logo.svg";
+import Logo from "./images/LogoBlack.svg";
 const Nav = () => {
   const dispatch = useDispatch();
   return (
@@ -65,7 +65,7 @@ const NavContainer = styled.nav`
   .nav-header img {
     max-width: 100%;
     height: auto;
-    max-height: 150px; /* Adjust the max height as needed */
+    max-height: 50px; /* Adjust the max height as needed */
   }
   .nav-toggle {
     background: transparent;

@@ -16,22 +16,22 @@ const PageHero = ({title,product}) => {
 }
 
 const Wrapper = styled.section`
-  background: var(--clr-primary-10);
+  background: #e0dcd4;
   width: 100%;
   min-height: 10vh;
-  height:10vh;
+  height: 10vh;
   display: flex;
   align-items: center;
 
   color: var(--clr-primary-1);
   a {
-    color: var(--clr-primary-3);
+    color: var(--clr-primary-5);
     padding: 0.5rem;
     transition: var(--transition);
   }
   a:hover {
     color: var(--clr-primary-1);
   }
-`
+`;
 
 export default PageHero

@@ -27,22 +27,22 @@ const InfoText = styled.p`
 `;
 
 const Header = () => {
-  return (
-    <HeaderContainer>
-      <InfoItem>
-        <FaTruck />
-        <InfoText>Free Shipping</InfoText>
-      </InfoItem>
-      <InfoItem>
-        <FaCreditCard />
-        <InfoText>Payment Methods</InfoText>
-      </InfoItem>
-      <InfoItem>
-        <FaPhone />
-        <InfoText>Call us 951-999-9999</InfoText>
-      </InfoItem>
-    </HeaderContainer>
-  );
+ return (
+   <HeaderContainer>
+     <InfoItem>
+       <FaTruck />
+       <InfoText>Fast Delivery</InfoText>
+     </InfoItem>
+     <InfoItem>
+       <FaCreditCard />
+       <InfoText>Secured Payment</InfoText>
+     </InfoItem>
+     <InfoItem>
+       <FaPhone />
+       <InfoText>Call us +212-600-000000</InfoText>
+     </InfoItem>
+   </HeaderContainer>
+ );
 };
 
 export default Header;
