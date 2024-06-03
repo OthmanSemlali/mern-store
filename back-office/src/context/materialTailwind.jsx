@@ -13,6 +13,7 @@ export function reducer(state, action) {
       return { ...state, sidenavType: action.value };
     }
     case "SIDENAV_COLOR": {
+      console.log('action.value', action.value)
       return { ...state, sidenavColor: action.value };
     }
     case "TRANSPARENT_NAVBAR": {
@@ -35,7 +36,6 @@ export function MaterialTailwindControllerProvider({ children }) {
     openSidenav: false,
     sidenavColor: "dark",
     sidenavType: "white",
-    transparentNavbar: true,
     fixedNavbar: false,
     openConfigurator: false,
   };
