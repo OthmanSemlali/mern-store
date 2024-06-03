@@ -72,6 +72,7 @@ const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
             <h5>category</h5>
             <div>
               {categories.map((cat, index) => {
+                console.log('cat', cat)
                 return (
                   <button
                     key={index}

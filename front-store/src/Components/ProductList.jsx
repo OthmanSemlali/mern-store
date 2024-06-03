@@ -9,6 +9,7 @@ const ProductList = () => {
   const {products, products_loading, totaProducts} = useSelector((store) => store.product)
   const {productsView} = useSelector((store)=>store.theme)
 
+  console.log('products', products)
 //   if (loading && grid_view) {
 //     return <SkeletonGridView />;
 //   }
