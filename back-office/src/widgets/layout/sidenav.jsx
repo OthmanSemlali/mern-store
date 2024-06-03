@@ -24,17 +24,34 @@ export function Sidenav({ brandImg, brandName, routes }) {
         openSidenav ? "translate-x-0" : "-translate-x-80"
       } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100`}
     >
-      <div
-        className={`relative`}
-      >
-        <Link to="/" className="px-8 py-6 text-center">
+      <div className={`relative`}>
+        <Link to="/dashboard/" className="px-8 py-6 text-center">
           <Typography
             variant="h6"
             color={sidenavType === "dark" ? "white" : "blue-gray"}
           >
-            {brandName}
+            <div className="flex items-center justify-center">
+             {
+              sidenavType === 'dark' ? (
+                <img
+                src="/img/LogoWhite.svg"
+                height={130}
+                width={130}
+                alt="logo"
+              />
+              ) : (
+                <img
+                src="/img/LogoBlack.svg"
+                height={130}
+                width={130}
+                alt="logo"
+              />
+              )
+             }
+            </div>
           </Typography>
         </Link>
+
         <IconButton
           variant="text"
           color="white"

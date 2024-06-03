@@ -13,11 +13,9 @@ const Nav = () => {
     <NavContainer>
       <div className="nav-center">
         <div className="nav-header">
-          <img src={Logo} />
-          {/* <ul className="nav-links">
-            <li style={{ color: "var(--clr-primary-5)" }}>{brand_name}</li>
-          </ul> */}
-
+          <img src={Logo}   height={110}
+                width={110} />
+          
           <button
             type="button"
             className="nav-toggle"

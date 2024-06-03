@@ -6,6 +6,7 @@ import { brand_name, links } from "../Utils/constants";
 import CartButtons from "./CartButtons";
 import { FaTimes } from "react-icons/fa";
 
+import Logo from "./images/LogoBlack.svg";
 
 const Sidebar = () => {
 
@@ -23,8 +24,9 @@ const { isSideBarOpen } = useSelector(
     <SidebarContainer>
       <aside className={`${isSideBarOpen ? "sidebar show-sidebar" : "sidebar"}`}>
         <div className="sidebar-header">
-          {/* <img src={logo} className="logo" alt="Keep Reading" /> */}
-          <span style={{ color: 'var(--clr-primary-5)' }}>{brand_name}</span>
+        <img src={Logo}   height={110}
+                width={110} />
+          {/* <span style={{ color: 'var(--clr-primary-5)' }}>{brand_name}</span> */}
           <button className="close-btn" type="button" onClick={closeSideBatHundler}>
             <FaTimes />
             
