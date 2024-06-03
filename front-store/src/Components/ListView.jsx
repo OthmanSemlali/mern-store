@@ -7,12 +7,15 @@ const ListView = ({ products }) => {
   return (
     <Wrapper>
       {products.map((product) => {
-        const { id, image, name, slug, price, seodescription, description } =
-          product;
+        const { id, name, slug, price, options, description, published } = product;
+// console.log('published', published)
 
+if(published == false) {
+  return
+}
         return (
           <article key={id}>
-            <img src={image} alt={name} />
+            <img src={options[0]?.images[0]} alt={name} />
 
             <div>
               <h4>{name} </h4>

@@ -133,7 +133,7 @@ class ProductClass {
 
   static async getFeaturedProducts() {
     return await this.find({ featured: true })
-      .select("slug name price image")
+      .select("slug name price options")
       .exec();
   }
 
