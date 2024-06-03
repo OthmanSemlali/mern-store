@@ -7,7 +7,7 @@ const HomePage = () => {
       <Hero />
       <FeaturedProducts />
       <Categories />
-      <Services />
+      {/* <Services /> */}
     </main>
   );
 };

@@ -8,42 +8,38 @@ import { useDispatch, useSelector } from "react-redux";
 import { setGridView, setListView } from "../features/themeSlice";
 import { updateSort } from "../features/productSlice";
 const Sort = () => {
-const dispatch = useDispatch()
-    const {products_loading, totalProducts} = useSelector((store)=>store.product)
+  const dispatch = useDispatch();
+  const { products_loading, totalProducts } = useSelector(
+    (store) => store.product
+  );
 
-    const {productsView} = useSelector((store)=>store.theme)
-    console.log('productsView', productsView)
+  const { productsView } = useSelector((store) => store.theme);
+  console.log("productsView", productsView);
 
-    const updateSortHandler = ({target}) => {
-
-        console.log('target value: ',target.value);
-        dispatch(updateSort(target.value))
-    }
+  const updateSortHandler = ({ target }) => {
+    console.log("target value: ", target.value);
+    dispatch(updateSort(target.value));
+  };
 
   return (
     <Wrapper>
       <div className="buttons-container">
-   
         <button
-
           type="butotn"
-          onClick={()=>dispatch(setGridView())}
-          className={`${productsView == 'grid' ? "active" : null}`}
+          onClick={() => dispatch(setGridView())}
+          className={`${productsView == "grid" ? "active" : null}`}
         >
           <BsFillGridFill />
         </button>
         <button
           type="butotn"
-          onClick={()=>dispatch(setListView())}
-          className={`${productsView == 'list' ? "active" : null}`}
+          onClick={() => dispatch(setListView())}
+          className={`${productsView == "list" ? "active" : null}`}
         >
           <BsList />
         </button>
 
-
-        <button className="search-btn" 
- 
-        >
+        <button className="search-btn">
           Search <AiOutlineSearch />
         </button>
       </div>
@@ -63,10 +59,10 @@ const dispatch = useDispatch()
           className="sort-input"
           onChange={updateSortHandler}
         >
-          <option value="price-lowest" >price (lowest)</option>
+          <option value="price-lowest">price (lowest)</option>
           <option value="price-highest">price (highest)</option>
-          <option value="name-a" >name (a-z)</option>
-          <option value="name-z" >name (z-a)</option>
+          <option value="name-a">name (a-z)</option>
+          <option value="name-z">name (z-a)</option>
         </select>
       </form>
     </Wrapper>

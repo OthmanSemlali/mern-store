@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { PageHero } from "../Components";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -35,13 +36,15 @@ const MenuItem = styled.li`
     border-radius: 8px;
     padding: 16px;
     margin: 6px;
+    // color:hsl(162, 100%, 25%);
+    background-color: #e0dcd4;
 
-    &:first-child {
-      border-top: 1px solid black;
-    }
+    // &:first-child {
+    //   border-top: 1px solid black;
+    // }
 
     &.active {
-      background-color: #e5e7eb;
+      background-color: #efece6;
     }
   }
 `;
@@ -71,16 +74,16 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  padding: 8px 16px;
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  // padding: 8px 16px;
+  // background-color: #3b82f6;
+  // color: white;
+  // border: none;
+  // border-radius: 4px;
+  // cursor: pointer;
 
-  &:hover {
-    background-color: #2563eb;
-  }
+  // &:hover {
+  //   background-color: #2563eb;
+  // }
 `;
 
 const Card = styled.div`
@@ -162,40 +165,44 @@ const Account = () => {
   };
 
   return (
-    <Container>
-      <Title>Profile</Title>
-      <FlexContainer>
-        <Sidebar>
-          <MenuList>
-            <MenuItem>
-              <button
-                className={section === "details" ? "active" : ""}
-                onClick={() => setSection("details")}
-              >
-                Account Details
-              </button>
-            </MenuItem>
-            {/* <MenuItem>
+    <>
+      <PageHero title="profile" />
+      <Container>
+        {/* <Title>Profile</Title> */}
+
+        <FlexContainer>
+          <Sidebar>
+            <MenuList>
+              <MenuItem>
+                <button
+                  className={section === "details" ? "active" : ""}
+                  onClick={() => setSection("details")}
+                >
+                  Account Details
+                </button>
+              </MenuItem>
+              {/* <MenuItem>
               <button
                 className={section === "address" ? "active" : ""}
                 onClick={() => setSection("address")}
               >
-                Address
+                Address 
               </button>
             </MenuItem> */}
-            <MenuItem>
-              <button
-                className={section === "orders" ? "active" : ""}
-                onClick={() => setSection("orders")}
-              >
-                Orders
-              </button>
-            </MenuItem>
-          </MenuList>
-        </Sidebar>
-        <Content>{renderSection()}</Content>
-      </FlexContainer>
-    </Container>
+              <MenuItem>
+                <button
+                  className={section === "orders" ? "active" : ""}
+                  onClick={() => setSection("orders")}
+                >
+                  Orders
+                </button>
+              </MenuItem>
+            </MenuList>
+          </Sidebar>
+          <Content>{renderSection()}</Content>
+        </FlexContainer>
+      </Container>
+    </>
   );
 };
 
@@ -276,7 +283,9 @@ const AccountDetails = ({ user, setUser }) => {
             }
           />
         </div>
-        <Button type="submit">Save Changes</Button>
+        <Button className="btn" type="submit">
+          Save Changes
+        </Button>
       </Form>
     </div>
   );
@@ -363,7 +372,10 @@ const Orders = ({ user }) => {
             <p>Ordered on: {order.createdAt}</p>
             <p>Order Total: ${order.totalPrice}</p>
           </Info>
-          <Button onClick={() => cancelOrder(order.id, order.orderStatus)}>
+          <Button
+            className="btn"
+            onClick={() => cancelOrder(order.id, order.orderStatus)}
+          >
             Cancel Order
           </Button>
         </Card>

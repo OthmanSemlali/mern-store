@@ -10,6 +10,7 @@ import {
 import { IoMail } from "react-icons/io5";
 import { IoIosSend } from "react-icons/io";
 import { Link } from "react-router-dom";
+import Logo from "./images/LogoBlack.svg";
 
 const Footer = () => {
   return (
@@ -50,9 +51,10 @@ const Footer = () => {
           <div className="footer-content">
             <div className="footer-widget">
               <div className="footer-logo">
-                <a href="index.html">
-                  <h3>ZELLIJ Hub</h3>
-                </a>
+                <Link to="/">
+                  <img src={Logo} />
+                </Link>
+                {/* <h3>ZELLIJ Hub</h3> */}
               </div>
               <div className="footer-text">
                 <p>
@@ -167,7 +169,7 @@ const Wrapper = styled.footer`
 
   .single-cta i {
     font-size: 30px;
-    color: #ab7a5f;
+    color: #007f5f;
     margin-right: 15px;
   }
 
@@ -207,7 +209,9 @@ const Wrapper = styled.footer`
   }
 
   .footer-logo img {
-    max-width: 200px;
+    max-width: 100%;
+    height: auto;
+    max-height: 60px; /* Adjust the max height as needed */
   }
 
   .footer-text p {
@@ -267,7 +271,7 @@ const Wrapper = styled.footer`
     bottom: -15px;
     height: 2px;
     width: 50px;
-    background: #ab7a5f;
+    background: #007f5f;
   }
 
   .footer-widget ul li {
@@ -285,7 +289,7 @@ const Wrapper = styled.footer`
   }
 
   .footer-widget ul li a:hover {
-    color: #ab7a5f;
+    color: #007f5f;
   }
 
   //
@@ -303,9 +307,9 @@ const Wrapper = styled.footer`
   .subscribe-form button {
     position: absolute;
     right: 0;
-    background: #ab7a5f;
+    background: #007f5f;
     padding: 13px 20px;
-    border: 1px solid #ab7a5f;
+    border: 1px solid #007f5f;
     top: 0;
     height: 100%;
   }

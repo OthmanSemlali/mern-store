@@ -1,78 +1,10 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { MdNavigateNext } from "react-icons/md";
-import { GrPrevious } from "react-icons/gr";
+import bg1 from "./images/bg1.png";
 
 const Hero = () => {
   return (
-    <Wrapper className="section-center">
-      <Carousel
-        autoPlay
-        infiniteLoop
-        showThumbs={false}
-        showStatus={false}
-        showArrows={false}
-        showIndicators={false}
-        interval={5000}
-        cssEase="linear"
-        className="carousel"
-        renderArrowPrev={(onClickHandler, hasPrev, label) =>
-          hasPrev && (
-            <button
-              type="button"
-              onClick={onClickHandler}
-              title={label}
-              className="arrow-prev"
-            >
-              <span>
-                <GrPrevious />
-              </span>
-            </button>
-          )
-        }
-        renderArrowNext={(onClickHandler, hasNext, label) =>
-          hasNext && (
-            <button
-              type="button"
-              onClick={onClickHandler}
-              title={label}
-              className="arrow-next"
-            >
-              <span>
-                <MdNavigateNext />
-              </span>
-            </button>
-          )
-        }
-      >
-        <div>
-          <img
-            src="https://www.mainzu.com/src/image/slider_home/grd/BLEU-SUNSET-MAINZU.jpg"
-            alt="Background 1"
-          />
-        </div>
-        <div>
-          <img
-            src="https://www.mainzu.com/src/image/slider_home/grd/AQUAMARINE-LUGANO-MAINZU.jpg"
-            alt="Background 2"
-          />
-        </div>
-        <div>
-          <img
-            src="https://www.mainzu.com/src/image/slider_home/grd/CUERO-FONDANT-PISCINA-MAINZU.jpg"
-            alt="Background 3"
-          />
-        </div>
-        <div>
-          <img
-            src="https://www.mainzu.com/src/image/slider_home/grd/TERRA-MOKA-SAJONIA-MAINZU.jpg"
-            alt="Background 4"
-          />
-        </div>
-      </Carousel>
-
+    <Wrapper>
       <article className="content">
         <h3>Explore ZELIJ Home Decor</h3>
         <p>
@@ -89,27 +21,14 @@ const Hero = () => {
 };
 
 const Wrapper = styled.section`
-  width: 100vw; /* Take width of the full page */
+  width: 100vw;
   height: calc(100vh - 5rem);
   display: grid;
   place-items: center;
   position: relative;
   overflow: hidden;
-
-  .carousel {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-
-    .carousel .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
+  background: url("https://saharadesigns.com/cdn/shop/files/Eight_pointed_star_moroccan_mosaic_with_laces_for_kitchen_1400x.jpg?v=1701540046")
+    no-repeat center center/cover;
 
   .content {
     z-index: 1;
@@ -132,50 +51,28 @@ const Wrapper = styled.section`
     .hero-btn {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
+      background: var(--clr-primary-5);
+      color: var(--clr-white);
+      border: none;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s;
+      &:hover {
+        background: var(--clr-primary-7);
+      }
     }
   }
 
-  .arrow-prev,
-  .arrow-next {
-    // position: absolute;
-    // top: 50%;
-    // transform: translateY(-50%);
-    // background-color: rgba(0, 0, 0, 0.5);
-    // color: red;
-    // border: none;
-    // outline: none;
-    // cursor: pointer;
-    // padding: 1rem;
-    // font-size: 1.5rem;
-    // z-index: 10;
-    // // transition: background-color 0.3s;
-  }
+  @media (max-width: 991px) {
+    background: url(${bg1}) no-repeat center center/cover;
 
-  .arrow-prev {
-    left: 0;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-  }
-
-  .arrow-next {
-    right: 0;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-  }
-
-  .arrow-prev:hover,
-  .arrow-next:hover {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-
-  @media (min-width: 992px) {
     .content {
       h3 {
-        font-size: 3rem;
+        font-size: 2rem;
       }
 
       p {
-        font-size: 1.25rem;
+        font-size: 1rem;
       }
 
       .hero-btn {
