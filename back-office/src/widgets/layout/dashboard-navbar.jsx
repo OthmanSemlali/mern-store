@@ -35,11 +35,11 @@ export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
-  const [layout, page] = pathname.split("/").filter((el) => el !== "");
+  const [layout, page, secPage] = pathname.split("/").filter((el) => el !== "");
 
-
-  const [authState, authDispatch] = useAuthenticationContext()
-  const {authenticated} = authState;
+  console.log("secPage", secPage);
+  const [authState, authDispatch] = useAuthenticationContext();
+  const { authenticated } = authState;
   return (
     <Navbar
       color={fixedNavbar ? "white" : "transparent"}
@@ -51,10 +51,10 @@ export function DashboardNavbar() {
       fullWidth
       blurred={fixedNavbar}
     >
-      <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
+      <div className="flex flex-col-reverse items-center justify-between gap-6 md:flex-row md:items">
         <div className="capitalize">
-          <Breadcrumbs
-            className={`bg-transparent p-0 transition-all ${
+          <div
+            className={`flex bg-transparent p-0 transition-all ${
               fixedNavbar ? "mt-1" : ""
             }`}
           >
@@ -67,16 +67,37 @@ export function DashboardNavbar() {
                 {layout}
               </Typography>
             </Link>
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
-              {page}
-            </Typography>
-          </Breadcrumbs>
+
+            {page ? (
+              <>
+                <span className="ml-2 mr-2 text-black">/</span>
+
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal "
+                >
+                  <Link to={`${page}`}>{page}</Link>
+                </Typography>
+              </>
+            ) : null}
+
+            {secPage ? (
+              <>
+                <span className="ml-2 mr-2 text-black">/</span>
+
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal"
+                >
+                  {secPage}
+                </Typography>
+              </>
+            ) : null}
+          </div>
           {/* <Typography variant="h6" color="blue-gray">
-            {page}
+            {secPage}
           </Typography> */}
         </div>
         <div className="flex items-center">
@@ -91,21 +112,19 @@ export function DashboardNavbar() {
           >
             <Bars3Icon strokeWidth={3} className="w-6 h-6 text-blue-gray-500" />
           </IconButton>
-       
 
-{
-  authenticated &&  <Button
-  variant="text"
-  color="blue-gray"
-  className="items-center hidden gap-1 px-4 text-red-900 normal-case xl:flex"
-  onClick={() => logout(authDispatch)}
->
-{/* <ArrowRightStartOnRectangleIcon class="h-6 w-6 text-gray-500" /> */}
+          {authenticated && (
+            <Button
+              variant="text"
+              color="blue-gray"
+              className="items-center hidden gap-1 px-4 text-red-900 normal-case xl:flex"
+              onClick={() => logout(authDispatch)}
+            >
+              {/* <ArrowRightStartOnRectangleIcon class="h-6 w-6 text-gray-500" /> */}
+              Sign out
+            </Button>
+          )}
 
-  Sign out
-</Button>
-}
-       
           <Menu>
             <MenuHandler>
               <IconButton variant="text" color="blue-gray">

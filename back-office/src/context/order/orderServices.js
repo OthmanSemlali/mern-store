@@ -1,19 +1,20 @@
+import { toast } from "react-toastify";
 import { loadOrdersBegin, loadOrdersServerError, loadOrdersSuccess, updateOrderStatusBegin, updateOrderStatusError, updateOrderStatusSuccess,  } from "..";
 
  
-export const fetchOrdersService = async (dispatch, page = 1, filters,  handelInput,handelStatus,handelDate) => {
+export const fetchOrdersService = async (dispatch, page = 1, searchQuery,orderStatus,date) => {
   
-  console.log('handleInput service ', handelInput)
-  console.log('handleInput s ', handelStatus)
+  // console.log('handleInput service ', handelInput)
+  // console.log('handleInput s ', handelStatus)
     loadOrdersBegin(dispatch)
       try {
         const queryParams = new URLSearchParams({
           page: page.toString(),
           pageSize: 6,
-          firstName:handelInput,
-          status : handelStatus,
-          date : handelDate,
-          ...filters,
+          firstName:searchQuery,
+          status : orderStatus,
+          date,
+          // ...filters,
         }).toString();
   
         console.log('order queryParams**', queryParams);
@@ -34,6 +35,8 @@ export const fetchOrdersService = async (dispatch, page = 1, filters,  handelInp
       } catch (error) {
         console.log("Error: Something went wrong while fetching orders", error);
         loadOrdersServerError(dispatch)
+        toast.error('Something went wrong. Try later!')
+
       }
     }
 
@@ -62,9 +65,12 @@ export const updateOrderStatus = async (dispatch,oldStatusId, newStatus) => {
         const data = await response.json();
         console.log('update order success')
 
+        toast.success('order status updated')
+
         // updateOrderStatusSuccess(dispatch, data.response)
         
       } catch (error) {
+        toast.error('Something went wrong. Try later!')
         console.log("Error: Something went wrong while updating orders", error);
         // updateOrderStatusError(dispatch)
         console.log('update order error')

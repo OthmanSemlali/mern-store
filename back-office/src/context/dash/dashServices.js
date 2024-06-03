@@ -1,6 +1,12 @@
-import { loadCardTodaysOrdersSuccess, loadCardTodaysRevenueSuccess, loadCardTotalRevenueSuccess, loadCardWeekUsersSuccess, loadChartOrdersByMonth, loadChartSalesByMonth, loadChartUsersByDay } from "./dashContext";
+import { toast } from "react-toastify";
+import { loadCardTodaysOrders, loadCardTodaysOrdersSuccess, loadCardTodaysRevenue, loadCardTodaysRevenueSuccess, loadCardTotalRevenue, loadCardTotalRevenueSuccess, loadCardWeekUsers, loadCardWeekUsersSuccess, loadChartOrdersByMonth, loadChartSalesByMonth, loadChartUsersByDay } from "./dashContext";
 
 export const fetchCardsData = async (dispatch) => {
+
+  loadCardTodaysRevenue(dispatch)
+  loadCardTodaysOrders(dispatch)
+  loadCardWeekUsers(dispatch)
+  loadCardTotalRevenue(dispatch)
       try {
         const response = await fetch(
           `http://localhost:3000/api/orders/getTodayAndYesterdayRevenueComparison`
@@ -69,6 +75,8 @@ export const fetchCardsData = async (dispatch) => {
         
       } catch (error) {
         console.log("Error: Something went wrong while RevDay Card", error);
+        toast.error('Something went wrong while fetching Stats')
+
       }
     }
 
@@ -126,6 +134,8 @@ export const fetchCardsData = async (dispatch) => {
         
       } catch (error) {
         console.log("Error: Something went wrong while fetch chart data", error);
+        toast.error('Something went wrong while fetching Stats')
+
       }
     }
 
