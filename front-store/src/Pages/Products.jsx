@@ -26,7 +26,8 @@ function Products() {
   const { page } = parsed;
   const filters = useMemo(() => ({ ...parsed }), [parsed]);
 
-  const {category, style, tileUse, materials, maxPrice} = filters
+  const {category, style, tileUse, materials, maxPrice, searchQuery} = filters
+
 
   const handleDragEnd = useCallback(() => {
     console.log('end dragging');
@@ -51,7 +52,7 @@ function Products() {
 
     // window.scrollTo({ top: 100, behavior: "smooth" });
 
-  }, [dispatch, page, category, style, tileUse, materials, isDragging]);
+  }, [dispatch, page, category, style, tileUse, materials, isDragging, searchQuery]);
 
 
 

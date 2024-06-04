@@ -44,7 +44,7 @@ export const login = async ({ email, password }, dispatch, navigate) => {
                 sessionStorage.setItem("user", JSON.stringify(user));
     
                 setAuth(dispatch , user)
-                navigate('/dashboard')
+                navigate('/dashboard/')
             }
             if(error){
                 // console.log('validation ', error )
