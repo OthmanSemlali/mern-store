@@ -46,6 +46,7 @@ background-color: #E0DCD4;
     padding-top: 36px;
     padding-left: 45px;
     padding-right: 45px;
+    
   }
   .inner h5 {
     text-transform: uppercase;
@@ -131,7 +132,7 @@ background-color: #E0DCD4;
     align-items: center;
     justify-content: center;
     padding: 0;
-    background: #333;
+    background: #629871;
     font-size: 15px;
     color: #fff;
     vertical-align: middle;
@@ -180,7 +181,8 @@ background-color: #E0DCD4;
       display: block;
     }
     .inner .image-holder {
-      width: 100%;
+      // width: 100%;
+      display: none;
     }
     .inner form {
       width: 100%;

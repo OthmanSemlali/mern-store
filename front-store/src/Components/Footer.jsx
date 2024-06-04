@@ -57,7 +57,6 @@ const Footer = () => {
                   designers, and architects.
                 </p>
               </div>
-
             </div>
             <div className="footer-widget">
               <div className="footer-social-icon">
@@ -76,7 +75,7 @@ const Footer = () => {
                 <a href="#">
                   <FaGoogle />
                 </a>
-              </div> */}
+              </div>
             </div>
 
             <div className="footer-widget">
@@ -98,7 +97,6 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
-
           </div>
         </div>
       </section>
@@ -107,14 +105,12 @@ const Footer = () => {
 };
 
 const Wrapper = styled.footer`
-
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
   .footer-section {
-
     // background-size: cover;
     background: #f2eee6;
 
@@ -128,8 +124,7 @@ const Wrapper = styled.footer`
   }
 
   .footer-cta {
-
-    padding: 30px 0;
+    padding: 60px 0 30px 0;
 
     display: flex;
     justify-content: space-between;
@@ -356,7 +351,6 @@ const Wrapper = styled.footer`
     }
     .footer-text p {
       font-size: 13px;
-     
     }
   }
 `;
