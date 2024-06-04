@@ -7,17 +7,16 @@ import {
 } from "../features/filterSlice";
 import { useNavigate } from "react-router-dom";
 
-
 const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
   const dispatch = useDispatch();
-  console.log('filters---------', filters)
-  const naviate = useNavigate()
+  const navigate = useNavigate();
   const {
     distinctCategoriesWithPostsCount: categories,
     styles,
     materials,
     tileUse,
   } = useSelector((store) => store.filter);
+
   useEffect(() => {
     dispatch(getCategoriesWithProductsCounts());
     dispatch(getDistinctFilters());
@@ -27,150 +26,186 @@ const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
     setFilter(target.name, target.value);
   };
 
+  // const [openFilter, setOpenFilter] = useState(null);
+  // const toggleFilter = (filterName) => {
+  //   setOpenFilter((prevFilter) =>
+  //     prevFilter === filterName ? null : filterName
+  //   );
+  // };
 
-  // track size
-  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isPriceOpen, setIsPriceOpen] = useState(false);
+  const togglePrice = () => {
+    setIsPriceOpen(!isPriceOpen);
+  };
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(min-width: 768px)");
-    const handleMediaQueryChange = (event) => {
-      setIsSmallScreen(event.matches);
-    };
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const toggleCategory = () => {
+    setIsCategoryOpen(!isCategoryOpen);
+  };
 
-    // Add event listener to the media query
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
+  const [isStylesOpen, setIsStylesOpen] = useState(false);
+  const toggleStyles = () => {
+    setIsStylesOpen(!isStylesOpen);
+  };
 
-    // Check the initial value of the media query
-    setIsSmallScreen(mediaQuery.matches);
+  const [isMaterialsOpen, setIsMaterialsOpen] = useState(false);
+  const toggleMaterials = () => {
+    setIsMaterialsOpen(!isMaterialsOpen);
+  };
 
-    // Clean up by removing event listener
-    return () => {
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
-    };
-  }, []);
+  const [isTileUseOpen, setIsTileUseOpen] = useState(false);
+  const toggleTileUse = () => {
+    setIsTileUseOpen(!isTileUseOpen);
+  };
 
-  //   if (isSmallScreen && loading) {
-  //     return <Loading props="small-loading" />;
-  //   }
   return (
     <Wrapper>
-
       <div className="content">
         <form onSubmit={(e) => e.preventDefault()}>
-          <div className="form-control">
+          <FormControl>
             <input
               type="text"
-              name="text"
+              name="searchQuery"
+              onChange={updateFilters}
               placeholder="Search"
               className="search-input"
-        
             />
-          </div>
+          </FormControl>
 
-          {/* Categories  */}
-          <div className="form-control">
-            <h5>category</h5>
-            <div>
-              {categories.map((cat, index) => {
-                console.log('cat', cat)
-                return (
-                  <button
+          <FilterGroup>
+            <FilterTitle onClick={() => toggleCategory()}>
+              Category
+              <ArrowIcon isOpen={isCategoryOpen} />
+            </FilterTitle>
+            {isCategoryOpen && (
+              <FilterList>
+                {categories.map((cat, index) => (
+                  <FilterItem
                     key={index}
-                    onClick={updateFilters}
-                    name="category"
-                    value={cat.category}
-                    type="button"
-                    className={`${
-                      filters.category &&
+                    onClick={() => {
+                      setFilter("category", cat.category);
+                    }}
+                    className={
                       filters.category === cat.category.toLowerCase()
                         ? "active"
-                        : null
-                    }`}
+                        : ""
+                    }
                   >
                     {cat.category} ({cat.count})
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+                  </FilterItem>
+                ))}
+              </FilterList>
+            )}
+          </FilterGroup>
 
-          {/* Companies */}
+          <FilterGroup>
+            <FilterTitle onClick={() => toggleStyles()}>
+              Styles
+              <ArrowIcon isOpen={isStylesOpen} />
+            </FilterTitle>
+            {isStylesOpen && (
+              <FilterList>
+                {styles.map((style, index) => (
+                  <FilterItem
+                    key={index}
+                    onClick={() => {
+                      setFilter("style", style);
+                    }}
+                    className={
+                      filters.style === style.toLowerCase() ? "active" : ""
+                    }
+                  >
+                    {style}
+                  </FilterItem>
+                ))}
+              </FilterList>
+            )}
+          </FilterGroup>
 
-          <div className="form-control">
-            <h5>Styles</h5>
-            <form>
-              <select name="style" className="company" onChange={updateFilters} value={filters.style || ""}>
-                <option value={""} >select..</option>
-                {styles.map((s, index) => {
-                  return (
-                    <option key={index} value={s}>
-                      {s}
-                    </option>
-                  );
-                })}
-              </select>
-            </form>
-          </div>
+          <FilterGroup>
+            <FilterTitle onClick={() => toggleMaterials()}>
+              Materials
+              <ArrowIcon isOpen={isMaterialsOpen} />
+            </FilterTitle>
+            {isMaterialsOpen && (
+              <FilterList>
+                {materials.map((material, index) => (
+                  <FilterItem
+                    key={index}
+                    onClick={() => {
+                      setFilter("materials", material);
+                    }}
+                    className={
+                      filters.materials === material.toLowerCase()
+                        ? "active"
+                        : ""
+                    }
+                  >
+                    {material}
+                  </FilterItem>
+                ))}
+              </FilterList>
+            )}
+          </FilterGroup>
 
+          <FilterGroup>
+            <FilterTitle onClick={() => toggleTileUse()}>
+              Tile Use
+              <ArrowIcon isOpen={isTileUseOpen} />
+            </FilterTitle>
+            {isTileUseOpen && (
+              <FilterList>
+                {tileUse.map((use, index) => (
+                  <FilterItem
+                    key={index}
+                    onClick={() => {
+                      setFilter("tileUse", use);
+                    }}
+                    className={
+                      filters.tileUse === use.toLowerCase() ? "active" : ""
+                    }
+                  >
+                    {use}
+                  </FilterItem>
+                ))}
+              </FilterList>
+            )}
+          </FilterGroup>
 
-          <div className="form-control">
-            <h5>tile Use</h5>
-            <form>
-              <select name="tileUse" className="company" onChange={updateFilters} value={filters.tileUse || ""}>
-                <option value={''}>select..</option>
-                {tileUse.map((t, index) => {
-                  return (
-                    <option key={index} value={t}>
-                      {t}
-                    </option>
-                  );
-                })}
-              </select>
-            </form>
-          </div>
-
-
-
-
-          <div className="form-control">
-            <h5>Materials</h5>
-            <form>
-              <select name="materials" className="company" onChange={updateFilters} value={filters.materials || ""}>
-                <option value={''}>select..</option>
-                {materials.map((m, index) => {
-                  return (
-                    <option key={index} value={m}>
-                      {m}
-                    </option>
-                  );
-                })}
-              </select>
-            </form>
-          </div>
-         
-
-          <div className="form-control">
-            <h5>price</h5>
-            <p className="price">
-              {/* {formatPrice(price)} */}
-             </p>
-            <input
-              type="range"
-              name="maxPrice"
-              onChange={updateFilters}
-              onMouseUp={handleDragEnd}
-              onMouseDown={handleDragStart}
-              min='1'
-              max='1000'
-            />
-          </div>
+          <FilterGroup>
+            <FilterTitle onClick={() => togglePrice()}>
+              Price
+              <ArrowIcon isOpen={isPriceOpen} />
+            </FilterTitle>
+            {isPriceOpen && (
+              <FormControl>
+                <p className="price">{/* {formatPrice(price)} */}</p>
+                <input
+                  type="range"
+                  name="maxPrice"
+                  onChange={updateFilters}
+                  onMouseUp={handleDragEnd}
+                  onMouseDown={handleDragStart}
+                  min="1"
+                  max="1000"
+                />
+              </FormControl>
+            )}
+          </FilterGroup>
 
           <button
             type="button"
             className="clear-btn"
-               onClick={()=>naviate('/products')}
+            onClick={() => {
+              navigate("/products");
+              setIsCategoryOpen(false);
+              setIsStylesOpen(false);
+              setIsMaterialsOpen(false);
+              setIsPriceOpen(false);
+              setIsTileUseOpen(false);
+            }}
           >
-            clear filters
+            Clear Filters
           </button>
         </form>
       </div>
@@ -178,7 +213,27 @@ const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
   );
 };
 
+
 const Wrapper = styled.section`
+
+  @media (min-width: 768px) {
+    height: calc(100vh - 100px); /* Example height */
+    overflow-y: auto; /* Allow vertical scrolling */
+
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 100;
+    padding: 1rem;
+    transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+
+    /* Styling for when the component is sticky */
+    &.sticky {
+      background-color: rgba(255, 255, 255, 0.9); /* Reduce opacity */
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+    }
+  }
+
   .form-control {
     margin-bottom: 1.25rem;
     h5 {
@@ -187,13 +242,11 @@ const Wrapper = styled.section`
   }
   .search-input {
     padding: 0.5rem;
+    width:100%;
     background: var(--clr-grey-10);
     border-radius: var(--radius);
     border-color: transparent;
     letter-spacing: var(--spacing);
-  }
-  .search-input::placeholder {
-    text-transform: capitalize;
   }
 
   button {
@@ -211,91 +264,71 @@ const Wrapper = styled.section`
   .active {
     border-color: var(--clr-grey-5);
   }
-  .company {
-    background: var(--clr-grey-10);
-    border-radius: var(--radius);
-    border-color: transparent;
-    padding: 0.25rem;
-  }
-  .colors {
-    display: flex;
-    align-items: center;
-  }
-  .color-btn {
-    display: inline-block;
-    width: 1rem;
-    height: 1rem;
-    border-radius: 50%;
-    background: #222;
-    margin-right: 0.5rem;
-    border: none;
-    cursor: pointer;
-    opacity: 0.5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    svg {
-      font-size: 0.5rem;
-      color: var(--clr-white);
-    }
-  }
-  .all-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 0.5rem;
-    opacity: 0.5;
-  }
-  .active {
-    opacity: 1;
-  }
-  .all-btn .active {
-    text-decoration: underline;
-  }
-  .price {
-    margin-bottom: 0.25rem;
-  }
-  .shipping {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    text-transform: capitalize;
-    column-gap: 0.5rem;
-    font-size: 1rem;
-    max-width: 200px;
-  }
-  .clear-btn {
-    background: var(--clr-red-dark);
-    color: var(--clr-white);
-    padding: 0.25rem 0.5rem;
-    border-radius: var(--radius);
-  }
 
   @media (max-width: 768px) {
     .content {
       display: none;
     }
-
-    // .search-btn {
-    //   display: block;
-    //   position: fixed;
-    //   right: 0;
-    //   margin-right: 20px;
-    // }
-
-    // .sticky {
-    //   top: 0;
-    // }
   }
+`;
 
-  @media (min-width: 768px) {
-    .content {
-      position: sticky;
-      top: 1rem;
-    }
-    // .search-btn {
-    //   display: none;
-    // }
+const FormControl = styled.div`
+  margin-bottom: 1.25rem;
+  h5 {
+    margin-bottom: 0.5rem;
+  }
+`;
+
+const FilterGroup = styled.div`
+  margin-bottom: 1.25rem;
+
+`;
+
+const FilterTitle = styled.h5`
+  // Styles for the filter title component
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--clr-grey-10);
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--clr-grey-9);
+  }
+`;
+
+const ArrowIcon = styled.div`
+  // Styles for the arrow icon component
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: var(--clr-grey-6) transparent transparent transparent;
+  margin-left: 0.5rem;
+  transition: transform 0.3s ease;
+  transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0)")};
+`;
+
+const FilterList = styled.div`
+  margin-top: 0.5rem;
+`;
+
+const FilterItem = styled.button`
+  display: block;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--clr-grey-10);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  &:hover {
+    background-color: var(--clr-grey-9);
+  }
+  &.active {
+    background-color: var(--clr-grey-8);
   }
 `;
 

@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     isSideBarOpen: false,
-    productsView:'list'
+    productsView:'list',
+
 };
 const themeSlice = createSlice({
   name: "theme",

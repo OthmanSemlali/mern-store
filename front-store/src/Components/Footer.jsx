@@ -57,6 +57,7 @@ const Footer = () => {
                   designers, and architects.
                 </p>
               </div>
+
             </div>
             <div className="footer-widget">
               <div className="footer-social-icon">
@@ -65,6 +66,7 @@ const Footer = () => {
                     <span>Follow us</span>
                   </h3>
                 </div>
+
                 <a href="#">
                   <FaFacebookF />
                 </a>
@@ -74,7 +76,7 @@ const Footer = () => {
                 <a href="#">
                   <FaGoogle />
                 </a>
-              </div>
+              </div> */}
             </div>
 
             <div className="footer-widget">
@@ -96,6 +98,7 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
+
           </div>
         </div>
       </section>
@@ -104,16 +107,19 @@ const Footer = () => {
 };
 
 const Wrapper = styled.footer`
+
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
   .footer-section {
+
     // background-size: cover;
     background: #f2eee6;
+
     position: relative;
-    padding: 60px 0;
+    // padding: 60px 0;
   }
   .container {
     width: 90%;
@@ -122,7 +128,9 @@ const Wrapper = styled.footer`
   }
 
   .footer-cta {
+
     padding: 30px 0;
+
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -332,19 +340,23 @@ const Wrapper = styled.footer`
 
   @media (max-width: 480px) {
     .cta-text h4 {
-      font-size: 18px;
+      font-size: 15px;
     }
     .cta-text span {
-      font-size: 14px;
+      font-size: 13px;
     }
     .footer-widget ul li {
       width: 100%;
     }
     .footer-widget ul li a {
-      font-size: 14px;
+      font-size: 12px;
     }
     .footer-widget-heading h3 {
-      font-size: 18px;
+      font-size: 15px;
+    }
+    .footer-text p {
+      font-size: 13px;
+     
     }
   }
 `;

@@ -13,7 +13,7 @@ import {
 } from "@heroicons/react/24/solid";
 
 import { Home, Profile, Tables, Notifications, Orders, Categories, Customers } from "@/pages/dashboard";
-import { SignIn, SignUp } from "@/pages/auth";
+import { SignIn } from "@/pages/auth";
 import {NotFound} from "@/pages/Error";
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -98,19 +98,7 @@ export const authRoutes = [
         name: "sign in",
         path: "/sign-in",
         element: <SignIn />,
-      },
-      {
-        icon: <RectangleStackIcon {...icon} />,
-        name: "sign up",
-        path: "/sign-up",
-        element: <SignUp />,
-      },
-      // {
-      //   // icon: <RectangleStackIcon {...icon} />,
-      //   // name: "sign up",
-      //   path: "/success",
-      //   element: <AuthSuccess,
-      // },
+      }
     ],
   },
 ]

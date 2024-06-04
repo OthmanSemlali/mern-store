@@ -32,7 +32,7 @@ export const fetchPaginatedProducts = createAsyncThunk(
   async ({ page = 1, filters }, thunkAPI) => {
     console.log('page', page);
 
-    console.log('filters**', filters)
+    console.log('filters***************', filters)
     try {
       
       // console.log('fetch****');return
@@ -41,9 +41,10 @@ export const fetchPaginatedProducts = createAsyncThunk(
         page: page.toString(),
         pageSize: 6,
         ...filters,
+        reqFromFrontStore:true
       }).toString();
 
-      console.log('queryParams**', queryParams);
+      console.log('queryParams***********************', queryParams);
       const response = await fetch(
         `http://localhost:3000/api/products?${queryParams}`
       );
@@ -69,6 +70,7 @@ export const fetchProduct = createAsyncThunk(
 
     try {
   
+       
       const res = await axios(
         `${"http://localhost:3000"}/api/products/fetchSingleProductBySlug/${slug}`
       );

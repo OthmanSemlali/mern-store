@@ -57,24 +57,44 @@ const Wrapper = styled.section`
   padding: 5rem 0;
   background: #f7f7f7;
 
-  .title {
-    h2 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      color: #333;
-    }
+  h2 {
+    margin-bottom: 1rem;
+  }
+  .underline {
+    margin: 0 auto;
+    margin-bottom: 2rem;
+  }
+  .p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1.5rem;
 
-    p {
-      font-size: 1.2rem;
-      color: #666;
-      margin-bottom: 1.5rem;
-    }
   }
 
   .section-center {
     display: grid;
     gap: 2rem;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  
+  @media (max-width: 768px) {
+
+    .title{
+
+    }
+    h2 {
+      font-size: 1.5rem; /* Adjust font size for mobile size */
+    }
+
+    .underline {
+      margin-bottom: 1rem; /* Adjust margin for mobile size */
+    }
+
+    .p {
+      font-size: 1rem; /* Adjust font size for mobile size */
+      margin-bottom: 1rem; /* Adjust margin for mobile size */
+    }
   }
 `;
 

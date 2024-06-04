@@ -30,22 +30,32 @@ const Wrapper = styled.section`
   background: url("https://saharadesigns.com/cdn/shop/files/Eight_pointed_star_moroccan_mosaic_with_laces_for_kitchen_1400x.jpg?v=1701540046")
     no-repeat center center/cover;
 
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4); /* Overlay color */
+    }
   .content {
     z-index: 1;
     text-align: center;
     color: white;
 
     h3 {
-      font-size: 2rem;
+      font-size: 2rem; /* Increased font size for better visibility */
       margin-bottom: 1rem;
     }
-
+  
     p {
-      line-height: 2;
+      line-height: 2; /* Adjusted line height for better readability */
       max-width: 45em;
       margin: 0 auto 2rem auto;
       color: white;
-      font-size: 1rem;
+      opacity:.9;
+      font-size: 1.25rem; /* Increased font size for better visibility */
     }
 
     .hero-btn {
@@ -68,7 +78,7 @@ const Wrapper = styled.section`
 
     .content {
       h3 {
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
 
       p {
@@ -79,6 +89,8 @@ const Wrapper = styled.section`
         padding: 0.75rem 1.5rem;
         font-size: 1rem;
       }
+
+      width:90%;
     }
   }
 `;

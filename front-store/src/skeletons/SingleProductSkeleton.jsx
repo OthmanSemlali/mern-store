@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 import SkeletonElement from './SkeletonElement';
-function SingleProductSkeleton() {
+export function SingleProductSkeleton() {
   return (
     <div className="product-center">
             {/* Images */}

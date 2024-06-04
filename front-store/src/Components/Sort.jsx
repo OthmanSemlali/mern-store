@@ -21,6 +21,7 @@ const Sort = () => {
     dispatch(updateSort(target.value));
   };
 
+  
   return (
     <Wrapper>
       <div className="buttons-container">
@@ -70,6 +71,20 @@ const Sort = () => {
 };
 
 const Wrapper = styled.section`
+
+position: sticky;
+top: 0;
+background-color: white;
+z-index: 100;
+padding: 1rem;
+transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+
+/* Styling for when the component is sticky */
+&.sticky {
+  background-color: rgba(255, 255, 255, 0.9); /* Reduce opacity */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+}
+  
   display: grid;
   grid-template-columns: auto auto 1fr auto;
   align-items: center;
@@ -157,6 +172,8 @@ const Wrapper = styled.section`
     }
   }
   @media (max-width: 660px) {
+
+    
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 0.75rem;

@@ -73,9 +73,10 @@ class ProductController {
       style,
       tileUse,
       materials,
-      searchQuery
+      searchQuery,
+      reqFromFrontStore
     } = req.query;
-    console.log("req.query", req.query);
+    console.log("req.queryyyy", req.query);
 
     const filters = {};
 
@@ -109,6 +110,10 @@ class ProductController {
     if(searchQuery && searchQuery != 'undefined' ){
 
       filters.name = {$regex: searchQuery, $options: 'i'}
+    }
+
+    if(reqFromFrontStore){
+      filters.published = true
     }
     try {
       const response = await Product.fetchPaginatedProducts(
