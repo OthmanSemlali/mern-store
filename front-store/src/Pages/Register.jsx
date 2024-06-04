@@ -36,13 +36,11 @@ function Register() {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit =  ({ firstName, lastName, email, password }) => {
+  const onSubmit = ({ firstName, lastName, email, password }) => {
     console.log("onsubmit register", email, password);
     dispatch(
       registerUser({ firstName, lastName, email, password, role: "user" })
     );
-
-   
   };
   return (
     <AuthWrapper
@@ -114,7 +112,7 @@ function Register() {
             <spam>Already have an account ?</spam>
             <spam>
               <b>
-                <Link to="/login" style={{ color: "black" }}>
+                <Link to="/login" style={{ color: "#538a64" }}>
                   Log In
                 </Link>
               </b>

@@ -106,7 +106,7 @@ function Login() {
             <spam>Don't have an account ?</spam>
             <spam>
               <b>
-                <Link to="/register" style={{ color: "black" }}>
+                <Link to="/register" style={{ color: "#538a64" }}>
                   Register
                 </Link>
               </b>
