@@ -8,8 +8,6 @@ import {
   FaGoogle,
 } from "react-icons/fa";
 import { IoMail } from "react-icons/io5";
-import { IoIosSend } from "react-icons/io";
-import { Link } from "react-router-dom";
 import Logo from "./images/LogoBlack.svg";
 
 const Footer = () => {
@@ -18,8 +16,6 @@ const Footer = () => {
       <section className="footer-section">
         <div className="container">
           <div className="footer-cta">
-            {/* <h4>Contact Us</h4> */}
-
             <div className="single-cta">
               <i>
                 <FaMapMarkerAlt />
@@ -51,10 +47,7 @@ const Footer = () => {
           <div className="footer-content">
             <div className="footer-widget">
               <div className="footer-logo">
-                <Link to="/">
-                  <img src={Logo} />
-                </Link>
-                {/* <h3>ZELLIJ Hub</h3> */}
+                <img src={Logo} alt="ZELLIJ Hub" />
               </div>
               <div className="footer-text">
                 <p>
@@ -64,64 +57,44 @@ const Footer = () => {
                   designers, and architects.
                 </p>
               </div>
+            </div>
+            <div className="footer-widget">
               <div className="footer-social-icon">
-                <span>Follow us</span>
+                <div className="footer-widget-heading">
+                  <h3>
+                    <span>Follow us</span>
+                  </h3>
+                </div>
                 <a href="#">
-                  <i className="fab ">
-                    <FaFacebookF />
-                  </i>
+                  <FaFacebookF />
                 </a>
                 <a href="#">
-                  <i className="fab ">
-                    <FaInstagram />
-                  </i>
+                  <FaInstagram />
                 </a>
                 <a href="#">
-                  <i className="fab ">
-                    <FaGoogle />
-                  </i>
+                  <FaGoogle />
                 </a>
               </div>
             </div>
+
             <div className="footer-widget">
               <div className="footer-widget-heading">
                 <h3>Useful Links</h3>
               </div>
               <ul>
                 <li>
-                  <Link to="/">Home</Link>
+                  <a href="/">Home</a>
                 </li>
                 <li>
-                  <Link to="/products">Products</Link>
+                  <a href="/products">Products</a>
                 </li>
                 <li>
-                  <Link to="/about">About Us</Link>
+                  <a href="/about">About Us</a>
                 </li>
                 <li>
-                  <Link to="/cart">Cart</Link>
+                  <a href="/cart">Cart</a>
                 </li>
               </ul>
-            </div>
-            <div className="footer-widget">
-              <div className="footer-widget-heading">
-                <h3>Subscribe</h3>
-              </div>
-              <div className="footer-text">
-                <p>
-                  Don’t miss to subscribe to our new feeds, kindly fill the form
-                  below.
-                </p>
-              </div>
-              <div className="subscribe-form">
-                <form action="#">
-                  <input type="text" placeholder="Email Address" />
-                  <button>
-                    <i className="fab">
-                      <IoIosSend />
-                    </i>
-                  </button>
-                </form>
-              </div>
             </div>
           </div>
         </div>
@@ -131,17 +104,14 @@ const Footer = () => {
 };
 
 const Wrapper = styled.footer`
-  z-index: -110;
-
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  ² .footer-section {
-    // background-image: url("");
+  .footer-section {
     // background-size: cover;
-    background: #ffffff;
+    background: #f2eee6;
     position: relative;
     padding: 60px 0;
   }
@@ -152,7 +122,7 @@ const Wrapper = styled.footer`
   }
 
   .footer-cta {
-    padding: 180px 0 30px 0;
+    padding: 30px 0;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -199,9 +169,10 @@ const Wrapper = styled.footer`
   }
 
   .footer-widget {
-    flex: 1 1 30%;
+    // flex: 1 1 30%;
     max-width: 30%;
-    // margin-bottom: 50px;
+    margin-bottom: 10px;
+    align-self: flex-start;
   }
 
   .footer-logo {
@@ -232,7 +203,7 @@ const Wrapper = styled.footer`
 
   .footer-social-icon a {
     margin-right: 15px;
-    font-size: 16px;
+    font-size: 25px;
     color: black;
   }
 
