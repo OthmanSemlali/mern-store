@@ -83,12 +83,18 @@ const FeaturedProducts = () => {
 const Wrapper = styled.section`
   background: var(--clr-grey-10);
   .featured {
-    margin: 4rem auto;
+    // background:red;
+    // width:200px;
+
+    // margin: auto auto 2rem 0;
+    
     .slick-slide {
       padding: 0 1rem;
+    // background:red;
     }
     img {
       height: 225px;
+      
     }
   }
   h2 {
@@ -110,6 +116,37 @@ const Wrapper = styled.section`
 
   .thumbnail-wrapper {
     height: 225px;
+  }
+
+  @media (max-width: 768px) {
+
+    .featured {
+      background:red;
+      // width:200px;
+  
+      // margin: auto auto 2rem 0;
+      
+      .slick-slide {
+        padding: 0 1rem;
+      // background:red;
+      }
+      img {
+        height: 225px;
+        
+      }
+    }
+    h2 {
+      font-size: 1.5rem; /* Adjust font size for mobile size */
+    }
+
+    .underline {
+      margin-bottom: 1rem; /* Adjust margin for mobile size */
+    }
+
+    .p {
+      font-size: 1rem; /* Adjust font size for mobile size */
+      margin-bottom: 1rem; /* Adjust margin for mobile size */
+    }
   }
 `;
 
