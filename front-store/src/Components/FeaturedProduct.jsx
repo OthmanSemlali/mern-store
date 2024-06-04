@@ -103,6 +103,10 @@ const Wrapper = styled.article`
       letter-spacing: var(--spacing);
       font-size: 1rem;
     }
+    @media (max-width: 991px) {
+      flex-direction: column; /* Display items in a column */
+      text-align: center; /* Center align text */
+    }
   }
 `;
 
