@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import SkeletonProduct from "./SkeletonProduct";
 
-const SkeletonGridView = () => {
+export const SkeletonGridView = () => {
   return (
     <Wrapper>
       <div className="products-container">

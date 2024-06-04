@@ -64,7 +64,7 @@ const Footer = () => {
                   designers, and architects.
                 </p>
               </div>
-              <div className="footer-social-icon">
+              {/* <div className="footer-social-icon">
                 <span>Follow us</span>
                 <a href="#">
                   <i className="fab ">
@@ -81,7 +81,7 @@ const Footer = () => {
                     <FaGoogle />
                   </i>
                 </a>
-              </div>
+              </div> */}
             </div>
             <div className="footer-widget">
               <div className="footer-widget-heading">
@@ -104,9 +104,26 @@ const Footer = () => {
             </div>
             <div className="footer-widget">
               <div className="footer-widget-heading">
-                <h3>Subscribe</h3>
+                <h3>Follow us</h3>
               </div>
-              <div className="footer-text">
+              <div className="footer-social-icon">
+                <a href="#">
+                  <i className="fab ">
+                    <FaFacebookF />
+                  </i>
+                </a>
+                <a href="#">
+                  <i className="fab ">
+                    <FaInstagram />
+                  </i>
+                </a>
+                <a href="#">
+                  <i className="fab ">
+                    <FaGoogle />
+                  </i>
+                </a>
+              </div>
+              {/* <div className="footer-text">
                 <p>
                   Don’t miss to subscribe to our new feeds, kindly fill the form
                   below.
@@ -121,7 +138,7 @@ const Footer = () => {
                     </i>
                   </button>
                 </form>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -133,17 +150,19 @@ const Footer = () => {
 const Wrapper = styled.footer`
   z-index: -110;
 
+  // background-color:red;
   ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  ² .footer-section {
+  .footer-section {
     // background-image: url("");
     // background-size: cover;
     background: #ffffff;
+  // background-color:white;
     position: relative;
-    padding: 60px 0;
+    // padding: 60px 0;
   }
   .container {
     width: 90%;
@@ -152,7 +171,7 @@ const Wrapper = styled.footer`
   }
 
   .footer-cta {
-    padding: 180px 0 30px 0;
+    padding: 100px 0 30px 0;
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -361,19 +380,23 @@ const Wrapper = styled.footer`
 
   @media (max-width: 480px) {
     .cta-text h4 {
-      font-size: 18px;
+      font-size: 15px;
     }
     .cta-text span {
-      font-size: 14px;
+      font-size: 13px;
     }
     .footer-widget ul li {
       width: 100%;
     }
     .footer-widget ul li a {
-      font-size: 14px;
+      font-size: 12px;
     }
     .footer-widget-heading h3 {
-      font-size: 18px;
+      font-size: 15px;
+    }
+    .footer-text p {
+      font-size: 13px;
+     
     }
   }
 `;

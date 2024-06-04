@@ -121,7 +121,7 @@ const Wrapper = styled.section`
   @media (max-width: 768px) {
 
     .featured {
-      background:red;
+      // background:red;
       // width:200px;
   
       // margin: auto auto 2rem 0;

@@ -50,7 +50,7 @@ function Products() {
     }
     dispatch(getDistinctFilters());
 
-    // window.scrollTo({ top: 100, behavior: "smooth" });
+    window.scrollTo({ top: 140, behavior: "smooth" });
 
   }, [dispatch, page, category, style, tileUse, materials, isDragging, searchQuery]);
 

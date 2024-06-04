@@ -5,7 +5,7 @@ import styled from "styled-components";
 // import { FaSearch } from "react-icons/fa";
 // import Shimmer from "./Shimmer";
 
-const SkeletonProduct = () => {
+export const SkeletonProduct = () => {
   return (
     <Wrapper>
       <div className="container">

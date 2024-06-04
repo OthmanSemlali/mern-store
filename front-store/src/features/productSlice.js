@@ -70,6 +70,7 @@ export const fetchProduct = createAsyncThunk(
 
     try {
   
+       
       const res = await axios(
         `${"http://localhost:3000"}/api/products/fetchSingleProductBySlug/${slug}`
       );

@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddToCart, Error, ProductImages } from "../Components";
 import { formatPrice } from "../Utils/helpers";
 import styled from "styled-components";
+import { SingleProductSkeleton } from "../skeletons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+
 // import { countCartTotals } from "../features/cartSlice";
 
 function Product() {
@@ -12,7 +16,7 @@ function Product() {
     single_product: product,
     single_product_loading: loading,
     single_product_error: error,
-    selected_option_images
+    selected_option_images,
   } = useSelector((store) => store.product);
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -33,19 +37,15 @@ function Product() {
     sellerID,
     categoryID,
   } = product;
-//   const [selectedOprionImages, setSelectedOptionImages] = useState(selected_option_images);
-
-
-
+  //   const [selectedOprionImages, setSelectedOptionImages] = useState(selected_option_images);
 
   useEffect(() => {
-
     dispatch(fetchProduct(slug));
 
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [slug]);
 
-  console.log('product', product)
+  console.log("product", product);
 
   if (error) {
     return (
@@ -56,7 +56,6 @@ function Product() {
     );
   }
 
-
   // if(!id){
   //   return (
   //     <div className="text-center page-100">
@@ -65,11 +64,8 @@ function Product() {
   //     </div>
   //   );
   // }
-  
 
   console.log("product", product);
-
-
 
   const increase = () => {
     setAmount((oldAmount) => {
@@ -91,9 +87,24 @@ function Product() {
     });
   };
 
-  console.log('selectedOptionsImages', selected_option_images)
-//   console.log('selectedOptionsImages', image)
-  
+  console.log("selectedOptionsImages", selected_option_images);
+  //   console.log('selectedOptionsImages', image)
+
+  if (loading) {
+    // return <Loading props="loading" />;
+    return (
+      <Wrapper>
+        {/* <PageHero title={name} product /> */}
+        <div className="section section-center page">
+          <Link to="/book" className="btn">
+            back to books
+          </Link>
+
+          <SingleProductSkeleton />
+        </div>
+      </Wrapper>
+    );
+  }
   return (
     <Wrapper>
       <div className="section section-center page">
@@ -143,6 +154,12 @@ function Product() {
             </p>
 
             <p className="info">
+  <span>Size : </span>
+  {size?.width} x {size?.height}
+</p>
+
+
+            <p className="info">
               <span>tile use : </span>
               {tileUse}
             </p>
@@ -155,30 +172,40 @@ function Product() {
             <p className="info">
               <span>options : </span>
 
-             <div style={{display:"flex", justifyContent:'space-around'}}>
-             {options && options.map((o)=> {
-                return (
-                    <span onClick={()=>dispatch(setOptions(o.images))}>
+              <div style={{ display: "flex", justifyContent: "space-around" }}>
+                {options &&
+                  options.map((o) => {
+                    return (
+                      <span onClick={() => dispatch(setOptions(o.images))}>
                         {o.color}
-                    </span>
-                )
-              })}
-             </div>
+                      </span>
+                    );
+                  })}
+              </div>
+            </p>
+
+            <p className="info">
+              <span>
+                <FontAwesomeIcon
+                  icon={faInfoCircle}
+                  style={{ marginRight: "0.5rem" }}
+                />
+                Box Contains :
+              </span>
+              20 pcs
             </p>
             <hr />
 
-            {
-              stock > 0 ? (
-                <div>
-                  <AddToCart
-                    product={product}
-                    increase={increase}
-                    decrease={decrease}
-                    amount={amount}
-                  />
-                </div>
-              ) : null
-            }
+            {stock > 0 ? (
+              <div>
+                <AddToCart
+                  product={product}
+                  increase={increase}
+                  decrease={decrease}
+                  amount={amount}
+                />
+              </div>
+            ) : null}
           </section>
         </div>
 

@@ -78,7 +78,7 @@ const Wrapper = styled.section`
 
     .content {
       h3 {
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
 
       p {
@@ -89,6 +89,8 @@ const Wrapper = styled.section`
         padding: 0.75rem 1.5rem;
         font-size: 1rem;
       }
+
+      width:90%;
     }
   }
 `;

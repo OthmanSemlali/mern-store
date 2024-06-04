@@ -215,6 +215,25 @@ const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
 
 
 const Wrapper = styled.section`
+
+  @media (min-width: 768px) {
+    height: calc(100vh - 100px); /* Example height */
+    overflow-y: auto; /* Allow vertical scrolling */
+
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 100;
+    padding: 1rem;
+    transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+
+    /* Styling for when the component is sticky */
+    &.sticky {
+      background-color: rgba(255, 255, 255, 0.9); /* Reduce opacity */
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+    }
+  }
+
   .form-control {
     margin-bottom: 1.25rem;
     h5 {

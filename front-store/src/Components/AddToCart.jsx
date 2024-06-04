@@ -67,6 +67,9 @@ const Wrapper = styled.section`
   }
   .btn-container {
     margin-top: 2rem;
+
+    display:flex;
+    justify-content:space-between;
   }
 
   .btn {

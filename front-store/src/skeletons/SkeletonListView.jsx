@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import SkeletonElement from "./SkeletonElement";
 import Shimmer from "./Shimmer";
-const SkeletonListView = () => {
+export const SkeletonListView = () => {
   return (
     <Wrapper>
       {[0, 1, 2, 3, 4, 6].map((n) => {
