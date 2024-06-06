@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import {
   FaPhone,
@@ -9,8 +9,15 @@ import {
 } from "react-icons/fa";
 import { IoMail } from "react-icons/io5";
 import Logo from "./images/LogoBlack.svg";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
+
+
+  // useEffect(()=>{
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // },[])
   return (
     <Wrapper>
       <section className="footer-section">
@@ -85,12 +92,19 @@ const Footer = () => {
               <ul>
                 <li>
                   <a href="/">Home</a>
+
+                
                 </li>
                 <li>
                   <a href="/products">Products</a>
                 </li>
                 <li>
-                  <a href="/about">About Us</a>
+                  <a href="/about"> 
+                  About
+                  </a>
+                  {/* <Link to={'about'}>
+                  About
+                  </Link> */}
                 </li>
                 <li>
                   <a href="/cart">Cart</a>

@@ -27,6 +27,7 @@ const cartSlice = createSlice({
     addToCart: (state, action) => {
       const { id, optionColor, amount, product } = action.payload;
 
+      console.log('product image card ', product)
       // Generate unique identifier for each item in the cart
       const itemId = `${id}-${optionColor}`;
       // console.log('itemId', itemId)
@@ -50,7 +51,8 @@ const cartSlice = createSlice({
           name: product.name,
           optionColor,
           amount,
-          price: product.price
+          price: product.price,
+          image:product.options[0]?.images[0]
         };
         return { ...state, cart: [...state.cart, newItem] };
       }

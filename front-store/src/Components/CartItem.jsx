@@ -7,7 +7,7 @@ import { formatPrice } from '../Utils/helpers'
 import { removeItem, toggleAmount } from '../features/cartSlice'
 import { useDispatch } from 'react-redux'
 
-const CartItem = ({id,name,optionColor,amount,price}) => {
+const CartItem = ({id,name,optionColor,amount,price, image}) => {
 const dispatch = useDispatch()
 
   const increase = () => {
@@ -23,8 +23,8 @@ const dispatch = useDispatch()
   }
   return <Wrapper>
     <div className='title'>
-      {/* <img src={image} alt={name} /> */}
-      IMG
+      <img src={image} alt={name} />
+      
       <div>
         <h5 className="name">{name} </h5>
         <p className='color'>color: {optionColor}</p>

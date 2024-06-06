@@ -126,13 +126,13 @@ export function DashboardNavbar() {
           )}
 
           <Menu>
-            <MenuHandler>
+            {/* <MenuHandler>
               <IconButton variant="text" color="blue-gray">
                 <BellIcon className="w-5 h-5 text-blue-gray-500" />
               </IconButton>
-            </MenuHandler>
-            <MenuList className="border-0 w-max">
-              <MenuItem className="flex items-center gap-3">
+            </MenuHandler> */}
+            {/* <MenuList className="border-0 w-max"> */}
+              {/* <MenuItem className="flex items-center gap-3">
                 <Avatar
                   src="https://demos.creative-tim.com/material-dashboard/assets/img/team-2.jpg"
                   alt="item-1"
@@ -155,8 +155,8 @@ export function DashboardNavbar() {
                     <ClockIcon className="h-3.5 w-3.5" /> 13 minutes ago
                   </Typography>
                 </div>
-              </MenuItem>
-              <MenuItem className="flex items-center gap-4">
+              </MenuItem> */}
+              {/* <MenuItem className="flex items-center gap-4">
                 <Avatar
                   src="https://demos.creative-tim.com/material-dashboard/assets/img/small-logos/logo-spotify.svg"
                   alt="item-1"
@@ -179,8 +179,8 @@ export function DashboardNavbar() {
                     <ClockIcon className="h-3.5 w-3.5" /> 1 day ago
                   </Typography>
                 </div>
-              </MenuItem>
-              <MenuItem className="flex items-center gap-4">
+              </MenuItem> */}
+              {/* <MenuItem className="flex items-center gap-4">
                 <div className="grid rounded-full h-9 w-9 place-items-center bg-gradient-to-tr from-blue-gray-800 to-blue-gray-900">
                   <CreditCardIcon className="w-4 h-4 text-white" />
                 </div>
@@ -200,8 +200,8 @@ export function DashboardNavbar() {
                     <ClockIcon className="h-3.5 w-3.5" /> 2 days ago
                   </Typography>
                 </div>
-              </MenuItem>
-            </MenuList>
+              </MenuItem> */}
+            {/* </MenuList> */}
           </Menu>
           <IconButton
             variant="text"
