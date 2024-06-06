@@ -48,7 +48,8 @@ const CartButtons = ({ closeSideBatHundler }) => {
       {isConnected && user && user.role === "user" ? (
         <div className="dropdown">
           <button className="auth-btn">
-            {user.firstName} <FaUser  size={20} />
+            {/* {user.firstName}  */}
+            <FaUser  size={20} />
           </button>
           <div className="dropdown-content">
             <Link to="/profile" onClick={closeSideBatHundler}>
