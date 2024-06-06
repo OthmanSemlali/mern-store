@@ -13,7 +13,16 @@ const AboutPage = () => {
             <div className="underline"></div>
           </div>
           <p>
-           Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis doloremque officia animi. Qui dolor inventore doloremque quidem dolores aperiam totam esse non eveniet sunt. Quis ipsa ab cum doloremque natus, molestias ipsum nesciunt est sunt repudiandae dolor perspiciatis recusandae fugiat, expedita asperiores dicta ut explicabo similique rerum veritatis delectus. Dolorem fuga harum corrupti eos sit quas provident veritatis vitae inventore totam velit, quo labore. Necessitatibus eum dolore pariatur ipsa ut suscipit consequatur, blanditiis veniam asperiores sed eos consectetur tempore illo doloremque expedita ducimus rem vero? Nemo dignissimos earum quae molestiae alias odio, repellendus debitis perspiciatis tempore officiis quos! Earum, ab?
+            Welcome to Zellige, your premier destination for exquisite zellige
+            tiles and unique tile pieces. Our store is dedicated to offering
+            high-quality, handcrafted tiles that reflect the rich heritage and
+            beauty of Moroccan architecture. Whether you're renovating your home
+            or starting a new project, our extensive collection of vibrant,
+            intricately designed zellige tiles will bring elegance and timeless
+            charm to any space. At Zellige, we are passionate about
+            craftsmanship and committed to providing exceptional customer
+            service, ensuring that each piece you purchase is a perfect blend of
+            tradition and sophistication.
           </p>
         </article>
       </Wrapper>

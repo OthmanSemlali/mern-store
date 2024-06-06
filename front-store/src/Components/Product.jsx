@@ -4,9 +4,8 @@ import { Link } from "react-router-dom";
 import { formatPrice } from "../Utils/helpers";
 
 const Product = ({ slug, options, name, price, id, published }) => {
-
-  if(published == false) {
-    return
+  if (published == false) {
+    return;
   }
   return (
     <Wrapper>

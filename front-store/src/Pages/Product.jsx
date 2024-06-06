@@ -97,7 +97,7 @@ function Product() {
         {/* <PageHero title={name} product /> */}
         <div className="section section-center page">
           <Link to="/book" className="btn">
-            back to books
+            back to Products
           </Link>
 
           <SingleProductSkeleton />
@@ -154,10 +154,9 @@ function Product() {
             </p>
 
             <p className="info">
-  <span>Size : </span>
-  {size?.width} x {size?.height}
-</p>
-
+              <span>Size : </span>
+              {size?.width} x {size?.height}
+            </p>
 
             <p className="info">
               <span>tile use : </span>

@@ -6,7 +6,7 @@ import { PageHero } from "../Components";
 const Container = styled.div`
   max-width: 1200px;
   margin: auto;
-  padding: 24px;
+  padding: 40px 30px 100px 30px;
 `;
 
 const Title = styled.h2`
