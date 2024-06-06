@@ -11,19 +11,21 @@ const AddToCart = ({ product, increase, decrease, amount }) => {
   const fixRef = React.useRef(null);
   const fixedRef = React.useRef(null);
 
-
   return (
     <Wrapper>
-
       <div className="btn-container" ref={fixRef}>
-        
         <AmountButtons
           increase={increase}
           decrease={decrease}
           amount={amount}
         />
 
-        <AddToCartBtn id={id} optionColor={'black'}  amount={amount} product={product} />
+        <AddToCartBtn
+          id={id}
+          optionColor={"black"}
+          amount={amount}
+          product={product}
+        />
       </div>
     </Wrapper>
   );
@@ -68,8 +70,8 @@ const Wrapper = styled.section`
   .btn-container {
     margin-top: 2rem;
 
-    display:flex;
-    justify-content:space-between;
+    display: flex;
+    justify-content: space-between;
   }
 
   .btn {

@@ -16,6 +16,7 @@ function Categories() {
           "http://localhost:3000/api/categories"
         );
         setCategories(response.data);
+        console.log("cateee", response.data);
       } catch (error) {
         console.error("oops Error fetching categories:", error);
       }
@@ -44,7 +45,8 @@ function Categories() {
             key={category.id}
             onClick={() => handleCategoryClick(category)}
           >
-            <img src={category.image || defaultImage} alt={category.name} />
+            <img src={category.imageUrl || defaultImage} alt={category.name} />
+
             <h3>{category.name}</h3>
           </CategoryCard>
         ))}
@@ -68,7 +70,6 @@ const Wrapper = styled.section`
     font-size: 1.2rem;
     color: #666;
     margin-bottom: 1.5rem;
-
   }
 
   .section-center {
@@ -77,11 +78,8 @@ const Wrapper = styled.section`
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
 
-  
   @media (max-width: 768px) {
-
-    .title{
-
+    .title {
     }
     h2 {
       font-size: 1.5rem; /* Adjust font size for mobile size */
@@ -118,7 +116,6 @@ const CategoryCard = styled.div`
     margin: 1rem 0; /* Add margin to create space around the image */
     object-fit: cover;
   }
-
 
   h3 {
     margin: 1rem 0;

@@ -32,7 +32,6 @@ const CartButtons = ({ closeSideBatHundler }) => {
   return (
     <Wrapper className="cart-btn-wrapper">
       <Link to="/cart" className="cart-btn" onClick={closeSideBatHundler}>
-        Cart
         <span className="cart-container">
           <FaShoppingCart />
           <span className="cart-value">{total_items} </span>
