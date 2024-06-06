@@ -18,10 +18,12 @@ import { logout } from "../features/userSlice";
 const CartButtons = ({ closeSideBatHundler }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { total_items } = useSelector((store) => store.cart);
+  const { total_items, cart } = useSelector((store) => store.cart);
   const { isConnected, user } = useSelector((store) => store.user);
 
   useEffect(() => {
+
+    // console.log('cart', cart)
     dispatch(countCartTotals());
   }, []);
   const handleLogout = () => {
@@ -33,25 +35,20 @@ const CartButtons = ({ closeSideBatHundler }) => {
     <Wrapper className="cart-btn-wrapper">
       <Link to="/cart" className="cart-btn" onClick={closeSideBatHundler}>
         <span className="cart-container">
-          <FaShoppingCart />
-          <span className="cart-value">{total_items} </span>
+          <FaShoppingCart  size={20} />
+
+          {cart.length > 0 ? (
+            <span className="cart-value">{cart.length} </span>
+          ) : null }
+          
         </span>
       </Link>
 
-      {/* {isConnected && user && user.role === "user" ? (
-        <button className="auth-btn" onClick={() => dispatch(logout())}>
-          logout
-        </button>
-      ) : (
-        <Link to="/login" className="auth-btn" onClick={closeSideBatHundler}>
-          Login
-          <FaUserPlus />
-        </Link>
-      )} */}
+     
       {isConnected && user && user.role === "user" ? (
         <div className="dropdown">
           <button className="auth-btn">
-            {user.firstName} <FaUser />
+            {user.firstName} <FaUser  size={20} />
           </button>
           <div className="dropdown-content">
             <Link to="/profile" onClick={closeSideBatHundler}>
@@ -63,7 +60,7 @@ const CartButtons = ({ closeSideBatHundler }) => {
       ) : (
         <div className="dropdown">
           <button className="auth-btn">
-            Welcome! <FaUserPlus />
+            <FaUserPlus  size={20} />
           </button>
           <div className="dropdown-content">
             <Link to="/login" onClick={closeSideBatHundler}>
@@ -83,7 +80,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  width: 225px;
+  width: 100px;
 
   .cart-btn {
     color: var(--clr-grey-1);
@@ -108,15 +105,15 @@ const Wrapper = styled.div`
     top: -10px;
     right: -16px;
     background: var(--clr-primary-5);
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     font-size: 0.75rem;
     color: var(--clr-white);
-    padding: 12px;
+    padding: 11px;
   }
   .auth-btn {
     display: flex;

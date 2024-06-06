@@ -15,7 +15,7 @@ const fadeIn = keyframes`
 `;
 
 const Button = styled.button`
-width:130px;
+width:140px;
   position: relative;
   padding: 5px 10px;
   border: none;
@@ -70,8 +70,8 @@ function AddToCartBtn({ id, optionColor, amount, product }) {
         setAddedToCart(false);
         dispatch(addToCart({ id, optionColor, amount, product }));
         dispatch(countCartTotals());
-      }, 1000);
-    }, 1000);
+      }, 400);
+    }, 500);
 
  
   };
