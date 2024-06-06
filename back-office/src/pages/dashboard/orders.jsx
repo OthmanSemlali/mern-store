@@ -75,7 +75,9 @@ const OrderRow = ({
     handleChange(e, id);
   };
 
-  const { line1, city, country } = shipping.address;
+  const { address: line1, city, country, name } = shipping;
+
+  console.log('shipping.address', shipping)
   const className = `py-3 px-5 ${
     key === authorsTableData.length - 1 ? "" : "border-b border-blue-gray-50"
   }`;

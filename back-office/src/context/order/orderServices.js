@@ -30,6 +30,9 @@ export const fetchOrdersService = async (dispatch, page = 1, searchQuery,orderSt
   
         const data = await response.json();
 
+
+        console.log('data orders service', data)
+
         loadOrdersSuccess(dispatch, data.response)
         
       } catch (error) {

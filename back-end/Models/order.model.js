@@ -81,8 +81,10 @@ orderSchema.statics.fetchOrders = async function (page, pageSize, filters) {
 
   const getOrdersQuery = this.find(filters)
     // .sort()
+    .sort({ createdAt: -1 })
     .skip(skip)
     .limit(pageSize)
+
   // .select("slug name seodescription description image price");
 
   const getOrdersCount = this.countDocuments(filters);

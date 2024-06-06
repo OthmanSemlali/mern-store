@@ -18,6 +18,7 @@ export function reducer(state, action) {
 
     console.log('action.value', action.value)
     const {orders, totalOrders} = action.value
+    console.log('orders context', orders)
       return {
         ...state,
         orders,

@@ -8,7 +8,6 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import axios from "axios";
-// import { formatPrice } from '../utils/helpers';
 import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../Utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,24 +31,18 @@ const CheckoutForm = () => {
   const [processing, setProcessing] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [clientSecret, setClientSecret] = useState("");
+  const [shippingDetails, setShippingDetails] = useState({
+    name: "",
+    address: "",
+    city: "",
+    country: "",
+  });
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
 
   //   create order
-
   const createOrder = async () => {
-    const shipping = {
-      name: "John Doe", // Customer's name for delivery
-      address: {
-        line1: "123 Main St", // Customer's street address
-        city: "Anytown", // Customer's city
-        // state: 'CA', // Customer's state
-        // postal_code: '12345', // Customer's postal code
-        country: "US", // Customer's country code
-      },
-    };
-
     try {
       const response = await fetch("http://localhost:3000/placeOrder", {
         method: "POST",
@@ -57,33 +50,39 @@ const CheckoutForm = () => {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ cart, shipping_fee, total_amount, shipping }),
+        body: JSON.stringify({
+          cart,
+          shipping_fee,
+          total_amount,
+          shipping: shippingDetails,
+        }),
       });
 
       if (response.ok) {
         console.log("order created");
       } else {
         const errDetails = await response.json();
-        console.log("error create orderrr ", errDetails);
+        console.log("error creating order ", errDetails);
       }
     } catch (error) {
-      console.log("error create order ", error.response);
+      console.log("error creating order ", error.response);
       throw Error(error.response);
     }
   };
+
   // create payment
   const createPaymentIntent = async () => {
     try {
       const { data } = await axios.post(
         "http://localhost:3000/create-payment-intent",
-
         { cart, shipping_fee, total_amount }
       );
       setClientSecret(data.clientSecret);
     } catch (error) {
-      console.log("error create payment intent ", error.response);
+      console.log("error creating payment intent ", error.response);
     }
   };
+
   useEffect(() => {
     createPaymentIntent();
     // eslint-disable-next-line
@@ -106,6 +105,7 @@ const CheckoutForm = () => {
       },
     },
   };
+
   const handleChange = async (event) => {
     // Listen for changes in the CardElement
     // and display any errors as the customer types their card details
@@ -113,17 +113,19 @@ const CheckoutForm = () => {
     setError(event.error ? event.error.message : "");
   };
 
-  
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     setProcessing(true);
     const payload = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: elements.getElement(CardElement),
+
+        billing_details: {
+          name: shippingDetails.name,
+        },
       },
     });
     if (payload.error) {
-      // console.log('payload', payload)
       setError(`Payment failed ${payload.error.message}`);
       setProcessing(false);
     } else {
@@ -139,21 +141,23 @@ const CheckoutForm = () => {
         }, 3000);
       } catch (error) {
         setProcessing(false);
-
-        alert("SERVER LOGIN! PLEASAE LOGIN AGAIN");
+        alert("SERVER LOGIN! PLEASE LOGIN AGAIN");
         dispatch(logout());
         navigate("/login");
-
-        // alert(error.message)
-        // setError(`Payment failed ${error.message}`);
-        console.log("errorrtrt", error);
       }
-
-      //   PLACE ORDER
     }
   };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setShippingDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
   return (
-    <div>
+    <Wrapper>
       {succeeded ? (
         <article>
           <h4>Thank you</h4>
@@ -161,20 +165,58 @@ const CheckoutForm = () => {
           <h4>Redirecting to home page shortly</h4>
         </article>
       ) : (
-        <>
-          <article>
+      <div className=" section">
+        
+          {/* <article>
             <h4>Hello, {user && user.firstName}</h4>
             <p>Your total is {formatPrice(total_amount)}</p>
             <p>Test Card Number: 4242 4242 4242 4242</p>
-          </article>
+          </article> */}
 
           <form id="payment-form" onSubmit={handleSubmit}>
+      
+            <label htmlFor="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={shippingDetails.address}
+              onChange={handleInputChange}
+              required
+            />
+            <label htmlFor="city">City</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              value={shippingDetails.city}
+              onChange={handleInputChange}
+              required
+            />
+            <label htmlFor="country">Country</label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              value={shippingDetails.country}
+              onChange={handleInputChange}
+              required
+            />
+                  <label htmlFor="name">Card Holder</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={shippingDetails.name}
+              onChange={handleInputChange}
+              required
+            />
             <CardElement
               id="card-element"
               options={cardStyle}
               onChange={handleChange}
             />
-            <button disabled={processing || disabled || succeeded} id="submit">
+            <button style={{marginTop:"10px"}} disabled={processing || disabled || succeeded} id="submit">
               <span id="button-text">
                 {processing ? (
                   <div className="spinner" id="spinner"></div>
@@ -183,22 +225,15 @@ const CheckoutForm = () => {
                 )}
               </span>
             </button>
-            {/* Show any error that happens when processing the payment */}
             {error && (
               <div className="card-error" role="alert">
                 {error}
               </div>
             )}
-            {/* Show a success message upon completion */}
-            {/* <p
-              className={succeeded ? "result-message" : "result-message hidden"}
-            >
-              Payment succeeded
-            </p> */}
           </form>
-        </>
+        </div>
       )}
-    </div>
+    </Wrapper>
   );
 };
 
@@ -264,7 +299,6 @@ const Wrapper = styled.section`
   #payment-request-button {
     margin-bottom: 32px;
   }
-  /* Buttons and links */
   button {
     background: #5469d4;
     font-family: Arial, sans-serif;
@@ -287,7 +321,6 @@ const Wrapper = styled.section`
     opacity: 0.5;
     cursor: default;
   }
-  /* spinner/processing state, errors */
   .spinner,
   .spinner:before,
   .spinner:after {
@@ -345,7 +378,7 @@ const Wrapper = styled.section`
       transform: rotate(360deg);
     }
   }
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 900px) {
     form {
       width: 80vw;
     }

@@ -52,7 +52,7 @@ function PaginationControls({ currentPage = 1 }) {
   onClick={() => paginate(nextPage)}
   className="float-right"
 >
-  Next &gt;
+  Next
 </PaginationButton>
 </ButtonWrapper>
 
