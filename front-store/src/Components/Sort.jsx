@@ -5,15 +5,21 @@ import styled from "styled-components";
 
 import { AiOutlineSearch } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { setGridView, setListView } from "../features/themeSlice";
+import {
+  openFilterModal,
+  setGridView,
+  setListView,
+} from "../features/themeSlice";
 import { updateSort } from "../features/productSlice";
-const Sort = () => {
+const Sort = ({ children }) => {
   const dispatch = useDispatch();
   const { products_loading, totalProducts } = useSelector(
     (store) => store.product
   );
 
-  const { productsView } = useSelector((store) => store.theme);
+  const { productsView, isFilterModalOpen } = useSelector(
+    (store) => store.theme
+  );
   console.log("productsView", productsView);
 
   const updateSortHandler = ({ target }) => {
@@ -21,34 +27,34 @@ const Sort = () => {
     dispatch(updateSort(target.value));
   };
 
-  
   return (
     <Wrapper>
       <div className="buttons-container">
         <button
-          type="butotn"
+          type="button"
           onClick={() => dispatch(setGridView())}
-          className={`${productsView == "grid" ? "active" : null}`}
+          className={`${productsView === "grid" ? "active" : null}`}
         >
           <BsFillGridFill />
         </button>
         <button
-          type="butotn"
+          type="button"
           onClick={() => dispatch(setListView())}
-          className={`${productsView == "list" ? "active" : null}`}
+          className={`${productsView === "list" ? "active" : null}`}
         >
           <BsList />
         </button>
 
-        <button className="search-btn">
+        <button
+          className="search-btn"
+          onClick={() => dispatch(openFilterModal())}
+        >
           Search <AiOutlineSearch />
         </button>
       </div>
 
       <p>
         {products_loading ? "loading..." : `${totalProducts} products found`}
-
-        {/* f */}
       </p>
       <hr />
 
@@ -66,25 +72,27 @@ const Sort = () => {
           <option value="name-z">name (z-a)</option>
         </select>
       </form>
+
+      {isFilterModalOpen ? <div>{children}</div> : null}
     </Wrapper>
   );
 };
 
 const Wrapper = styled.section`
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 100;
+  padding: 1rem;
+  transition: background-color 0.3s ease, opacity 0.3s ease,
+    box-shadow 0.3s ease;
 
-position: sticky;
-top: 0;
-background-color: white;
-z-index: 100;
-padding: 1rem;
-transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  /* Styling for when the component is sticky */
+  &.sticky {
+    background-color: rgba(255, 255, 255, 0.9); /* Reduce opacity */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
+  }
 
-/* Styling for when the component is sticky */
-&.sticky {
-  background-color: rgba(255, 255, 255, 0.9); /* Reduce opacity */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow */
-}
-  
   display: grid;
   grid-template-columns: auto auto 1fr auto;
   align-items: center;
@@ -172,8 +180,6 @@ transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
     }
   }
   @media (max-width: 660px) {
-
-    
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 0.75rem;

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isSideBarOpen: false,
     productsView:'list',
+    isFilterModalOpen:false,
 
 };
 const themeSlice = createSlice({
@@ -15,6 +16,13 @@ const themeSlice = createSlice({
     closeSideBar:(state)=>{
         state.isSideBarOpen = false
     },
+
+    openFilterModal: (state) => {
+      state.isFilterModalOpen = true;
+    },
+    closeFilterModal:(state)=>{
+        state.isFilterModalOpen = false
+    },
     setListView: (state) => {
 
         state.productsView = 'list'
@@ -26,5 +34,5 @@ const themeSlice = createSlice({
   },
 });
 
-export const { openSideBar, closeSideBar, setListView, setGridView } = themeSlice.actions;
+export const { openSideBar, closeSideBar, setListView, setGridView, openFilterModal, closeFilterModal } = themeSlice.actions;
 export default themeSlice.reducer;

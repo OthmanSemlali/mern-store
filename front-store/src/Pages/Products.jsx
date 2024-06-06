@@ -9,53 +9,54 @@ import { fetchPaginatedProducts, sortProducts } from "../features/productSlice";
 import { useNavigate } from "react-router-dom";
 import PaginationControls from "../Components/PaginationControls";
 import { PageHero, Sort } from "../Components";
+import useMediaQuery from "../Utils/useMediaQuery";
+import { closeFilterModal } from "../features/themeSlice";
 function Products() {
+  const { sort } = useSelector((store) => store.product);
 
-  const {sort} = useSelector((store) => store.product)
-  
   const [isDragging, setIsDragging] = useState(false);
-
 
   // const {totalProducts} = useSelector((store)=>store.product)
   const parsed = queryString.parse(location.search);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  console.log('*** products page ***');
+  console.log("*** products page ***");
 
   const { page } = parsed;
   const filters = useMemo(() => ({ ...parsed }), [parsed]);
 
-  const {category, style, tileUse, materials, maxPrice, searchQuery} = filters
-
+  const { category, style, tileUse, materials, maxPrice, searchQuery } =
+    filters;
 
   const handleDragEnd = useCallback(() => {
-    console.log('end dragging');
+    console.log("end dragging");
 
-    setIsDragging(false)
-
+    setIsDragging(false);
   }, []);
 
   const handleDragStart = useCallback(() => {
-
-    console.log('start dragging');
-    setIsDragging(true)
-
+    console.log("start dragging");
+    setIsDragging(true);
   }, []);
   useEffect(() => {
     console.log("query changes", page, filters);
-    if(!isDragging){
+    if (!isDragging) {
       dispatch(fetchPaginatedProducts({ page, filters }));
-
     }
     dispatch(getDistinctFilters());
 
     window.scrollTo({ top: 140, behavior: "smooth" });
-
-  }, [dispatch, page, category, style, tileUse, materials, isDragging, searchQuery]);
-
-
-
+  }, [
+    dispatch,
+    page,
+    category,
+    style,
+    tileUse,
+    materials,
+    isDragging,
+    searchQuery,
+  ]);
 
   // useEffect(()=>{
 
@@ -65,17 +66,15 @@ function Products() {
 
   // }
 
-
   // },[maxPrice])
 
-  useEffect(()=>{
-    dispatch(sortProducts())
-  },[sort])
+  useEffect(() => {
+    dispatch(sortProducts());
+  }, [sort]);
   const setFilter = (name, value) => {
-   
     const params = new URLSearchParams(window.location.search);
-    params.set('page', 1);
-    
+    params.set("page", 1);
+
     // Set the filter value if it's not empty
     if (value.trim() !== "") {
       params.set(name, value);
@@ -83,14 +82,25 @@ function Products() {
       // If the value is empty, remove the filter from the query string
       params.delete(name);
     }
-    
-    const newParamsString = params.toString();
-    const newUrl = `${window.location.pathname}${newParamsString ? '?' + newParamsString : ''}`;
-    
-    navigate(newUrl);
 
+    const newParamsString = params.toString();
+    const newUrl = `${window.location.pathname}${
+      newParamsString ? "?" + newParamsString : ""
+    }`;
+
+    navigate(newUrl);
   };
-  
+
+
+
+  // const dispatch = useDispatch();
+  const isLargeScreen = useMediaQuery("(min-width: 768px)"); // Adjusted media query
+
+  useEffect(() => {
+    if (isLargeScreen) {
+      dispatch(closeFilterModal());
+    }
+  }, [isLargeScreen, dispatch]);
   return (
     <main>
       {/* <PageHero title="products"  /> */}
@@ -98,10 +108,24 @@ function Products() {
 
       <Wrapper className="page">
         <div className="section-center products">
-          <Filters filters={filters} setFilter={setFilter} handleDragEnd={handleDragEnd} handleDragStart={handleDragStart} />
+          <Filters
+            filters={filters}
+            setFilter={setFilter}
+            handleDragEnd={handleDragEnd}
+            handleDragStart={handleDragStart}
+          />
 
           <div>
-            <Sort  />
+            <Sort>
+              <Filters
+                filters={filters}
+                setFilter={setFilter}
+                handleDragEnd={handleDragEnd}
+                handleDragStart={handleDragStart}
+                showContent={true}
+                showHideBtn={true}
+              />
+            </Sort>
             <ProductList />
             <PaginationControls currentPage={page} />
           </div>

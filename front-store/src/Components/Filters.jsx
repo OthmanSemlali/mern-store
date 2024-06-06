@@ -6,8 +6,16 @@ import {
   getDistinctFilters,
 } from "../features/filterSlice";
 import { useNavigate } from "react-router-dom";
+import { closeFilterModal } from "../features/themeSlice";
 
-const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
+const Filters = ({
+  filters,
+  setFilter,
+  handleDragEnd,
+  handleDragStart,
+  showContent,
+  showHideBtn
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -59,7 +67,7 @@ const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper showContent={showContent}>
       <div className="content">
         <form onSubmit={(e) => e.preventDefault()}>
           <FormControl>
@@ -193,29 +201,40 @@ const Filters = ({ filters, setFilter, handleDragEnd, handleDragStart }) => {
             )}
           </FilterGroup>
 
-          <button
-            type="button"
-            className="clear-btn"
-            onClick={() => {
-              navigate("/products");
-              setIsCategoryOpen(false);
-              setIsStylesOpen(false);
-              setIsMaterialsOpen(false);
-              setIsPriceOpen(false);
-              setIsTileUseOpen(false);
-            }}
-          >
-            Clear Filters
-          </button>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <button
+              type="button"
+              className="clear-btn"
+              onClick={() => {
+                navigate("/products");
+                setIsCategoryOpen(false);
+                setIsStylesOpen(false);
+                setIsMaterialsOpen(false);
+                setIsPriceOpen(false);
+                setIsTileUseOpen(false);
+              }}
+            >
+              Clear Filters
+            </button>
+
+
+{
+  showHideBtn ?  (
+    <button 
+    onClick={() => dispatch(closeFilterModal())}
+    
+    >hide</button>
+
+  ) : null
+}
+          </div>
         </form>
       </div>
     </Wrapper>
   );
 };
 
-
 const Wrapper = styled.section`
-
   @media (min-width: 768px) {
     height: calc(100vh - 100px); /* Example height */
     overflow-y: auto; /* Allow vertical scrolling */
@@ -225,7 +244,8 @@ const Wrapper = styled.section`
     background-color: white;
     z-index: 100;
     padding: 1rem;
-    transition: background-color 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease,
+      box-shadow 0.3s ease;
 
     /* Styling for when the component is sticky */
     &.sticky {
@@ -242,7 +262,7 @@ const Wrapper = styled.section`
   }
   .search-input {
     padding: 0.5rem;
-    width:100%;
+    width: 100%;
     background: var(--clr-grey-10);
     border-radius: var(--radius);
     border-color: transparent;
@@ -267,7 +287,9 @@ const Wrapper = styled.section`
 
   @media (max-width: 768px) {
     .content {
-      display: none;
+
+
+      display: ${(props) => (props.showContent ? "block" : "none")};
     }
   }
 `;
@@ -281,13 +303,12 @@ const FormControl = styled.div`
 
 const FilterGroup = styled.div`
   margin-bottom: 1.25rem;
-
 `;
 
 const FilterTitle = styled.h5`
   // Styles for the filter title component
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   align-items: center;
   cursor: pointer;
   padding: 0.5rem;
