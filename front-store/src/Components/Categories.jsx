@@ -44,7 +44,7 @@ function Categories() {
             key={category.id}
             onClick={() => handleCategoryClick(category)}
           >
-            <img src={category.image || defaultImage} alt={category.name} />
+            <img src={category.imageUrl || defaultImage} alt={category.name} />
             <h3>{category.name}</h3>
           </CategoryCard>
         ))}

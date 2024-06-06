@@ -176,7 +176,7 @@ function Product() {
                 {options &&
                   options.map((o) => {
                     return (
-                      <span onClick={() => dispatch(setOptions(o.images))}>
+                      <span style={{cursor:"pointer"}} onClick={() => dispatch(setOptions(o.images))}>
                         {o.color}
                       </span>
                     );

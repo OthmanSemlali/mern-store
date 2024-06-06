@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { FaSearch } from "react-icons/fa";
+// import { FaSearch } from "react-icons/fa";
+import { FaEye } from "react-icons/fa"; 
 import { Link } from "react-router-dom";
 import { formatPrice } from "../Utils/helpers";
 
@@ -9,7 +10,7 @@ const Product = ({ slug, options, name, price, id }) => {
       <div className="container">
         <img src={options[0]?.images[0]} alt={name} />
         <Link to={`/products/${slug}`} className="link">
-          <FaSearch />
+          <FaEye />
         </Link>
       </div>
       <footer>

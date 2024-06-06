@@ -39,6 +39,8 @@ CategorySchema.statics.fetchPaginatedCategories = async function (search, page =
  
    const [data, totalCategories] = await Promise.all([getCatgoriesQquery.exec(), getCountQuery.exec()]);
  
+
+  //  console.log('cattt', data)
    return { data, totalCategories };
   } catch (error) {
  
