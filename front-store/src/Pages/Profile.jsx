@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { PageHero } from "../Components";
+import { Loader, PageHero } from "../Components";
+import { toast } from "react-toastify";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -213,28 +214,46 @@ const AccountDetails = ({ user, setUser }) => {
     firstName: "",
     lastName: "",
   });
+  const [loading, setLoading] = useState(false); // State for loader
+
   useEffect(() => {
     setEditedUser(user);
   }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await axios.put(
-      `http://localhost:3000/api/users/${user.id}`,
-      editedUser,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
-    const updatedUser = response.data;
+    setLoading(true); // Start loader
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/users/${user.id}`,
+        editedUser,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      const updatedUser = response.data;
 
-    sessionStorage.setItem("user", JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    console.log(response.data);
+      sessionStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+      console.log(response.data);
+
+      
+    } catch (error) {
+      console.error("Error updating user data:", error);
+toast.error('Something went wrong while updating. Try later!')
+
+    } finally {
+      setTimeout(() => {
+        setLoading(false)
+toast.success('profile updated')
+      }
+      , 500); // Stop loader after a short delay
+    }
   };
+
 
   return (
     <div>
@@ -284,8 +303,17 @@ const AccountDetails = ({ user, setUser }) => {
           />
         </div>
         <Button className="btn" type="submit">
-          Save Changes
-        </Button>
+  <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+    {loading ? (
+      <>
+        Saving <Loader /> 
+      </>
+    ) : (
+      "Save Changes"
+    )}
+  </div>
+</Button>
+
       </Form>
     </div>
   );
@@ -294,7 +322,7 @@ const AccountDetails = ({ user, setUser }) => {
 // const Address = () => {
 //   return (
 //     <div>
-//       <h3 className="text-xl font-bold mb-4">Address</h3>
+//       <h3 className="mb-4 text-xl font-bold">Address</h3>
 //       <p>Update your address here.</p>
 //       <Form>
 //         <div>
@@ -336,14 +364,15 @@ const Orders = ({ user }) => {
   }, []);
   const cancelOrder = async (orderId, currentStatus) => {
     if (currentStatus !== "pending") {
-      alert("This order can't be canceled anymore.");
+      // alert("This order can't be canceled anymore.");
+      toast.info("This order can't be canceled anymore.")
       return;
     }
 
     try {
       const response = await axios.post(
         `http://localhost:3000/api/orders/updateOrderStatus/${orderId}`,
-        { orderStatus: "canceled" },
+        { newStatus: "canceled" },
         {
           headers: {
             "Content-Type": "application/json",
@@ -352,12 +381,15 @@ const Orders = ({ user }) => {
         }
       );
       console.log("update data", response.data);
-      // setOrders(
-      //   orders.map((order) =>
-      //     order.id === orderId ? { ...order, orderStatus: "canceled" } : order
-      //   )
-      // );
+
+      toast.success('Order Canceled')
+
+      setOrders(prevOrders => prevOrders.filter(order => order.id !== orderId));
+
+ 
     } catch (error) {
+      toast.error('Something went wrong. Try later!')
+
       console.error("Error canceling order:", error);
     }
   };

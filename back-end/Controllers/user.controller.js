@@ -19,7 +19,7 @@ const getUserById = async (req, res) => {
 
 const getUserOrders = async (req, res) => {
     try {
-        const orders = await Order.find({ 'user.id': req.params.id });
+        const orders = await Order.find({ 'user.id': req.params.id ,  orderStatus: { $ne: 'canceled' } });
         if (!orders) {
             return res.status(404).json({ message: 'oops No orders found for this user' });
         }

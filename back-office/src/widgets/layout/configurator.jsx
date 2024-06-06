@@ -71,9 +71,9 @@ export function Configurator() {
           <Typography variant="h5" color="blue-gray">
             Dashboard Configurator
           </Typography>
-          <Typography className="font-normal text-blue-gray-600">
+          {/* <Typography className="font-normal text-blue-gray-600">
             See our dashboard options.
-          </Typography>
+          </Typography> */}
         </div>
         <IconButton
           variant="text"

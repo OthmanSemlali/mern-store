@@ -51,6 +51,8 @@ const fetchPaginatedOrders = async (req, res) => {
   }
 };
 
+
+// const deleteOrder = async (req, res) =>
 const placeOrder = async (req, res) => {
   console.log("req.user.firstName", req.user.firstName);
   const { cart, total_amount, shipping } = req.body;
