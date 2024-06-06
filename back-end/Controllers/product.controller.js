@@ -107,12 +107,12 @@ class ProductController {
       filters.materials = materials;
     }
 
-    if(searchQuery && searchQuery != 'undefined' ){
+    if (searchQuery && searchQuery != 'undefined') {
 
-      filters.name = {$regex: searchQuery, $options: 'i'}
+      filters.name = { $regex: searchQuery, $options: 'i' }
     }
 
-    if(reqFromFrontStore){
+    if (reqFromFrontStore) {
       filters.published = true
     }
     try {
@@ -213,9 +213,9 @@ class ProductController {
     } catch (error) {
 
       console.error('create pr ', error)
-     
-        res.status(500).json({ message: "Server Error" });
-     
+
+      res.status(500).json({ message: "Server Error" });
+
     }
   }
   async deleteProductById(req, res) {
