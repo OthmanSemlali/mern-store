@@ -1,4 +1,5 @@
 # Zellige
 
 ## E-commerce Platform for Moroccan Tiles
-[Zellige Logo](https://github.com/OthmanSemlali/mern-store/blob/main/LogoLight.svg)
+![Zellige Logo](https://raw.githubusercontent.com/OthmanSemlali/mern-store/main/LogoLight.svg)
+
