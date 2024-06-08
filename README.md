@@ -4,7 +4,7 @@
 ![Zellige Logo](https://raw.githubusercontent.com/OthmanSemlali/mern-store/main/back-office/public/img/LogoBlack.svg)
 
 ### Color Choices
-![Color Choices](https://raw.githubusercontent.com/OthmanSemlali/mern-store/main/back-office/public/img/colorsChoice.PNG)
+![Color Choices](https://raw.githubusercontent.com/OthmanSemlali/mern-store/main/back-office/public/img/colors.PNG)
 
 ### Screenshots
 
