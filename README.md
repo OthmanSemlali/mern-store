@@ -25,8 +25,6 @@
 - **Material Tailwind**: Material Design components built with Tailwind CSS.
 - **Zod**: TypeScript-first schema declaration and validation library.
 
-### Color Choices
-![Color Choices](https://raw.githubusercontent.com/OthmanSemlali/mern-store/main/back-office/public/img/colors.PNG)
 
 ### Screenshots
 
@@ -38,3 +36,7 @@
 
 #### Products Page
 ![Products Page](https://raw.githubusercontent.com/OthmanSemlali/mern-store/main/back-office/public/img/products.PNG)
+
+### Color Choices
+![Color Choices](https://raw.githubusercontent.com/OthmanSemlali/mern-store/main/back-office/public/img/colors.PNG)
+
